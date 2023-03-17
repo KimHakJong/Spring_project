@@ -8,11 +8,11 @@
 		<version>2.6.11</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.naver</groupId>
-	<artifactId>Spring_Security_War</artifactId>
+	<groupId>com</groupId>
+	<artifactId>Gant</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>Spring_Security_War</name>
+	<name>Gant</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>11</java.version>
