@@ -4,9 +4,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="_csrf" content="${_csrf.token}">
+<meta name="_csrf_header" content="${_csrf.headerName}">
 <title>GANT</title>
-<script src="js/jquery-3.6.3.js"></script>
-<script src="js/findpass.js"></script>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="../resources/js/member/findpass.js"></script>
 <style>
 * {font-family:"noto sans", sans-serif;
    box-sizing: border-box}
