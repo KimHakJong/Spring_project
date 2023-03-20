@@ -1,4 +1,7 @@
 $(document).ready(function(){
+	let token = $("meta[name='_csrf']").attr("content");
+	let header = $("meta[name='_csrf_header']").attr("content");
+	
 	let checkemail = false;	   //이메일 형식 일치 여부
 	let checksendcert = false; //인증번호 발송 눌렀는지
 	let checkcertnum = false; //인증번호 일치 여부
@@ -26,9 +29,14 @@ $(document).ready(function(){
 		$('#sendcert').text('인증번호 재발송');
 		const emdo = $('#email').val();
 		$.ajax({
-				url: "certcheck.net",
+				url: "sendCert",
+				data: "post",
 				dataType : "json",
-				data : {"emdo" : emdo},
+				data : {"emdomain" : emdomain},
+				beforeSend : function(xhr)
+      			{   //데이터를 전송하기 전에 헤더에 csrf값을 설정합니다.
+        			xhr.setRequestHeader(header, token);			
+        		},				
 				success: function(rdata){
 					certnum = rdata.certnum;
 					alert(rdata.result);

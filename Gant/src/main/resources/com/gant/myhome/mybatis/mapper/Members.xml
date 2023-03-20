@@ -13,7 +13,7 @@
       insert into members
       (admin,id,password,name,jumin,phone_num,email,post,address,department,position,auth)
       values 
-      (#{admin}, #{id}, #{password},#{name},#{jumin},#{phone_num},#{email},#{address},#{department}, #{position}, #{auth})
+      (#{admin}, #{id}, #{password},#{name},#{jumin},#{phone_num},#{email},#{post},#{address},#{department}, #{position}, #{auth})
   </insert>
   
   <select id="findIdCheck" resultType="members">
