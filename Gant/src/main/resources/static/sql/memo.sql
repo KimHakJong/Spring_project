@@ -5,4 +5,4 @@ background varchar2(100),
 color		varchar2(20)
 );
 select * from memo;
-drop table memo CASCADE CONSTRAINTS;
+drop table memo;

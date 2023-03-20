@@ -23,7 +23,5 @@ public class Securityinitializer extends AbstractSecurityWebApplicationInitializ
 		insertFilters(servletContext,multipartFilter);
 		
 	}
-
-	
 	
 }

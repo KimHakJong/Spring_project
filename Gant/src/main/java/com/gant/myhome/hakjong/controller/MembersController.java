@@ -1,0 +1,291 @@
+package com.gant.myhome.hakjong.controller;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.security.Principal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.server.Cookie;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.gant.myhome.hakjong.domain.MailVO;
+import com.gant.myhome.hakjong.domain.Members;
+import com.gant.myhome.hakjong.service.MemberService;
+import com.gant.myhome.hakjong.task.SendMail;
+
+@Controller
+@RequestMapping(value = "/member")//http://localhost:8088/myhome4/member/ 로 시작하는 주소 맴핑
+public class MembersController {
+	
+	private static final Logger logger = LoggerFactory.getLogger(MembersController.class);
+	
+	private MemberService  memberservice;
+	private PasswordEncoder passwordEncoder;
+	private SendMail sendMail;
+		
+	@Autowired
+	public MembersController(MemberService memberservice , PasswordEncoder passwordEncoder,SendMail sendMail) {
+	this.memberservice = memberservice;
+	this.passwordEncoder = passwordEncoder;
+	this.sendMail = sendMail;
+	}
+	
+	
+	/*
+	<security:remember-me> 설정 후
+    로그인 유지를 위한 쿠키의 값 수정
+	 */
+	@RequestMapping(value = "/login" , method = RequestMethod.GET)
+	public ModelAndView login(ModelAndView mv, 
+							  @CookieValue(value="remember-me",required=false) Cookie readCookie,
+							  @CookieValue(value="store", required=false) Cookie readCookie2,
+							  HttpSession session,
+							  Principal userPrincipal) {
+		if(readCookie != null) {
+				logger.info("자동로그인 쿠키 로드 :" + userPrincipal.getName()); //principal.getName() : 로그인한 아이디
+				mv.setViewName("redirect:/pmain/view");
+		}else if (readCookie2 != null){
+			logger.info("ID저장 쿠키 로드 ");
+			mv.setViewName("member/login");
+			mv.addObject("id_store",userPrincipal.getName());
+			mv.addObject("loginfail",session.getAttribute("loginfail"));
+			session.removeAttribute("loginfail");
+		} else {
+			mv.setViewName("member/login");
+			mv.addObject("loginfail",session.getAttribute("loginfail")); //세션에 저장된 값을 한 번만 실행될 수 있도록 mv에 저장
+			session.removeAttribute("loginfail"); //세션의 값은 제거
+		}
+		return mv;
+	}
+	
+	@RequestMapping(value="/join", method=RequestMethod.GET)
+	public String join() {
+		return "member/join"; //WEB-INF/views/member/member_joinForm.jsp
+	}	
+	
+	//회원가입폼에서 아이디 검사
+	@RequestMapping(value = "/idcheck", method=RequestMethod.POST)
+	public void idcheck(@RequestParam("id") String id,
+						HttpServletResponse response) throws Exception {
+		
+		int result = memberservice.idCheck(id);
+		response.setContentType("text/html;charset=utf-8");
+		PrintWriter out = response.getWriter();
+		out.print(result);
+	}
+	
+	@ResponseBody
+	@PostMapping(value = "/sendCert")
+	public Map<String,String> certCheck(String emdomain) {
+		logger.info("인증발송ajax");
+		int num = (int) (Math.random() * 999999 + 1);
+		String certnum = String.format("%06d", num);
+		
+		MailVO vo = new MailVO();
+		vo.setTo(emdomain);
+		vo.setSubject("인증번호 [" + certnum + "] 이메일 인증 메일입니다.");
+		vo.setContent("인증번호는 " + certnum + " 입니다.");
+		
+		sendMail.sendMail(vo);
+		
+		Map<String,String> map = new HashMap<String,String>();
+		map.put("certnum", certnum);
+		map.put("result", "인증번호를 발송했습니다.");
+		
+		return map;
+	}
+	
+	@RequestMapping(value = "/joinProcess",method=RequestMethod.POST)
+	public String joinProcess(String jumin1, String jumin2, String phone1, String phone2, String phone3,
+							  String email, String domain, Members m, RedirectAttributes rattr,
+							  Model model, HttpServletRequest request) {
+		
+		m.setAdmin("false");
+		String encPassword = passwordEncoder.encode(m.getPassword());
+		m.setPassword(encPassword);
+		m.setJumin(jumin1+"-"+jumin2);
+		m.setPhone_num(phone1+"-"+phone2+"-"+phone3);
+		m.setEmail(email+"@"+domain);
+		
+		logger.info("회원가입 비밀번호 암호화");
+		int result = memberservice.insert(m);
+		
+		if(result==1) {
+			rattr.addFlashAttribute("result","joinSuccess");
+			return "redirect:login";
+		}else {
+			model.addAttribute("url",request.getRequestURI());
+			model.addAttribute("message","회원 가입 실패입니다.");
+			return "error/error";
+		}
+	}
+	
+	@GetMapping(value ="/findid")
+	public String findId() {
+		return "member/findid";
+	}
+	
+	@PostMapping(value="/findidok")
+	public ModelAndView findIdOk(String name, String email, ModelAndView mv, HttpServletResponse response) throws IOException {
+		String id = memberservice.findIdCheck(name,email);
+		
+		if(id.equals("")) {
+			response.setContentType("text/html;charset=utf-8");
+			PrintWriter out = response.getWriter();
+			out.println("<script>");
+			out.println("alert('등록된 이름이 없습니다.');");
+			out.println("</script>");
+			out.close();
+			return null;
+		}else if(id.equals("noemail")) {
+			response.setContentType("text/html;charset=utf-8");
+			PrintWriter out = response.getWriter();
+			out.println("<script>");
+			out.println("alert('등록된 이메일이 존재하지 않습니다.');");
+			out.println("history.back();"); //다시 아이디찾기 창으로
+			out.println("</script>");
+			out.close();
+			return null;
+		}else { //정보 잘 찾은 경우
+			mv.addObject("namme",name);
+			mv.addObject("id", id);
+			mv.setViewName("member/findidok");
+			return mv;
+		}
+	}
+
+	@GetMapping(value ="/findpass")
+	public String findPass() {
+		return "member/findpass";
+	}
+	
+	@PostMapping(value ="/findpassok")
+	public ModelAndView findPassOk(String id, String name, String email, ModelAndView mv, HttpServletResponse response) throws Exception {
+		
+		String pass = memberservice.findPassCheck(id, name, email);
+		
+		if(pass.equals("")) { //아이디 존재X
+			response.setContentType("text/html;charset=utf-8");
+			PrintWriter out = response.getWriter();
+			samecode(out, "아이디가");
+			return null;
+		}else if (pass.equals("noname")) { //이름 존재X
+			response.setContentType("text/html;charset=utf-8");
+			PrintWriter out = response.getWriter();
+			samecode(out, "이름이");
+			return null;
+		}else if (pass.equals("noemail")){ //이메일 존재X
+			response.setContentType("text/html;charset=utf-8");
+			PrintWriter out = response.getWriter();
+			samecode(out, "이메일이");
+			return null;
+		}else { //정보 잘 찾은 경우
+			mv.addObject("id", id);
+			mv.addObject("password", pass);
+			mv.setViewName("member/findpassok");
+			return mv;
+		}
+	}
+	
+	public static void samecode(PrintWriter out, String message) {
+		out.println("<script>");
+		out.println("alert('입력한 " + message + " 존재하지 않습니다.');");
+		out.println("history.back();"); //다시 비밀번호찾기 창으로
+		out.println("</script>");
+		out.close();
+	}
+	
+	@RequestMapping(value ="/list",method=RequestMethod.POST)
+	public ModelAndView membersList(Principal principal,
+						  @RequestParam(value="page", defaultValue="1", required=false) int page,
+						  @RequestParam(value="searchfield", defaultValue="", required=false) String searchfield,
+						  @RequestParam(value="searchword", defaultValue="", required=false) String searchword,
+						  ModelAndView mv, HttpServletResponse response) throws IOException {
+		
+		int limit = 6; //최대 보이는 수
+		
+		int membercount = memberservice.getMembersCount(searchfield,searchword); //총 리스트 수
+		List<Members> memberlist = memberservice.getMembersList(searchfield, searchword, page, limit); //페이지별 회원리스트
+		
+		int maxpage = (membercount + limit - 1) / limit; //총 페이지수
+		int startpage = ((page-1)/10) * 10 + 1;
+		int endpage = startpage + 10 - 1;
+		
+		if (endpage > maxpage) endpage=maxpage;
+		
+		// 로그인 풀린 상태면 로그인창으로 이동
+		String id = principal.getName();
+		if(id==null) {
+			response.setContentType("text/html;charset=utf-8");
+			PrintWriter out = response.getWriter();
+			out.println("<script>");
+			out.println("alert('로그인 후 이용해주세요');"); 
+			out.println("location.href='login';");
+			out.println("</script>");
+			out.close();
+			return null;
+		}
+		
+		//관리자와 인사부는 삭제버튼 보이기 위한 코드
+		String isadminhuman = memberservice.isAdminHuman(id);
+		
+		//회원리스트 조회를 위한 코드
+		mv.addObject("isadminhuman", isadminhuman);
+		mv.addObject("page", page); //기본값1,넘어온값 있으면 보낸다.
+		mv.addObject("maxpage", maxpage);
+		mv.addObject("startpage", startpage);
+		mv.addObject("endpage", endpage);
+		
+		mv.addObject("membercount", membercount);
+		mv.addObject("memberlist", memberlist);
+		mv.addObject("searchfield", searchfield);
+		mv.addObject("searchword", searchword);
+		
+		mv.setViewName("member/list");
+		return mv;
+	}
+	
+	@ResponseBody
+	@RequestMapping("value=/orgchart")
+	public Map<String,String> getOrgchart() {
+		
+		//각 부서별 이름을 ','로 구분하여 String형으로 담음
+		String plan = memberservice.selectByDname("기획부");
+		String sales = memberservice.selectByDname("영업부");
+		String human = memberservice.selectByDname("인사부");
+		String it = memberservice.selectByDname("전산부");
+		String chong = memberservice.selectByDname("총무부");
+		String account = memberservice.selectByDname("회계부");
+		
+		Map<String,String> map = new HashMap<String,String>();
+		map.put("plan", plan);
+		map.put("sales", sales);
+		map.put("human", human);
+		map.put("it", it);
+		map.put("chong", chong);
+		map.put("account", account);
+		
+		return map;
+	}
+	
+}

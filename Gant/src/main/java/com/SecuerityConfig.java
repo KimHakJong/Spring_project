@@ -13,10 +13,10 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
-import com.gant.security.CustomAccessDeniedHandler;
-import com.gant.security.CustomUserDetailsService;
-import com.gant.security.LoginFailHandler;
-import com.gant.security.LoginSuccessHandler;
+import com.gant.myhome.hakjong.security.CustomAccessDeniedHandler;
+import com.gant.myhome.hakjong.security.CustomUserDetailsService;
+import com.gant.myhome.hakjong.security.LoginFailHandler;
+import com.gant.myhome.hakjong.security.LoginSuccessHandler;
 
 @EnableWebSecurity // 스프링 시큐리티 결합
 @Configuration
@@ -32,6 +32,8 @@ public class SecuerityConfig extends WebSecurityConfigurerAdapter {
 		          .antMatchers("/member/join").permitAll()
 		          .antMatchers("/member/idcheck").permitAll()
 		          .antMatchers("/member/joinProcess").permitAll()
+		          .antMatchers("/member/findid").permitAll()
+		          .antMatchers("/member/sendCert").permitAll()
 		          .antMatchers("/member/list").access("hasRole('ROLE_ADMIN')")
 		          .antMatchers("/member/info").access("hasRole('ROLE_ADMIN')")
 		          .antMatchers("/**").access("hasAnyRole('ROLE_MEMBER','ROLE_ADMIN')");
@@ -53,12 +55,18 @@ public class SecuerityConfig extends WebSecurityConfigurerAdapter {
 	http.logout().logoutSuccessUrl("/member/login")
 	    .logoutUrl("/member/logout")
 	    .invalidateHttpSession(true)
-	    .deleteCookies("remember-me" , "JSESSION_ID");
+	    .deleteCookies("remember-me" , "JSESSION_ID" , "store");
+	
 	
 	http.rememberMe()
 	    .rememberMeParameter("remember-me")
 	    .rememberMeCookieName("remember-me")
-	    .tokenValiditySeconds(2419200);
+	    .tokenValiditySeconds(21600); //6시간 쿠키유지
+	
+	http.rememberMe()
+		.rememberMeParameter("store")
+		.rememberMeCookieName("store")
+		.tokenValiditySeconds(86400); //24시간 쿠키유지
 	
 	http.exceptionHandling().accessDeniedHandler(accessDeniedHandler());
 	
@@ -69,8 +77,8 @@ public class SecuerityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(customUserService()).passwordEncoder(passwordEncoder());
 	}
-
-  
+	
+	
 	//로그인 성공시 실행할 객체 생성
 	@Bean
 	public AuthenticationSuccessHandler loginSuccessHandler() {
