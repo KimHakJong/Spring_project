@@ -1,23 +1,42 @@
-drop table comments3 cascade constraints purge;
+drop table com cascade constraints purge;
 
-CREATE TABLE comments3(
-num               NUMBER primary key,           
-id                VARCHAR2(30) references member3(id),     
+--ë‹µë³€ê¸€ í…Œì´ë¸” 
+CREATE TABLE com(
+num               NUMBER primary key,--ëŒ“ê¸€ ë²ˆí˜¸        
+id                varchar2(15) references members(id) on delete cascade,     
 content           VARCHAR2 (200), 
 reg_date          date,
-board_num         NUMBER  references board3(board_num) on delete cascade --comments Å×ÀÌºíÀÌ ÂüÁ¶ÇÏ´Â º¸µå ±Û¹øÈ£
+comment_board_num NUMBER references boards(board_num) on delete cascade, --comm í…Œì´ë¸”ì´ ì°¸ì¡°í•˜ëŠ” ë³´ë“œ ê¸€ë²ˆí˜¸
+comment_re_lev    NUMBER(1) check(comment_re_lev in (0,1,2)), -- ì›ë¬¸ì´ë©´ 0 ë‹µê¸€ì´ë©´ 1 ë‹µê¸€ì˜ ë‹µê¸€ì€ 2
+comment_re_seq    NUMBER, -- ë‹µë³€ëŒ“ê¸€ì˜ ìˆœì„œ
+comment_re_ref    NUMBER -- ì›ë¬¸ì€ ìì‹  ëŒ“ê¸€ë²ˆí˜¸ , ë‹µê¸€ì´ë©´ ì›ë¬¸ ëŒ“ê¸€ ë²ˆí˜¸
 );
 
--- °Ô½ÃÆÇ ±ÛÀÌ »èÁ¦µÇ¸é ÂüÁ¶ÇÏ´Â ´ñ±Ûµµ »èÁ¦µË´Ï´Ù.
+-- ê²Œì‹œíŒ ê¸€ì´ ì‚­ì œë˜ë©´ ì°¸ì¡°í•˜ëŠ” ëŒ“ê¸€ë„ ì‚­ì œë©ë‹ˆë‹¤.
 
 
-drop sequence com_seq3; --½ÃÄö½º»èÁ¦
-
-create sequence com_seq3;--½ÃÄö½º»ı¼º
-
-delete comments3;
-
-select * from comments3;
+drop sequence comm_seq; --ì‹œí€€ìŠ¤ì‚­ì œ
 
 
+create sequence comm_seq; --ì‹œí€€ìŠ¤ìƒì„±
+
+
+select * from com;
+
+
+--memberì— ìˆëŠ” memberfileì´ í•„ìš”í•©ë‹ˆë‹¤.
+--1. comment_re_ref asc , comment_re_seq asc (ë“±ë¡ìˆœ)
+--2. comment_re_ref desc , comment_re_seq asc (ìµœì‹ ìˆœ)
+
+select com.* , member.memberfile
+from com inner join member
+on comment.id=member.id
+where comment_board_num = ?
+order by comment_re_ref desc , comment_re_seq asc;
+
+delete from com;
+
+   
+    
+    
   
