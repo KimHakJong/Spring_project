@@ -64,7 +64,7 @@ public class BoardController {
 	@RequestMapping(value = "/main" , method = RequestMethod.GET)
 	public ModelAndView boardlist(
 			@RequestParam(value = "page", defaultValue = "1", required = false) int page,
-			@RequestParam(value = "search_name", required = false) String search_name,
+			@RequestParam(value = "search_name", defaultValue = "", required = false) String search_name,
 			ModelAndView mv) {
 		List<Board> boardlist = new ArrayList<Board>();
 			
@@ -76,7 +76,7 @@ public class BoardController {
 		//공지게시글 수
 		int noticeCount = 0;
 		
-		//검색어가 있는경우
+		//검색어가 없는경우
         if(search_name == null || search_name.equals("")) {	
 			//검색어에 포함되어있는 게시글 수 
 			listcount = boardService.getSearchListCount(search_name);
@@ -85,7 +85,7 @@ public class BoardController {
 			//검색어에 포함되어있는 게시글 리스트
 			boardlist = boardService.getSearchBoardList(page,limit,search_name);
 					
-		}else {// 검색어가없는경우
+		}else {// 검색어가있는경우
 			
 			//총 리스트 수를 받아옵니다.
 			listcount = boardService.getListCount();
@@ -113,7 +113,7 @@ public class BoardController {
 		}
 		
 
-		mv.setViewName("board/boardList.jsp");
+		mv.setViewName("board/boardList");
 		mv.addObject("page", page);
 		mv.addObject("maxpage" , maxpage);
 		mv.addObject("startpage" , startpage);

@@ -9,15 +9,15 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
-<link href="css/home.css" rel="stylesheet" type="text/css">
-<link href="board/board_css/main_bo.css" rel="stylesheet" type="text/css">
+<link href="${pageContext.request.contextPath}/resources/css/home.css" rel="stylesheet" type="text/css">
+<link href="${pageContext.request.contextPath}/resources/css/board_css/main_bo.css" rel="stylesheet" type="text/css">
 <script>
 $(function(){
 	
 	$("#board_write").click(function(){
 		location.href="write"; 
 		 })
-				 	 
+	 
 });		 
 </script>
 <title>자유/공지 게시판</title>
