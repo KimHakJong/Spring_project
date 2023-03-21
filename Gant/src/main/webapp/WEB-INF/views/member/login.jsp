@@ -71,6 +71,8 @@ $(document).ready(function(){
 		alert("회원 가입을 축하합니다.")
 	}else if("${loginfail}" == 'loginFailMsg'){
 		alert("아이디 또는 비밀번호가 일치하지 않습니다.");
+	}else if("${update}" == 'success'){
+		alert("정상적으로 비밀번호가 변경되었습니다.");
 	}
   
   $('#joinbtn').click(function(){

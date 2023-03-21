@@ -62,7 +62,7 @@ background:transparent;
                             <a href="#" class="dropdown-item">
                                 <div class="d-flex align-items-center">
                                        <c:if test="${empty profileimg}">
-	    									<img class="rounded-circle" src="member/image/defaultprofile.png"  alt="" style="width: 40px; height: 40px;">
+	    									<img class="rounded-circle" src="${pageContext.request.contextPath}/resources/image/home/defaultprofile.png"  alt="" style="width: 40px; height: 40px;">
 	    								</c:if>
 	    								<c:if test="${!empty profileimg}">
 	    									<img class="rounded-circle" src="memberupload/${profileimg}"  alt="" style="width: 40px; height: 40px;">
@@ -77,7 +77,7 @@ background:transparent;
                             <a href="#" class="dropdown-item">
                                 <div class="d-flex align-items-center">
                                         <c:if test="${empty profileimg}">
-	    									<img class="rounded-circle" src="member/image/defaultprofile.png"  alt="" style="width: 40px; height: 40px;">
+	    									<img class="rounded-circle" src="${pageContext.request.contextPath}/resources/image/home/defaultprofile.png"  alt="" style="width: 40px; height: 40px;">
 	    								</c:if>
 	    								<c:if test="${!empty profileimg}">
 	    									<img class="rounded-circle" src="memberupload/${profileimg}"  alt="" style="width: 40px; height: 40px;">
@@ -92,7 +92,7 @@ background:transparent;
                             <a href="#" class="dropdown-item">
                                 <div class="d-flex align-items-center">
                                        <c:if test="${empty profileimg}">
-	    									<img class="rounded-circle" src="member/image/defaultprofile.png"  alt="" style="width: 40px; height: 40px;">
+	    									<img class="rounded-circle" src="${pageContext.request.contextPath}/resources/image/home/defaultprofile.png"  alt="" style="width: 40px; height: 40px;">
 	    								</c:if>
 	    								<c:if test="${!empty profileimg}">
 	    									<img class="rounded-circle" src="memberupload/${profileimg}"  alt="" style="width: 40px; height: 40px;">
@@ -114,7 +114,7 @@ background:transparent;
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                        		
-                            <a href="chat.sml" onClick="window.open('chat.sml', 'chat', 'width=500, height=450, top=170px, left=230px, resizable=no,menubar=no,status=no,titlebar=no,toolbar=no, scrollbars=no,directories=no,location=no'); return false;"
+                            <a href="${pageContext.request.contextPath}/small/chat" onClick="window.open('${pageContext.request.contextPath}/small/chat', 'chat', 'width=500, height=450, top=170px, left=230px, resizable=no,menubar=no,status=no,titlebar=no,toolbar=no, scrollbars=no,directories=no,location=no'); return false;"
                                class="dropdown-item chat"><i class="far fa-comment-dots me-2"></i>채팅</a>
                                
                             <a href="avascript:void(0)" class="dropdown-item openmemo"><i class="far fa-sticky-note me-2"></i>메모장</a>
@@ -124,7 +124,7 @@ background:transparent;
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                         <c:if test="${empty profileimg}">
-	    					<img class="rounded-circle me-lg-2" src="member/image/defaultprofile.png"  alt="" style="width: 40px; height: 40px;">
+	    					<img class="rounded-circle me-lg-2" src="${pageContext.request.contextPath}/resources/image/home/defaultprofile.png"  alt="" style="width: 40px; height: 40px;">
 	    				</c:if>
 	    				<c:if test="${!empty profileimg}">
 	    					<img class="rounded-circle me-lg-2" src="memberupload/${profileimg}"  alt="" style="width: 40px; height: 40px;">

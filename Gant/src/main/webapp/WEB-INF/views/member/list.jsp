@@ -10,8 +10,11 @@
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-<link href="css/home.css" rel="stylesheet">
+<link href="../resources/css/home/home.css" rel="stylesheet">
 <meta charset="UTF-8">
+<meta name="_csrf" content="${_csrf.token}">
+<meta name="_csrf_header" content="${_csrf.headerName}">
+
 <title>GANT</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
@@ -91,6 +94,9 @@ h1 {
 <script>
 
 $(document).ready(function(){
+	let token = $("meta[name='_csrf']").attr("content");
+	let header = $("meta[name='_csrf_header']").attr("content");
+	
 	let selval = '${searchfield}';
 	if(selval != ""){
 		$("#searchfield").val(selval);
@@ -110,16 +116,21 @@ $(document).ready(function(){
 		function ajax(name, department, phone_num, where){
 			
 		  $.ajax({
-			url : "commutecheck.net",
+			url : "commuteCheck",
+			type : "post",
 			data : { "name" : name, "department" : department,
 				    "phone_num" : phone_num },
 			dataType : "json",
+			beforeSend : function(xhr)
+  			{   //데이터를 전송하기 전에 헤더에 csrf값을 설정합니다.
+    			xhr.setRequestHeader(header, token);			
+    		},
 			success : function(rdata){
 				let check = rdata.check;
 				if(check=="true"){
-					where.before("<img src='member/image/greencircle.png' title='출근상태'>"); //where은 이미지삽입되는 뒤 형제요소
+					where.before("<img src='${pageContext.request.contextPath}/resources/image/member/greencircle.png' title='출근상태'>"); //where은 이미지삽입되는 뒤 형제요소
 				}else{
-					where.before("<img src='member/image/redcircle.png' title='퇴근상태'>");
+					where.before("<img src='${pageContext.request.contextPath}/resources/image/member/redcircle.png' title='퇴근상태'>");
 				}
 			}
 		  });
@@ -130,14 +141,19 @@ $(document).ready(function(){
 	$('.godetail').click(function(){
 		let clickname = $(this).text();
 		$.ajax({
-			url : "detail.net",
+			url : "detail",
+			type : "post",
 			data : {"clickname" : clickname } ,
 			dataType : "json",
+			beforeSend : function(xhr)
+  			{   //데이터를 전송하기 전에 헤더에 csrf값을 설정합니다.
+    			xhr.setRequestHeader(header, token);			
+    		},
 			success : function(data){
 				if(data.profileimg==null){
-					$("#profileimg").attr('src','member/image/defaultprofile.png');
+					$("#profileimg").attr('src','${pageContext.request.contextPath}/resources/image/member/defaultprofile.png');
 				}else{
-					$("#profileimg").attr('src','memberupload/'+data.profileimg);
+					$("#profileimg").attr('src','${pageContext.request.contextPath}/resources/image/memberupload/'+data.profileimg);
 				}
 
 				$("#name").text(data.name);
@@ -179,7 +195,7 @@ $(document).ready(function(){
 </aside>
 
 <div class="list">
-<form action="list.net" method="post">
+<form action="list" method="post">
 
 <div id="searchdiv">
 <select id="searchfield" name="searchfield">
@@ -191,11 +207,12 @@ $(document).ready(function(){
 <button type="submit" id="searchbtn">🔍︎</button>
 <!-- <img id="searchicon" src="member/image/searchicon.png"> -->
 </div>
+<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 </form>
 
 <div class='explain'>
-	<img src='member/image/greencircle.png'> 출근
-	<img src='member/image/redcircle.png'> 퇴근
+	<img src='${pageContext.request.contextPath}/resources/image/member/greencircle.png'> 출근
+	<img src='${pageContext.request.contextPath}/resources/image/member/redcircle.png'> 퇴근
 </div>
 
 <c:if test="${membercount > 0}">
@@ -287,6 +304,7 @@ hr{margin:10px;}
 		  		</div><hr>
 		  		
 		  		<button type="button" id="close" data-dismiss="modal">창 닫기</button>
+		  		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 		  		</form>
 		  	</div>
 		  </div>

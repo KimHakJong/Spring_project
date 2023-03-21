@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ include file="../memo/memo.jsp" %>
 <!DOCTYPE html>
 <head>
@@ -23,14 +24,14 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
     <!-- Libraries Stylesheet -->
-    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
-    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+    <link href="${pageContext.request.contextPath}/resources/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/resources/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
 
     <!-- Customized Bootstrap Stylesheet -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/resources/css/home/bootstrap.min.css" rel="stylesheet">
 
     <!-- Template Stylesheet -->
-    <link href="css/style.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/resources/css/home/style.css" rel="stylesheet">
 <style>
 .logo{width:100%;text-align:center}
 .leftside::-webkit-scrollbar {
@@ -72,6 +73,12 @@
 </head>
 
 <body>
+	<!-- isAnonymous() : 익명 사용자인 경우 로그인 페이지로 이동하도록 합니다. -->
+	<sec:authorize access="isAnonymous()">
+		<script>
+			location.href = "${pageContext.request.contextPath}/member/login";
+		</script>
+	</sec:authorize>
         <!-- Spinner Start -->
         <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
             <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
@@ -84,13 +91,13 @@
         <!-- Sidebar Start -->
         <div class="leftside sidebar pe-4 pb-3">
             <nav class="navbar bg-light navbar-light">
-                <a href="main.home" class="navbar-brand mx-4 mb-3 logo">
+                <a href="${pageContext.request.contextPath}/pmain/view" class="navbar-brand mx-4 mb-3 logo">
                     <h3 class="text-primary">GANT</h3>
                 </a>
                 <div class="d-flex align-items-center ms-4 mb-4">
                     <div class="position-relative">
 					<c:if test="${empty profileimg}">
-	    				<img class="rounded-circle" src="member/image/defaultprofile.png"  alt="" style="width: 40px; height: 40px;">
+	    				<img class="rounded-circle" src="${pageContext.request.contextPath}/resources/image/home/defaultprofile.png"  alt="" style="width: 40px; height: 40px;">
 	    			</c:if>
 	    			<c:if test="${!empty profileimg}">
 	    				<img class="rounded-circle" src="memberupload/${profileimg}"  alt="" style="width: 40px; height: 40px;">
@@ -98,7 +105,10 @@
                         <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
                     </div>
                     <div class="ms-3">
-                        <h6 class="mb-0">${id}</h6>
+                    <sec:authorize access="isAuthenticated()">
+	   				 <sec:authentication property="principal" var="pinfo"/>
+                        <h6 class="mb-0">${pinfo.username}</h6>
+                    </sec:authorize>
                         <span>${name}</span>
                     </div>
                 </div>
@@ -118,7 +128,7 @@
                      -->
                     <a href="main.calendar" class="nav-item nav-link"><i class="far fa-calendar-alt me-2"></i>캘린더</a>
                     <a href="main.calendar" class="nav-item nav-link"><i class="fas fa-clock me-2"></i>예약</a>
-                    <a href="list.net" class="nav-item nav-link"><i class="fa fa-address-book me-2"></i>주소록</a>
+                    <a href="../member/list" class="nav-item nav-link"><i class="fa fa-address-book me-2"></i>주소록</a>
                     <a href="jjokji" class="nav-item nav-link"><i class="far fa-envelope me-2"></i>쪽지</a>
                     <a href="junja" class="nav-item nav-link"><i class="fas fa-file me-2"></i>전자결재</a>
                 </div>
@@ -128,16 +138,16 @@
         
 	    <!-- JavaScript Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/chart/chart.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
-    <script src="lib/waypoints/waypoints.min.js"></script>
-    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
-    <script src="lib/tempusdominus/js/moment.min.js"></script>
-    <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
-    <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/lib/chart/chart.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/lib/easing/easing.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/lib/waypoints/waypoints.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/lib/tempusdominus/js/moment.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
 
     <!-- Template Javascript -->
-    <script src="js/main.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/home/main.js"></script>
 </body>
 
 </html>

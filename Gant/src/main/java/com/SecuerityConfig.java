@@ -31,10 +31,13 @@ public class SecuerityConfig extends WebSecurityConfigurerAdapter {
 		          .antMatchers("/member/login").permitAll()
 		          .antMatchers("/member/join").permitAll()
 		          .antMatchers("/member/idcheck").permitAll()
+		          .antMatchers("/member/sendCert").permitAll()
 		          .antMatchers("/member/joinProcess").permitAll()
 		          .antMatchers("/member/findid").permitAll()
-		          .antMatchers("/member/sendCert").permitAll()
-		          .antMatchers("/member/list").access("hasRole('ROLE_ADMIN')")
+		          .antMatchers("/member/findidok").permitAll()
+		          .antMatchers("/member/findpass").permitAll()
+		          .antMatchers("/member/findpassok").permitAll()
+		          .antMatchers("/member/findpassokProcess").permitAll()
 		          .antMatchers("/member/info").access("hasRole('ROLE_ADMIN')")
 		          .antMatchers("/**").access("hasAnyRole('ROLE_MEMBER','ROLE_ADMIN')");
 		

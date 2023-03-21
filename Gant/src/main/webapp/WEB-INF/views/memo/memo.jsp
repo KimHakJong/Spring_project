@@ -124,10 +124,10 @@ $(document).ready(function(){
 		console.log($('.txtMemo').css('color'));
 		if($('.txtMemo').css('color')=='rgb(0, 0, 0)'){ //검은색일때 클릭하면, 흰색으로 바뀌고->겅믄색그림색그림
 			$('.txtMemo').css('color','white');
-			$(this).attr('src','memo/image/color-black.png');
+			$(this).attr('src','${pageContext.request.contextPath}/image/memo/color-black.png');
 		}else if($('.txtMemo').css('color')=='rgb(255, 255, 255)'){//흰색일 때 클릭하면, 검은색으로 바뀌고->흰색 그림
 			$('.txtMemo').css('color','black');
-			$(this).attr('src','memo/image/color-white.png');
+			$(this).attr('src','${pageContext.request.contextPath}/image/memo/color-white.png');
 		}
 	});
 	
@@ -141,19 +141,19 @@ $(document).ready(function(){
 			var id = '${id}';
 		
 			$.ajax({
-			 url : "memo.sml",
+			 url : "memo",
 			 data : {"id" : id},
 			 dataType : "json",
 			 success : function(Mdata){
 		 	   if(!Mdata.addrow==1) {
-		  			$('.memo').css('background-image',"url('memo/image/"+ Mdata.background + "')"); //배경색 불러온 대로 설정
+		  			$('.memo').css('background-image',"url('${pageContext.request.contextPath}/image/memo/"+ Mdata.background + "')"); //배경색 불러온 대로 설정
 		  			
 		  			if(Mdata.color == 'rgb(0, 0, 0)'){ //불러온 색과 반대색이 위에 그림에 표시되도록, 글자색 설정
-		  				$('.pen_colors>img').attr('src',"memo/image/color-white.png");
+		  				$('.pen_colors>img').attr('src',"${pageContext.request.contextPath}/image/memo/color-white.png");
 		  				$('.memo .txtMemo').css('color','rgb(0, 0, 0)');
 		  			}else{
 		  				$('.memo .txtMemo').css('color','rgb(255, 255, 255)');
-		  				$('.pen_colors>img').attr('src',"memo/image/color-black.png");
+		  				$('.pen_colors>img').attr('src',"${pageContext.request.contextPath}/image/memo/color-black.png");
 		  			}
 		  			
 		  			$('.txtMemo').val(Mdata.content); //저장되어있던 내용 불러옴
@@ -197,7 +197,7 @@ $(document).ready(function(){
 			let content = $('.txtMemo').val();
 			
 			$.ajax({
-				url : 'memoupdate.sml',
+				url : 'memoupdate',
 				data : {"id" : id, "background" : background, "color":color, "content":content},
 				dataType : "json",
 				success : function(rdata){
@@ -220,19 +220,19 @@ $(document).ready(function(){
 </head>
 <body>
 
-<div class="memo" style="background-image: url('memo/image/memo-yellow.png')">
-	<div class="btnChange"><img src='memo/image/change.png'>
+<div class="memo" style="background-image: url('${pageContext.request.contextPath}/image/memo/memo-yellow.png')">
+	<div class="btnChange"><img src='${pageContext.request.contextPath}/image/memo/change.png'>
 		<span class='back_colors'>
-		<img src="memo/image/memo-red.png">
-		<img src="memo/image/memo-pink.png">
-		<img src="memo/image/memo-orange.png">
-		<img src="memo/image/memo-yellow.png">
-		<img src="memo/image/memo-green.png">
-		<img src="memo/image/memo-blue.png">
+		<img src="${pageContext.request.contextPath}/image/memo/memo-red.png">
+		<img src="${pageContext.request.contextPath}/image/memo/memo-pink.png">
+		<img src="${pageContext.request.contextPath}/image/memo/memo-orange.png">
+		<img src="${pageContext.request.contextPath}/image/memo/memo-yellow.png">
+		<img src="${pageContext.request.contextPath}/image/memo/memo-green.png">
+		<img src="${pageContext.request.contextPath}/image/memo/memo-blue.png">
 		</span>
 	</div>
 	<span class="pen_colors">
-		<img src="memo/image/color-white.png">
+		<img src="${pageContext.request.contextPath}/image/memo/color-white.png">
 	</span>
 	<div class="btnClose">&times;</div>
 	<button class="memo_store" type="button">저장</button>

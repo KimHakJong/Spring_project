@@ -15,6 +15,8 @@ public interface MembersMapper {
 	 
 	public int insert(Members m);
 
+	public int passUpdate(Members m);
+	
 	public int getMembersCount(HashMap<String, String> map);
 
 	public List<Members> getMembersList(HashMap<String, Object> map);
@@ -26,6 +28,10 @@ public interface MembersMapper {
 	public Members findIdCheck(String name);
 
 	public Members findPassCheck(String id);
+
+	public Members getMemberInfo(String id);
+
+
 
 	 
 }
