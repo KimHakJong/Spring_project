@@ -5,7 +5,8 @@
 <head>
 <title>실시간 채팅</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="js/jquery-3.6.3.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/jquery-3.6.3.js"></script>
+
 <style>
 * {font-family:"noto sans", sans-serif;
    box-sizing: border-box; font-size:15px}
@@ -107,17 +108,17 @@ button>img{width:30px;height:30px;}
 <body>
 <div class="out">
 	<div id="myinfo">
-	<img id="onimg" src="chat/image/onlinelist.png">
+	<img id="onimg" src="${pageContext.request.contextPath}/resources/image/chat/onlinelist.png">
 	<div id="onlinelist">
 	<div></div>
 		<ul>
 		</ul>
 	</div>
 	<c:if test="${member.profileimg==null}" > <%--프로필사진 없는 경우: 기본이미지 --%>
-	  <img id="myprofile" src="member/image/defaultprofile.png"><div id="myname">나</div><div id="myname2">${member.name}</div>
+	  <img id="myprofile" src="${pageContext.request.contextPath}/resources/image/member/defaultprofile.png"><div id="myname">나</div><div id="myname2">${member.name}</div>
 	</c:if>
 	<c:if test="${member.profileimg!=null}" > <%--프로필사진 등록한 경우: 그 이미지 --%>
-	  <img id="myprofile" src="memberupload/${member.profileimg}"><div id="myname">나</div><div id="myname2">${member.name}</div>
+	  <img id="myprofile" src="${pageContext.request.contextPath}/resources/image/memberupload/${member.profileimg}"><div id="myname">나</div><div id="myname2">${member.name}</div>
 	</c:if>
 	</div>
 <!-- onkeydown을 통해서 엔터키로도 입력되도록 설정. -->
@@ -128,7 +129,7 @@ button>img{width:30px;height:30px;}
 	<div id="bottombox">
 	<input id="inputMessage" type="text" placeholder="메시지를 입력하세요"
 			onkeydown="if(event.keyCode==13){send();}">
-	<button type="button" value="send"><img src="member/image/sendicon.png"></button>
+	<button type="button" value="send"><img src="${pageContext.request.contextPath}/resources/image/chat/sendicon.png"></button>
 	</div>
 	
 </div>
@@ -142,7 +143,7 @@ $("#onimg").click(function(){
 });
 
 	//웹소켓 설정
-	var webSocket = new WebSocket("ws://localhost:8088/Gant/ChatServer");
+	var webSocket = new WebSocket("ws://localhost:9696/gant/ChatServer");
 	
 	//같은 이가 여러번 보낼때 이름 판별할 변수
 	re_send = "";
@@ -218,9 +219,9 @@ $("#onimg").click(function(){
 		receiveDiv += "<div class='receive'>"
 					+		"<img src=";
 					if(rmessage[0]==''){
-						receiveDiv += "'member/image/defaultprofile.png'";
+						receiveDiv += "'${pageContext.request.contextPath}/resources/image/member/defaultprofile.png'";
 					}else{
-						receiveDiv += "'memberupload/"+rmessage[0]+"''";
+						receiveDiv += "'${pageContext.request.contextPath}/resources/image/memberupload/"+rmessage[0]+"''";
 					}
 		receiveDiv += 			" class='profile'>" //프로필 사진(없으면 기본사진,있으면 그사진)
 					+ 		"<div class='receivemessage'>"+rmessage[2]+"</div>" //메시지 내용

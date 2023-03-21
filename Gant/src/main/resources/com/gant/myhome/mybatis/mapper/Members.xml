@@ -22,12 +22,23 @@
   	where name = #{name}
   </select>
   
-  <select id="findPassCheck" resultType="Members">
+  <select id="findPassCheck" resultType="members">
   	select id, password, name, email 
   	from members 
   	where id = #{id}
   </select>
   
+  <update id="passUpdate">
+  	update members 
+  	set password = #{password} 
+  	where id = #{id} 
+  </update>
+  
+  <select id="getMemberInfo" resultType="members">
+	select * 
+	from members 
+	where id = #{id}
+  </select>
   <select id="getMembersCount" resultType="int">
      select count(*)
      from members 
@@ -71,4 +82,5 @@
   	from members 
   	where department = #{department}
   </select>
+  
 </mapper>

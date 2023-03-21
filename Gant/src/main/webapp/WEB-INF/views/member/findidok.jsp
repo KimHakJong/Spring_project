@@ -5,7 +5,8 @@
 <head>
 <meta charset="UTF-8">
 <title>GANT</title>
-<script src="js/jquery-3.6.3.js"></script>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+
 <style>
 * {font-family:"noto sans", sans-serif;
    box-sizing: border-box}
@@ -57,7 +58,6 @@ $(document).ready(function(){
   	<br>
   	<button type="button" id="logbtn">로그인</button>
   	<button type="button" id="findpassbtn">비밀번호 찾기</button>
-  	
   </div>
 </body>
 </html>

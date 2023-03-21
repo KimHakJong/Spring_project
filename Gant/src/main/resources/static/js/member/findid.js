@@ -27,10 +27,10 @@ $(document).ready(function(){
 	$("#sendcert").click(function(){
 		if(checkemail==true){
 		$('#sendcert').text('인증번호 재발송');
-		const emdo = $('#email').val();
+		const emdomain = $('#email').val();
 		$.ajax({
 				url: "sendCert",
-				data: "post",
+				type: "post",
 				dataType : "json",
 				data : {"emdomain" : emdomain},
 				beforeSend : function(xhr)

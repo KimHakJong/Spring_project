@@ -167,7 +167,7 @@ public class MembersController {
 			out.close();
 			return null;
 		}else { //정보 잘 찾은 경우
-			mv.addObject("namme",name);
+			mv.addObject("name",name);
 			mv.addObject("id", id);
 			mv.setViewName("member/findidok");
 			return mv;
@@ -207,6 +207,23 @@ public class MembersController {
 		}
 	}
 	
+	@PostMapping(value="/findpassokProcess")
+	public String findPassOkProcess(Members m, RedirectAttributes rattr, Model model,
+									HttpServletRequest request) {
+		
+		String encPassword = passwordEncoder.encode(m.getPassword());
+		m.setPassword(encPassword);
+		
+		int result = memberservice.passUpdate(m);
+		if(result==1) {
+			rattr.addFlashAttribute("update","success");
+			return "redirect:login";
+		}else {
+			model.addAttribute("url", request.getRequestURI());
+			model.addAttribute("message","비밀번호 변경 실패");
+			return "error/error";
+		}
+	}
 	public static void samecode(PrintWriter out, String message) {
 		out.println("<script>");
 		out.println("alert('입력한 " + message + " 존재하지 않습니다.');");
@@ -215,7 +232,7 @@ public class MembersController {
 		out.close();
 	}
 	
-	@RequestMapping(value ="/list",method=RequestMethod.POST)
+	@RequestMapping(value ="/list", method = {RequestMethod.GET, RequestMethod.POST})
 	public ModelAndView membersList(Principal principal,
 						  @RequestParam(value="page", defaultValue="1", required=false) int page,
 						  @RequestParam(value="searchfield", defaultValue="", required=false) String searchfield,

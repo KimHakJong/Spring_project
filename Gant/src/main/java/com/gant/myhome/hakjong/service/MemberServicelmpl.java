@@ -62,6 +62,11 @@ public class MemberServicelmpl implements MemberService {
 	}
 
 	@Override
+	public int passUpdate(Members m) {
+		return dao.passUpdate(m);
+	}
+	
+	@Override
 	public int getMembersCount(String searchfield, String searchword) {
 		HashMap<String,String> map = new HashMap<String,String>();
 		if(!searchfield.equals("")) {
@@ -109,6 +114,13 @@ public class MemberServicelmpl implements MemberService {
 		}
 		return names;
 	}
+
+	@Override
+	public Members getMemberInfo(String id) {
+		return dao.getMemberInfo(id);
+	}
+
+
 
 	
 

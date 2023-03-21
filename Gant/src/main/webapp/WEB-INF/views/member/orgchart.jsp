@@ -40,6 +40,9 @@ li{list-style-type:none}
 </style>
 <script>
 $(document).ready(function(){
+	let token = $("meta[name='_csrf']").attr("content");
+	let header = $("meta[name='_csrf_header']").attr("content");
+	
     $(".menu>a").click(function(){ //플러스마이너스아이콘, show-hide
    		if($(this).find('img').attr('src')=='../resources/image/member/plusblack.png'){
    			$(this).find('img').attr('src','../resources/image/member/minus.png');
@@ -53,7 +56,12 @@ $(document).ready(function(){
     function ajax(){
     	$.ajax({
 	    	url : '${pageContext.request.contextPath}/member/orgchart',
+	    	type : "post",
 	    	dataType: "json",
+	    	beforeSend : function(xhr)
+  			{   //데이터를 전송하기 전에 헤더에 csrf값을 설정합니다.
+    			xhr.setRequestHeader(header, token);			
+    		},
 	    	success : function(rdata){
 	    		
 	    		var dname = ["plan","sales","human","it","chong","account"];
@@ -129,7 +137,7 @@ $(document).ready(function(){
 		    	</ul>
 		    </li>
 		    	
-		    <li class="menu"><a><img src="member/image/plusblack.png">회계부</a>
+		    <li class="menu"><a><img src="../resources/image/member/plusblack.png">회계부</a>
 		    	<ul class="hide account">
 		    	</ul>
 		    </li>
