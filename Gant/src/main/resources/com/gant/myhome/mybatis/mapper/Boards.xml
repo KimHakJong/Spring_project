@@ -38,7 +38,7 @@
      </select>
      
      
-      <select id="getSearchBoardList"  resultType="board">
+      <select id="getBoardSearchList"  resultType="board">
        select * 
 	   from  (select rownum rnum, j.* 
 	          from (select boards.* , nvl(cnt,0) as cnt 
