@@ -10,17 +10,22 @@
 <meta charset="UTF-8">
 <script>
 $(document).ready(function(){
-	   
+	   $(".memolist").draggable();
 	   $( ".memo" ).draggable();
 	   
 		$('.chat').click(function(){
 			var win;
 			if(win){
 				win.close();
-				win = window.open('chat.sml', 'chat', 'width=500, height=450, top=170px, left=230px, resizable=no,menubar=no,status=no,titlebar=no,toolbar=no, scrollbars=no,directories=no,location=no');
+				win = window.open('${pageContext.request.contextPath}/small/chat', 'chat', 'width=500, height=450, top=170px, left=230px, resizable=no,menubar=no,status=no,titlebar=no,toolbar=no, scrollbars=no,directories=no,location=no');
 			}
 		});
-	   })
+		
+		$(".logout").click(function(event){
+			event.preventDefault();
+			$("form[name=logout]").submit();
+		})
+})
 </script>
 <style>
 .mypage:hover, .logout:hover, .openmemo:hover, .chat:hover{
@@ -117,7 +122,7 @@ background:transparent;
                             <a href="${pageContext.request.contextPath}/small/chat" onClick="window.open('${pageContext.request.contextPath}/small/chat', 'chat', 'width=500, height=450, top=170px, left=230px, resizable=no,menubar=no,status=no,titlebar=no,toolbar=no, scrollbars=no,directories=no,location=no'); return false;"
                                class="dropdown-item chat"><i class="far fa-comment-dots me-2"></i>채팅</a>
                                
-                            <a href="avascript:void(0)" class="dropdown-item openmemo"><i class="far fa-sticky-note me-2"></i>메모장</a>
+                            <a href="javascript:void(0)" class="dropdown-item openmemo"><i class="far fa-sticky-note me-2"></i>메모장</a>
                             
                         </div>
                     </div>
@@ -132,8 +137,12 @@ background:transparent;
                             <span class="d-none d-lg-inline-flex">${name}</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                            <a href="update.home" class="dropdown-item text-center mypage">마이페이지</a>
-                            <a href="logout.net" class="dropdown-item text-center logout">로그아웃</a>
+                            <a href="${pageContext.request.contextPath}/member/update" class="dropdown-item text-center mypage">마이페이지</a>
+                            <form action="${pageContext.request.contextPath}/member/logout" method="post"
+								style="margin-bottom:0px" name="logout">
+                           	 	<a href="#" class="dropdown-item text-center logout">로그아웃</a>
+                           	 	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+							</form>
                         </div>
                     </div>
                 </div>

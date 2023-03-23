@@ -39,6 +39,19 @@
 	from members 
 	where id = #{id}
   </select>
+  
+    <sql id="search_">
+   <if test="searchfield != null">
+	  and
+		<choose>
+		   <when test='searchfield=="name"'>name</when> 
+		   <when test='searchfield=="department"'>department</when> 
+		   <when test='searchfield=="phone_num"'>phone_num</when> 
+		</choose>
+		 like #{searchword} 
+   </if> 
+  </sql>
+  
   <select id="getMembersCount" resultType="int">
      select count(*)
      from members 
@@ -59,18 +72,6 @@
 	   where rnum between #{start} and #{end} 
   </select>
   
-  <sql id="search_">
-   <if test="searchfield != null">
-	  and
-		<choose>
-		   <when test='searchfield=="name"'>name</when> 
-		   <when test='searchfield=="department"'>department</when> 
-		   <when test='searchfield=="phone_num"'>phone_num</when> 
-		</choose>
-		 like #{searchword} 
-   </if> 
-  </sql>
-  
   <select id="isAdminHuman" resultType="members">
   	select admin, department 
   	from members 
@@ -83,4 +84,14 @@
   	where department = #{department}
   </select>
   
+  <select id="checkCommute" resultType="String">
+  	select checkbutton
+  	from attendance 
+  	where id = #{id}
+  </select>
+  
+  <delete id="delete">
+  	delete from members 
+  	where id = #{listid}
+  </delete>
 </mapper>

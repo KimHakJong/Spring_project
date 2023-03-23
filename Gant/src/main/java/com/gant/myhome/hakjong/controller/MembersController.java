@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -14,7 +15,6 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.server.Cookie;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,7 +34,7 @@ import com.gant.myhome.hakjong.service.MemberService;
 import com.gant.myhome.hakjong.task.SendMail;
 
 @Controller
-@RequestMapping(value = "/member")//http://localhost:8088/myhome4/member/ 로 시작하는 주소 맴핑
+@RequestMapping(value = "/member")//http://localhost:9696/gant/member/ 로 시작하는 주소 맴핑
 public class MembersController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(MembersController.class);
@@ -58,16 +58,28 @@ public class MembersController {
 	@RequestMapping(value = "/login" , method = RequestMethod.GET)
 	public ModelAndView login(ModelAndView mv, 
 							  @CookieValue(value="remember-me",required=false) Cookie readCookie,
-							  @CookieValue(value="store", required=false) Cookie readCookie2,
-							  HttpSession session,
+							  HttpSession session, HttpServletRequest request,
 							  Principal userPrincipal) {
+		
+		String readCookie2 = "";
+		String readCookie2_val = "";
+		Cookie[] cookies = request.getCookies();
+		if(cookies != null) {
+			for(int i=0; i<cookies.length; i++) {
+				if(cookies[i].getName().equals("store")) {
+					readCookie2 = cookies[i].getName();
+					readCookie2_val = cookies[i].getValue();
+				}
+			}
+		}
+
 		if(readCookie != null) {
 				logger.info("자동로그인 쿠키 로드 :" + userPrincipal.getName()); //principal.getName() : 로그인한 아이디
 				mv.setViewName("redirect:/pmain/view");
-		}else if (readCookie2 != null){
+		}else if (!readCookie2.equals("")){
 			logger.info("ID저장 쿠키 로드 ");
 			mv.setViewName("member/login");
-			mv.addObject("id_store",userPrincipal.getName());
+			mv.addObject("id_store", readCookie2_val);
 			mv.addObject("loginfail",session.getAttribute("loginfail"));
 			session.removeAttribute("loginfail");
 		} else {
@@ -232,7 +244,7 @@ public class MembersController {
 		out.close();
 	}
 	
-	@RequestMapping(value ="/list", method = {RequestMethod.GET, RequestMethod.POST})
+	@RequestMapping(value ="/list")
 	public ModelAndView membersList(Principal principal,
 						  @RequestParam(value="page", defaultValue="1", required=false) int page,
 						  @RequestParam(value="searchfield", defaultValue="", required=false) String searchfield,
@@ -283,7 +295,7 @@ public class MembersController {
 	}
 	
 	@ResponseBody
-	@RequestMapping("value=/orgchart")
+	@PostMapping(value="/orgchart")
 	public Map<String,String> getOrgchart() {
 		
 		//각 부서별 이름을 ','로 구분하여 String형으로 담음
@@ -305,4 +317,45 @@ public class MembersController {
 		return map;
 	}
 	
+	@ResponseBody
+	@PostMapping(value="/commuteCheck")
+	public Map<String,String> commuteCheck(String id) {
+		
+		String check = memberservice.checkCommute(id);
+		Map<String,String> map = new HashMap<String,String>();
+		map.put("check", check);
+		return map;
+	}
+	
+	@ResponseBody
+	@PostMapping(value="/detail")
+	public Map<String,String> memberDetail(String clickid) {
+		
+		Members m = memberservice.getMemberInfo(clickid);
+		
+		HashMap<String,String> map = new HashMap<String,String>();
+		map.put("name", m.getName());
+		map.put("profileimg", m.getProfileimg());
+		map.put("department", m.getDepartment());
+		map.put("position", m.getPosition());
+		map.put("birth", m.getBirth());
+		map.put("phone_num", m.getPhone_num());
+		map.put("email", m.getEmail());
+		map.put("address", m.getAddress());
+		//map에 members 담아서도가능
+		return map;
+	}
+	
+	@RequestMapping(value="/delete")
+	public String delete(String listid, RedirectAttributes rattr) {
+		int result = memberservice.delete(listid);
+
+		if(result==1) {
+			rattr.addFlashAttribute("message","삭제를 완료했습니다.");
+		}else {
+			rattr.addFlashAttribute("message","삭제를 실패하였습니다.");
+		}
+
+		return "redirect:/member/list";
+	}
 }

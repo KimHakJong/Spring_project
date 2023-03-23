@@ -31,6 +31,9 @@ public interface MembersMapper {
 
 	public Members getMemberInfo(String id);
 
+	public String checkCommute(String id);
+
+	public int delete(String listid);
 
 
 	 

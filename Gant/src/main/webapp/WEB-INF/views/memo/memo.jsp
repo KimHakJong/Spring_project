@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script src="http://code.jquery.com/jquery-latest.js"></script>
+
  <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta charset="UTF-8">
 <style>
@@ -141,7 +141,7 @@ $(document).ready(function(){
 			var id = '${id}';
 		
 			$.ajax({
-			 url : "memo",
+			 url : "${pageContext.request.contextPath}/small/memo",
 			 data : {"id" : id},
 			 dataType : "json",
 			 success : function(Mdata){
@@ -197,7 +197,7 @@ $(document).ready(function(){
 			let content = $('.txtMemo').val();
 			
 			$.ajax({
-				url : 'memoupdate',
+				url : '${pageContext.request.contextPath}/small/memoupdate',
 				data : {"id" : id, "background" : background, "color":color, "content":content},
 				dataType : "json",
 				success : function(rdata){
@@ -223,12 +223,12 @@ $(document).ready(function(){
 <div class="memo" style="background-image: url('${pageContext.request.contextPath}/image/memo/memo-yellow.png')">
 	<div class="btnChange"><img src='${pageContext.request.contextPath}/image/memo/change.png'>
 		<span class='back_colors'>
-		<img src="${pageContext.request.contextPath}/image/memo/memo-red.png">
-		<img src="${pageContext.request.contextPath}/image/memo/memo-pink.png">
-		<img src="${pageContext.request.contextPath}/image/memo/memo-orange.png">
-		<img src="${pageContext.request.contextPath}/image/memo/memo-yellow.png">
-		<img src="${pageContext.request.contextPath}/image/memo/memo-green.png">
-		<img src="${pageContext.request.contextPath}/image/memo/memo-blue.png">
+		<img src="${pageContext.request.contextPath}/resources/image/memo/memo-red.png">
+		<img src="${pageContext.request.contextPath}/resources/image/memo/memo-pink.png">
+		<img src="${pageContext.request.contextPath}/resources/image/memo/memo-orange.png">
+		<img src="${pageContext.request.contextPath}/resources/image/memo/memo-yellow.png">
+		<img src="${pageContext.request.contextPath}/resources/image/memo/memo-green.png">
+		<img src="${pageContext.request.contextPath}/resources/image/memo/memo-blue.png">
 		</span>
 	</div>
 	<span class="pen_colors">

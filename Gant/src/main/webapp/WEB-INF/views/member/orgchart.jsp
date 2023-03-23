@@ -55,7 +55,7 @@ $(document).ready(function(){
     ajax();
     function ajax(){
     	$.ajax({
-	    	url : '${pageContext.request.contextPath}/member/orgchart',
+	    	url : 'orgchart',
 	    	type : "post",
 	    	dataType: "json",
 	    	beforeSend : function(xhr)
