@@ -1,9 +1,7 @@
 package com.gant.myhome.hakjong.controller;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -15,6 +13,9 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
+import org.springframework.stereotype.Controller;
+
+@Controller
 @ServerEndpoint("/ChatServer")
 public class ChatServer extends HttpServlet {
 	private static final List<Session> sessionList=new ArrayList<Session>();

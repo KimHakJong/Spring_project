@@ -55,6 +55,7 @@ public class SecuerityConfig extends WebSecurityConfigurerAdapter {
 		 3. invalidateHttpSession : 로그아웃시 세션 속성들 제거
 		 4. deleteCookies : 쿠키 제거
 		*/
+		
 	http.logout().logoutSuccessUrl("/member/login")
 	    .logoutUrl("/member/logout")
 	    .invalidateHttpSession(true)
@@ -65,11 +66,6 @@ public class SecuerityConfig extends WebSecurityConfigurerAdapter {
 	    .rememberMeParameter("remember-me")
 	    .rememberMeCookieName("remember-me")
 	    .tokenValiditySeconds(21600); //6시간 쿠키유지
-	
-	http.rememberMe()
-		.rememberMeParameter("store")
-		.rememberMeCookieName("store")
-		.tokenValiditySeconds(86400); //24시간 쿠키유지
 	
 	http.exceptionHandling().accessDeniedHandler(accessDeniedHandler());
 	

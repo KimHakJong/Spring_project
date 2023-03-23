@@ -85,7 +85,7 @@ public class MemberServicelmpl implements MemberService {
 		
 		if(!searchfield.equals("")) {
 			map.put("searchfield", searchfield);
-			map.put("searchword", searchword);
+			map.put("searchword", "%"+searchword+"%");
 		}
 		
 		map.put("start", startrow);
@@ -118,6 +118,16 @@ public class MemberServicelmpl implements MemberService {
 	@Override
 	public Members getMemberInfo(String id) {
 		return dao.getMemberInfo(id);
+	}
+
+	@Override
+	public String checkCommute(String id) {
+		return dao.checkCommute(id);
+	}
+
+	@Override
+	public int delete(String listid) {
+		return dao.delete(listid);
 	}
 
 

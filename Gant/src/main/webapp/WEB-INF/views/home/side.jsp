@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<%@ include file="../memo/memo.jsp" %>
+<%@ include file="../memo/memolist.jsp" %>
 <!DOCTYPE html>
 <head>
     <meta charset="utf-8">
@@ -107,16 +107,15 @@
                     <div class="ms-3">
                     <sec:authorize access="isAuthenticated()">
 	   				 <sec:authentication property="principal" var="pinfo"/>
-                        <h6 class="mb-0">${pinfo.username}</h6>
+                        <h6 class="mb-0 side_userid">${pinfo.username}</h6>
                     </sec:authorize>
                         <span>${name}</span>
                     </div>
                 </div>
                 <div class="sidemenu navbar-nav w-100">
                     <a href="main.home" class="nav-item nav-link active"><i class="fas fa-folder-open me-2"></i>프로젝트</a>
-                    <a href="Main.att" class="nav-item nav-link"><i class="fas fa-user-clock me-2"></i>근태관리</a>
-                    <a href="Main.bo" class="nav-item nav-link"><i class="fas fa-th-list me-2"></i>게시판</a>
-                    <!-- 
+                    <a href="${pageContext.request.contextPath}/att/main" class="nav-item nav-link"><i class="fas fa-user-clock me-2"></i>근태관리</a>
+                    <a href="${pageContext.request.contextPath}/board/main" class="nav-item nav-link"><i class="fas fa-th-list me-2"></i>게시판</a> <!-- 
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>프로젝트 게시판</a>
                         <div class="dropdown-menu bg-transparent border-0">
@@ -126,9 +125,9 @@
                         </div>
                     </div>
                      -->
-                    <a href="main.calendar" class="nav-item nav-link"><i class="far fa-calendar-alt me-2"></i>캘린더</a>
+                    <a href="${pageContext.request.contextPath}/calendar/list" class="nav-item nav-link"><i class="far fa-calendar-alt me-2"></i>캘린더</a>
                     <a href="main.calendar" class="nav-item nav-link"><i class="fas fa-clock me-2"></i>예약</a>
-                    <a href="../member/list" class="nav-item nav-link"><i class="fa fa-address-book me-2"></i>주소록</a>
+                    <a href="${pageContext.request.contextPath}/member/list" class="nav-item nav-link"><i class="fa fa-address-book me-2"></i>주소록</a>
                     <a href="jjokji" class="nav-item nav-link"><i class="far fa-envelope me-2"></i>쪽지</a>
                     <a href="junja" class="nav-item nav-link"><i class="fas fa-file me-2"></i>전자결재</a>
                 </div>
@@ -140,7 +139,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/lib/chart/chart.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/lib/easing/easing.min.js"></script>
-    <script src="${pageContext.request.contextPath}/resources/lib/waypoints/waypoints.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/lib/owlcarousel/owl.carousel.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/lib/tempusdominus/js/moment.min.js"></script>
     <script src="${pageContext.request.contextPath}/resources/lib/tempusdominus/js/moment-timezone.min.js"></script>

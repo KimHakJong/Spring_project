@@ -12,9 +12,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 <link href="../resources/css/home/home.css" rel="stylesheet">
 <meta charset="UTF-8">
-<meta name="_csrf" content="${_csrf.token}">
-<meta name="_csrf_header" content="${_csrf.headerName}">
-
 <title>GANT</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
@@ -31,7 +28,7 @@ aside{width:30%; height: 50%; display:inline-block;position:absolute; left:5%; t
 		-webkit-appearance:none; /* for chrome */
    		 -moz-appearance:none; /*for firefox*/
    		 appearance:none;
-    		background:url('member/image/arrow.png') no-repeat 85% 50%/15px auto;
+    		background:url('../resources/image/member/arrow.png') no-repeat 85% 50%/15px auto;
 			}
 option{background:white;}
 #searchfield::-ms-expand{
@@ -108,18 +105,15 @@ $(document).ready(function(){
 	}
 	
 	$('.addbook>tbody>tr').each(function(index,item){
-		let name = $(this).find('td:eq(0)').text(); //출퇴근 체크할 이름
-		let department = $(this).find('td:eq(1)').text(); //출퇴근 체크할 부서명
-		let phone_num = $(this).find('td:eq(2)').text(); //출퇴근 체크할 휴대폰
-		ajax(name,department,phone_num, $(this).find('a'));
+		let id = $(this).find('input[type=hidden]').val(); //출퇴근 체크할 아이디
+		ajax(id, $(this).find('a'));
 		
-		function ajax(name, department, phone_num, where){
+		function ajax(id, where){
 			
 		  $.ajax({
 			url : "commuteCheck",
 			type : "post",
-			data : { "name" : name, "department" : department,
-				    "phone_num" : phone_num },
+			data : { "id" : id},
 			dataType : "json",
 			beforeSend : function(xhr)
   			{   //데이터를 전송하기 전에 헤더에 csrf값을 설정합니다.
@@ -139,11 +133,11 @@ $(document).ready(function(){
 	
 	//모달
 	$('.godetail').click(function(){
-		let clickname = $(this).text();
+		let clickid = $(this).find('input[type=hidden]').val();
 		$.ajax({
 			url : "detail",
 			type : "post",
-			data : {"clickname" : clickname } ,
+			data : {"clickid" : clickid },
 			dataType : "json",
 			beforeSend : function(xhr)
   			{   //데이터를 전송하기 전에 헤더에 csrf값을 설정합니다.
@@ -172,12 +166,15 @@ $(document).ready(function(){
 	$('.delete').click(function(){
 		let del = prompt("정말로 해당 회원을 삭제하려면\n'삭제' 를 입력하세요.");
 		if(del=='삭제'){
-			let name = $(this).parent().parent().find('.godetail').text();
-			let department = $(this).parent().parent().find('td:eq(1)').text();
-			let phone_num = $(this).parent().parent().find('td:eq(2)').text();
-			location.href="delete.net?name="+ name+"&department="+department+"&phone_num="+phone_num;
+			let id = $(this).parent().parent().find('input[type=hidden]').val();
+			location.href="delete?listid="+id;
 		}
 	});
+	
+	let dresult = "${message}";
+	if(dresult){
+		alert(dresult);
+	}
 });
 
 
@@ -230,7 +227,8 @@ $(document).ready(function(){
 	<tbody>
 	   <c:forEach var="m" items="${memberlist}">
 		<tr>
-			<td><a class="godetail" data-toggle="modal" href="#detailmodal" data-backdrop="static">${m.name}</a></td>
+			<td><a class="godetail" data-toggle="modal" href="#detailmodal" data-backdrop="static"><input type="hidden" name="listid" value="${m.id}">
+				${m.name}</a></td>
 			<td>${m.department}</td>
 			<td>${m.phone_num}</td>
 			<c:if test="${isadminhuman==true}">
@@ -343,13 +341,13 @@ height:25px; font-size:16px}
 	  
 	  <%-- 1페이지이상: 이전버튼 누르면 page-1값, 검색필드, 검색어 list.net으로 보냈다 다시옴 --%>
 	  <c:if test="${page>1}">
-	    <c:url var="first" value="list.net">
+	    <c:url var="first" value="list">
 	    	<c:param name="searchfield" value="${searchfield}"/>
 	    	<c:param name="searchword" value="${searchword}"/>
 	    	<c:param name="page" value="${1}"/>
 	    </c:url>
 	    
-	   	<c:url var="back" value="list.net">
+	   	<c:url var="back" value="list">
 	        <c:param name="searchfield" value="${searchfield}"/>
 	        <c:param name="searchword" value="${searchword}"/>
 	        <c:param name="page" value="${page-1}"/>
@@ -373,7 +371,7 @@ height:25px; font-size:16px}
 	    </c:if>
 	    <%--다른 페이지는 누르면 검색필드,검색어,페이지들고 list.net갔다온다 --%>
 	    <c:if test="${i != page}">
-	      <c:url var="move" value="list.net">
+	      <c:url var="move" value="list">
 	        <c:param name="searchfield" value="${searchfield}"/>
 	        <c:param name="searchword" value="${searchword}"/>
 	        <c:param name="page" value="${i}"/>
@@ -396,13 +394,13 @@ height:25px; font-size:16px}
 	    
 	    <%--최대페이지미만: 다음 버튼누르면 page+1값, 검색필드, 검색어 들고 list.net 갔다옴 --%>
 	    <c:if test="${page < maxpage}">
-	      <c:url var="last" value="list.net">
+	      <c:url var="last" value="list">
 	      	<c:param name="searchfield" value="${searchfield}"/>
 	      	<c:param name="searchword" value="${searchword}"/>
 	      	<c:param name="page" value="${maxpage}"/>
 	      </c:url>
 	      
-	      <c:url var="next" value="list.net">
+	      <c:url var="next" value="list">
 	        <c:param name="searchfield" value="${searchfield}"/>
 	        <c:param name="searchword" value="${searchword}"/>
 	        <c:param name="page" value="${page+1}"/>

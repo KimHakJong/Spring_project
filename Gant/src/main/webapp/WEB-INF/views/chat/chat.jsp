@@ -50,11 +50,11 @@
 .main{border:1px solid #C4C5C8; border-radius:2px; background:white; height:85%; position:relative; z-index:1}
 #messageWindow2{padding:12px; height:78%; overflow:auto; margin-top:10px}
 #messageWindow2::-webkit-scrollbar {
-           width: 7px; /*스크롤바의 너비*/
+           width: 3px; /*스크롤바의 너비*/
 }
 #messageWindow2::-webkit-scrollbar-thumb {
     height: 30%; /* 스크롤바의 길이 */
-    background: black; /* 스크롤바의 색상 */
+    background: #26abff; /* 스크롤바의 색상 */
     
     border-radius: 10px;
 }
@@ -92,14 +92,14 @@
     font-size:14px
 }
 .sendmessage{width:auto; word-wrap:break-word; float:right;
-			 display:inline-block; background-color:black;
+			 display:inline-block; background-color:#26abff;
 			 color:white; border-radius:20px; padding:10px; margin:5px 5px 5px 0px}
 
 #bottombox{position:relative; height:23%; padding: 12px 12px 4px 12px; margin-top:4px}
 #inputMessage {width: 94%;  display:inline-block;
 			   border:1px solid #C4C5C8; border-radius:25px; margin:0 auto;
 			   height:45px; padding:10px 20px; font-size:14px; position:absolute; left:3%; bottom:33.7%}	
-#inputMessage:focus {border:2px solid black; outline:none}		 
+#inputMessage:focus {border:2px solid #26abff; outline:none}		 
 button{background:transparent; border:none; outline:none; position:absolute; right:5%; bottom:39.7%}
 button>img{width:30px;height:30px;}
 
@@ -197,7 +197,7 @@ $("#onimg").click(function(){
 				
 				$('#onlinelist > div').text(namelist.length +" 명");
 				for(var i=0;i<namelist.length;i++){
-					let plusli = "<li><img src='member/image/people.png'>"+namelist[i]+"</li>";
+					let plusli = "<li><img src='${pageContext.request.contextPath}/resources/image/member/people.png'>"+namelist[i]+"</li>";
 					$("#onlinelist>ul").append(plusli);
 				}
 			}else{

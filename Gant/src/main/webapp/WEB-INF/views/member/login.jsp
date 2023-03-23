@@ -100,6 +100,11 @@ $(document).ready(function(){
 			 $('#store').prop('checked',false);
 		 }
  	})
+ 	
+ 	$("form").submit(function(){
+ 		
+ 		$("#store").val($("#id").val());
+ 	});
 });
 </script>
 </head>
