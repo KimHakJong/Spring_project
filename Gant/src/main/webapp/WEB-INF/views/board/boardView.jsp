@@ -2,17 +2,19 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
 <head>
+<meta name="_csrf" content="${_csrf.token}">
+<meta name="_csrf_header" content="${_csrf.headerName}">
 <title>게시판 - 상세</title>
 
-<link href="css/home.css" rel="stylesheet" type="text/css">
+<link href="${pageContext.request.contextPath}/resources/css/home/home.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
-	<script src="board/board_js/view.js"></script>
-	<link rel="stylesheet" href="board/board_css/view.css" type="text/css"> 
+	<script src="${pageContext.request.contextPath}/resources/js/board_js/view.js"></script>
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/board_css/view.css" type="text/css"> 
 </head>
 <body>
 
@@ -40,7 +42,7 @@
 		    </thead>
 		    <tr>
 		       <td id="member" colspan="2">
-		       <img src="memberupload/${boarddata.id_profileimg}" id="memberfile" alt="memberfile">        
+		       <img src="${pageContext.request.contextPath}/resources/image/memberupload/${boarddata.id_profileimg}" id="memberfile" alt="memberfile">  		             
 		       <div id="board_name">${boarddata.board_name}</div>
 		       </td>
                <td></td>
@@ -63,14 +65,18 @@
 	    <tr>
 	       <td><div id="File">첨부파일</div></td>
 	       <%-- 파일을 첨부한 경우 --%>
-	        <c:if test="${!empty boarddata.board_file}">
-	          <td id="Filename"><img src="board/board_image/download.png" width="20px">
-	            <a href="fileDown?filename=${boarddata.board_file}" id="board_file">${boarddata.board_file}</a>
-	           </td>
-	        </c:if>
-	       <%-- 파일을 첨부하지 않은경우 --%>
-	        <c:if test="${empty boarddata.board_file}"> 
-	        <td></td> 
+	          <c:if test="${!empty boarddata.board_file}">
+          <td id="Filename"><img src="${pageContext.request.contextPath}/resources/image/board_image/download.png" width="20px">
+	          <form method="post" action="down" style="height:0px">
+	             <input type="hidden" value="${boarddata.board_file}" name="filename">
+	             <input type="hidden" value="${boarddata.board_original}" name="original">
+	             <input type="submit" value="${boarddata.board_original}" >
+	          </form>
+           </td>
+        </c:if>
+       <%-- 파일을 첨부하지 않은경우 --%>
+        <c:if test="${empty boarddata.board_file}">  
+         <td></td>
 	        </c:if>
 	         <td> <%-- 좋아요버튼 --%>
 				         <div class="contain">
@@ -162,10 +168,11 @@
 				</div><%--comment-write end--%>
 			</div><%-- comment-area end--%>
 			
-	        
+	  
 		</div> <%-- class="container" end --%>
 	</div> <%-- class main end --%>
 </div> <%-- class row end --%>
+
 
 	<footer>
 		<jsp:include page="../home/bottom.jsp" />

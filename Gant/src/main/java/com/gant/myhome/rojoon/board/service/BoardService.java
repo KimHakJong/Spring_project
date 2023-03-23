@@ -20,8 +20,6 @@ public interface BoardService {
 	//검색 리스트
 	public List<Board> getSearchBoardList(int page, int limit, String search_name);
     
-	//공지 게시글 수
-	public int getNoticeCount();
    
 	//글 등록하기
 	public void insertBoard(Board board);
@@ -29,9 +27,19 @@ public interface BoardService {
 	//admin 계정 확인 
 	public String getadmindate(String id);
 	
+	//조회수 업데이트
+	public int setReadCountUpdate(int board_num);
+	
+	//글 내용 보기
+	public Board getDetail(int board_num);
+    
+	//프로필 이미지 가져오기
+	public String getprofileimg(String board_name);
+    
 
-//	//글 내용 보기
-//	public Board getDetail(int num);
+	
+	
+	
 //	
 //	//글 답변
 //	public int boardReply(Board board);
@@ -45,9 +53,7 @@ public interface BoardService {
 //	//글 삭제
 //	public int boardDelete(int num);
 //	
-//	//조회수 업데이트
-//	public int setReadCountUpdate(int num);
-//	
+
 //	//글쓴이인지 확인
 //	public boolean isBoardWriter(int num, String pass);
 //	

@@ -27,16 +27,18 @@ public interface BoardMapper {
 		
 		//검색 글 목록 
 		public List<Board> getBoardSearchList(HashMap<String, Object> map);
-			
-		//공지사항 글 갯수
-		public int getNoticeCount();
+
 		
-		
-		
+		//조회수 업데이트
+		public int setReadCountUpdate(int board_num);
 		
 		//글 내용 보기
-		public Board getDetail(int num);
+		public Board getDetail(int board_num);
 		
+		//admin 계정 확인 
+		public String getadmindate(String id);
+		
+	
 		//글 답변
 		public int boardReply(Board board);
 		
@@ -46,8 +48,6 @@ public interface BoardMapper {
 		//글 삭제
 		public int boardDelete(Board board);
 		
-		//조회수 업데이트
-		public int setReadCountUpdate(int num);
 		
 		//글쓴이인지 확인
 		public Board isBoardWriter(HashMap<String,Object> map);
@@ -64,9 +64,12 @@ public interface BoardMapper {
 		//파일 삭제 
 		public void deleteFileList(String filename);
         
-		//admin 계정 확인 
-		public String getadmindate(String id);
+		//프로필이미지가져오기
+		public String getprofileimg(String board_name);
+       
+        
 
+    
 	
 	
 }

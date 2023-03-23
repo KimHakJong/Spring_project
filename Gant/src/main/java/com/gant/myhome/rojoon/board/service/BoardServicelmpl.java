@@ -59,11 +59,6 @@ public class BoardServicelmpl implements BoardService {
 		return dao.getBoardSearchList(map);
 	}
     
-	//공지사항 게시물 수
-	@Override
-	public int getNoticeCount() {
-		return dao.getNoticeCount();
-	}
 
 	@Override
 	public void insertBoard(Board board) {
@@ -76,16 +71,26 @@ public class BoardServicelmpl implements BoardService {
 	}
 	
 	
+	@Override
+    public int setReadCountUpdate(int board_num) {
+		return dao.setReadCountUpdate(board_num);
+	}
+	
+		
+	@Override
+	public Board getDetail(int board_num) {
+		return dao.getDetail(board_num);
+	}
+    
+	
+	//프로필 이미지 가져오기
+	@Override
+	public String getprofileimg(String board_name) {		
+		return dao.getprofileimg(board_name);
+	}
 
-//	@Override
-//	public int setReadCountUpdate(int num) {
-//		return dao.setReadCountUpdate(num);
-//	}
-//	
-//	@Override
-//	public Board getDetail(int num) {
-//		return dao.getDetail(num);
-//	}
+	
+	
 //	
 //	@Override
 //	public boolean isBoardWriter(int num, String pass) {

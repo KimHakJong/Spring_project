@@ -54,22 +54,16 @@
 		where rnum  &gt;= #{start} and rnum &lt;= #{end}        
       </select>
       
-    
-     <select id="getNoticeCount" resultType="int">
-        select count(*) from boards
-        where board_notice = 'true'  
-     </select>
+
      
       <!-- admin 계정 확인  -->
      <select id="getadmindate" resultType="String">
         select admin from members where id = #{id} 
      </select>
      
-     <!-- 여기까지 -->
      
- 
-      <insert id="insertBoard" >
-        <selectKey resultType="int" order="BEFORE" keyProperty="BOARD_NUM">
+      <insert id="insertBoard">
+        <selectKey resultType="int" order="BEFORE" keyProperty="board_num">
             select nvl(max(BOARD_NUM),0)+1 from boards            
         </selectKey>
            insert into boards 
@@ -85,20 +79,48 @@
 		   ) 
       </insert>
       
-      
-      <update id="setReadCountUpdate" >
-	        update board3
+      <!-- 글 조회수 증가 -->
+      <update id="setReadCountUpdate">
+	       update boards
 	       set BOARD_READCOUNT = BOARD_READCOUNT+1
 	       where BOARD_NUM = #{number}
       </update>
       
-     
+         
       <select id="getDetail" resultType="board">
 	      select *
-	      from board3
+	      from boards
 	      where BOARD_NUM = #{number}
       </select>
       
+      <select id="selectLike" resultType="String">
+	      select id
+	      from boardLike
+	      where id = #{id} and board_num = #{board_num}
+      </select>
+      
+    
+      <insert id="insertLike">
+      INSERT INTO boardLike
+      (id,board_num,like_check)
+	  VALUES
+	  (#{id},#{board_num},'false')
+      </insert>
+      
+      
+      <select id="selectLikeCheck" resultType="String">
+        select like_check
+        from boardLike
+        where id = #{id} and board_num = #{board_num}
+      </select>
+      
+       <select id="getprofileimg" resultType="String">
+        select profileimg
+        from members
+        where id = #{BOARD_NAME}
+       </select>
+
+
       <select id="isBoardWriter"  resultType="board">
         select * from board3
         where BOARD_NUM = #{num}
@@ -161,7 +183,7 @@
        <select id="getDeleteFileList" resultType="String">
        select board_file
        from delete_file
-      </select>
+       </select>
       
       <delete id="deleteFileList" parameterType="String">
         delete from delete_file
