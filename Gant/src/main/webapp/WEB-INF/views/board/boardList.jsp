@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
-<link href="${pageContext.request.contextPath}/resources/css/home.css" rel="stylesheet" type="text/css">
+<link href="${pageContext.request.contextPath}/resources/css/home/home.css" rel="stylesheet" type="text/css">
 <link href="${pageContext.request.contextPath}/resources/css/board_css/main_bo.css" rel="stylesheet" type="text/css">
 <script>
 $(function(){
@@ -65,23 +65,21 @@ $(function(){
    <tbody>
     <%-- num은 번호를 나타낸다. 총갯수부터 글이 내려갈수록 1씩 내려간다. --%>
     <c:set var="num" value="${listcount-(page-1)*limit}" />
-    
-    <%-- 공지 게시글 표시를 위한 용도이다. 전체 게시물 수 --%>
-    <c:set var="noticenum" value="${listcount-(page-1)*limit}" />
-     	   
+ 
 	   <%-- 게시물 --%>
 	   <c:forEach var="b" items="${boardlist}"  varStatus="vs">     			      
 		      <tr>
 		       <td><%-- 번호 --%>
 		         <%-- 공지게시글은 번호가 아닌 [공지] 표시를 한다. --%>
-		         <c:if test="${num >= (noticenum - noticeCount)}">
+		         <c:if test="${b.board_notice == 'true'}">
 		            <c:out value="[공지]" /> 
+		             <c:set var="num" value="${num-1}" /> <%-- num = num-1 의미 --%>
 		         </c:if>
 		         <%-- 일반게시물은 번호로 표시한다. --%>
-		          <c:if test="${num < (noticenum - noticeCount)}">
+		          <c:if test="${b.board_notice == 'false'}">
 		            <c:out value="${num}" /> <%-- num 출력 --%>
-		         </c:if>
-		         <c:set var="num" value="${num-1}" /> <%-- num = num-1 의미 --%>
+		            <c:set var="num" value="${num-1}" /> <%-- num = num-1 의미 --%>
+		         </c:if> 
 		       </td>
 		       <td><%--제목 --%>
 		        <div>
@@ -90,7 +88,7 @@ $(function(){
 			           <c:forEach var="a" begin="0" end="${b.board_re_lev*2}" step="1">
 			           &nbsp;
 			           </c:forEach>
-		           <img src="board/board_image/arrows.png" width="15px"> 
+		           <img src="${pageContext.request.contextPath}/resources/image/board_image/arrows.png" width="15px"> 
 		         </c:if>
 		         
 		         <c:if test="${b.board_re_lev == 0}"><%-- 원문인경우 --%>

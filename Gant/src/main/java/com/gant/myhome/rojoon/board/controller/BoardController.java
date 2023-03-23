@@ -2,6 +2,8 @@ package com.gant.myhome.rojoon.board.controller;
 
 
 import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -32,6 +34,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gant.myhome.rojoon.board.domain.Board;
 import com.gant.myhome.rojoon.board.domain.BoardSaveFolder;
+import com.gant.myhome.rojoon.board.service.BoardLikeService;
 import com.gant.myhome.rojoon.board.service.BoardService;
 import com.gant.myhome.rojoon.board.service.CommentService;
 
@@ -46,21 +49,29 @@ public class BoardController {
 	
 	private BoardSaveFolder  boardsavefolder;
 	private BoardService  boardService;
+	private BoardLikeService  boardlikeService;
 	private CommentService commentService;
 	
 		
 	@Autowired
 	public BoardController(BoardService boardService ,
 			CommentService  commentService,
-			BoardSaveFolder  boardsavefolder
+			BoardSaveFolder  boardsavefolder,
+			BoardLikeService  boardlikeService
 			) {
 	this.boardService = boardService;
 	this.commentService = commentService;
 	this.boardsavefolder = boardsavefolder;
+	this.boardlikeService = boardlikeService;
 	}
 	
+	//response에 PrintWriter를 사용하여 스크립트를 사기위한 메서드
+	public static void init(HttpServletResponse response) {
+        response.setContentType("text/html; charset=utf-8");
+        response.setCharacterEncoding("utf-8");
+    }
 	
-	
+
 	@RequestMapping(value = "/main" , method = RequestMethod.GET)
 	public ModelAndView boardlist(
 			@RequestParam(value = "page", defaultValue = "1", required = false) int page,
@@ -94,8 +105,6 @@ public class BoardController {
 			//일반게시물 리스트
 			boardlist = boardService.getBoardList(page,limit);
 			
-			//공지게시글 수
-		    noticeCount = boardService.getNoticeCount();
 		}
 		
         
@@ -121,7 +130,6 @@ public class BoardController {
 		mv.addObject("listcount" , listcount);
 		mv.addObject("boardlist" , boardlist);
 		mv.addObject("limit" , limit);
-		mv.addObject("noticeCount" , noticeCount);
 		
 		return mv;
 	}
@@ -133,7 +141,6 @@ public class BoardController {
                               ModelAndView mv ) {			
     String id = principal.getName();
     String admin = boardService.getadmindate(id);
-    
     mv.setViewName("board/boardWrite");
 	mv.addObject("admin", admin);
 	mv.addObject("id", id);
@@ -226,6 +233,86 @@ public class BoardController {
 			String fileDBName = File.separator + year + "-" + month + "-" + date + File.separator + refileName; 
 			logger.info("fileDBName = "+ fileDBName);
 			return fileDBName;
+		}
+		
+		
+		//상세페이지 이동
+		//detail?num=9요청시 파라미터 num의 값을 int num에 저장합니다.
+		@RequestMapping(value="/detail" , method = {RequestMethod.GET, RequestMethod.POST})
+		public ModelAndView Detail(
+				Principal principal,
+				@RequestParam(value = "board_pass",defaultValue = "1" ,required = false) String board_pass,
+				@RequestParam(value = "input_pass",required = false) String input_pass,
+				int board_num,			
+				ModelAndView mv,
+				HttpServletRequest request,
+				HttpServletResponse response,
+				//현재 페이지 오기 전  URL정보
+				@RequestHeader(value = "referer", required = false) String beforeURL)
+				throws IOException {
+			
+			String id = principal.getName();
+			
+			//board_pass 가 1이면 일반글 아니면 비밀글
+			//비밀글이 경우 입력한 비밀번호가 맞는지 확인한다.
+			if(!board_pass.equals("1")) {  
+				    // input_pass 와 board_pass 가 다르다면 다시 리스트 화면으로 가게한다
+				    if(!board_pass.equals(input_pass)) {	
+				    	init(response);
+						PrintWriter out = response.getWriter();
+						out.println("<script>");
+						out.println("alert('비밀번호가 다릅니다.')");
+						out.println("history.back(-1);");
+						out.println("</script>");
+						out.flush();
+						return null;
+				    }      
+				}
+	
+			/*  
+			 1. String beforeURL = request.getHeader("referer"); 의미로
+			 어느 주소에서 detail로 이동했는지 header의 정보 중에서 "referer"를 통해 알 수 있습니다.
+			 2. 수정 후 이곳에서 이동하는 경우 조회수는 증가하지 않도록 합니다.
+			 3.gant/board/main에서 제목을 클릭한 경우 조회수가 증가하도록 합니다.
+			 4.detail을 새로고침 하는 경우 referer는 header에 존재하지 않아 오류 발생하므로
+			  required = false로 설정합니다. 이 경우에는  beforeURL 의 값은 null입니다.
+			 * */
+			logger.info("referer:"+beforeURL);
+			if(beforeURL != null && beforeURL.endsWith("list")) {
+				boardService.setReadCountUpdate(board_num);
+			}
+			
+			
+			//boardLike 테이블이있는지 확인 select으로 확인 
+			//selectlike 1이면 있고 0이면 없음
+			int selectlike = boardlikeService.selectLike(id,board_num);
+			String like_check = ""; 
+			if(selectlike == 0) {
+				boardlikeService.insertLike(id,board_num);
+				mv.addObject("like_check","false");
+			}else if(selectlike == 1) {
+				like_check =  boardlikeService.selectLikeCheck(id,board_num);
+				mv.addObject("like_check",like_check);
+			}
+			
+				
+			Board board = boardService.getDetail(board_num);
+			board.setId_profileimg(boardService.getprofileimg(board.getBoard_name()));
+			//board=null; // error 페이지 이동 확인하고자 임의로 지정합니다.
+			if(board == null) {
+				logger.info("상세보기 실패");
+				mv.setViewName("error/error");
+				mv.addObject("message","상세보기 실패입니다.");
+			}else {
+				logger.info("상세보기 성공");
+				String admin = boardService.getadmindate(id);
+				mv.setViewName("board/boardView");
+				mv.addObject("boarddata",board);				
+				mv.addObject("admin",admin);			
+			}
+			
+			return mv;
+			
 		}
 	
 	

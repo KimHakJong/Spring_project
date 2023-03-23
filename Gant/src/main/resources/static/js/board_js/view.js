@@ -1,15 +1,25 @@
 let option=1;  //선택한 등록순과 최신순을 수정, 삭제, 추가 후에도 유지되도록 하기위한 변수로 사용됩니다.
 
+//토큰
+let token = $("meta[name='_csrf']").attr("content");
+let header = $("meta[name='_csrf_header']").attr("content");
+
 // 댓글 리스트를 가져와 출력하는 함수
 function getList(state){//현재 선택한 댓글 정렬방식을 저장합니다. 1=>등록순, 2=>최신순
 	    console.log(state)
 	    option=state;
 		$.ajax({
 			type:"post",
-			url:"CommentList.co",
+			url:"../comment/list",
+			dataType:'json',	
 			data : {"comment_board_num" : $("#comment_board_num").val(), state:state},
-			dataType:"json",
+			beforeSend : function(xhr)
+	        {   //데이터를 전송하기 전에 헤더에 csrf값을 설정합니다.
+	        	xhr.setRequestHeader(header, token);			
+	        },
 			success:function(rdata){
+			console.log(rdata.boardlist)
+			console.log(rdata.listcount)
 				$('#count').text(rdata.listcount).css('font-family','arial,sans-serif')
 				let red1 ='red';
 				let red2 ='red';
@@ -20,9 +30,7 @@ function getList(state){//현재 선택한 댓글 정렬방식을 저장합니�
 				}
 				
 				let output ="";
-				
-				
-				
+
 			 if(rdata.boardlist.length>0){ //댓글이 1개 이상일때만 나타난다.
 				 output += '<li class="comment-order-item ' + red1 +'">' 
 				        + '   <a href="javascript:getList(1)" class="comment-order-button">등록순</a>'
@@ -43,9 +51,9 @@ function getList(state){//현재 선택한 댓글 정렬방식을 저장합니�
 							comment_reply = ' comment-list-item--reply lev2';
 						}
 						const profile=this.profileimg;
-						let src ='memberupload/user.png';
+						let src ='${pageContext.request.contextPath}/resources/image/memberupload/user.png';
 						if(profile){
-							src ='memberupload/'+profile;
+							src ='${pageContext.request.contextPath}/resources/image/memberupload/'+profile;
 						}
 						
 					output += '<li id="' + this.num + '" class="comment-list-item' + comment_reply +'">'
@@ -93,6 +101,8 @@ function getList(state){//현재 선택한 댓글 정렬방식을 저장합니�
 					output += '</div>'//comment-nick-area
 					        +'</li>' // li.ccomment-list-item						    
 					})//each end
+					
+					console.log(output);
 					
 					$('.comment-list').html(output);
 			 }//if(rdata.boardlist.length>0)
@@ -151,8 +161,12 @@ function del(num){//num : 댓글 번호
 	  }
 	  
 	  $.ajax({
-			url:"CommentDelete.co", 
+			url:"../comment/delete", 
 			data : {num:num},
+			beforeSend : function(xhr)
+        {   //데이터를 전송하기 전에 헤더에 csrf값을 설정합니다.
+        	xhr.setRequestHeader(header, token);			
+        },
 			success:function(rdata){
 				if(rdata == 1){
 				getList(option);
@@ -215,7 +229,7 @@ $(function() {
 		}
 		
 		$.ajax({
-			url:"CommentAdd.co", //원문 등록
+			url:"../comment/add", //원문 등록
 			data : {
 				id : $('#loginid').val(),
 				content : content,
@@ -225,6 +239,10 @@ $(function() {
 				// comment_re_ref는 원문댓글인경우 원문댓글번호 
 				},
 			type:"post",
+			beforeSend : function(xhr)
+        {   //데이터를 전송하기 전에 헤더에 csrf값을 설정합니다.
+        	xhr.setRequestHeader(header, token);			
+        },
 			success:function(rdata){
 				if(rdata == 1){
 				getList(option);
@@ -257,8 +275,12 @@ $(function() {
 		}
 		const num = $(this).attr('data-id');
 		$.ajax({
-			url:"CommentUpdate.co", 
+			url:"../comment/update", 
 			data : {num:num, content:content},
+			beforeSend : function(xhr)
+        {   //데이터를 전송하기 전에 헤더에 csrf값을 설정합니다.
+        	xhr.setRequestHeader(header, token);			
+        },
 			success:function(rdata){
 				if(rdata == 1){
 				getList(option);
@@ -300,7 +322,7 @@ $(function() {
 		const lev = $(this).attr('data-lev');
 		const seq = $(this).attr('data-seq');
 		$.ajax({
-			url:"CommentReply.co", 
+			url:"../comment/reply", 
 			data : {
 				id : $('#loginid').val(),
 				content:content,
@@ -310,6 +332,10 @@ $(function() {
 				comment_re_seq : seq
 				},
 				type : 'post',
+				beforeSend : function(xhr)
+        {   //데이터를 전송하기 전에 헤더에 csrf값을 설정합니다.
+        	xhr.setRequestHeader(header, token);			
+        },
 			success:function(rdata){
 				if(rdata == 1){
 				getList(option);
@@ -363,8 +389,12 @@ $(function() {
 			$.ajax({
 				   type : "POST" ,
 				   data : data,
-				   url :  "LikeCheck.bo", 
+				   url :  "likecheck", 
 				   cache : false,// js는 보통 정적페이지이기때문에(변화가 없기때문에) 미리 저장해놓는다.cache : false는  그것을 막는다. 매번 js를 불러온다. 
+				   beforeSend : function(xhr)
+        {   //데이터를 전송하기 전에 헤더에 csrf값을 설정합니다.
+        	xhr.setRequestHeader(header, token);			
+        },
 				   success : function(data){	
 					   $("#like").val('true'); // 좋아요 체크 true으로 변경
 					   $("#like").addClass('heart');
@@ -384,8 +414,12 @@ $(function() {
 				$.ajax({
 					   type : "POST" ,
 					   data : data,
-					   url :  "LikeCheck.bo",
+					   url :  "likecheck",
 					   cache : false,// js는 보통 정적페이지이기때문에(변화가 없기때문에) 미리 저장해놓는다.cache : false는  그것을 막는다. 매번 js를 불러온다. 
+					   beforeSend : function(xhr)
+				        {   //데이터를 전송하기 전에 헤더에 csrf값을 설정합니다.
+				        	xhr.setRequestHeader(header, token);			
+				        },
 					   success : function(data){	
 						   $("#like").val('false'); // 좋아요 체크 true으로 변경
 						   $("#like").removeClass('heart');

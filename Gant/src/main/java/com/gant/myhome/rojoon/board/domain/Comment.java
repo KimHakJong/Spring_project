@@ -9,15 +9,9 @@ private int comment_board_num; //com 테이블이 참조하는 보드 글번호
 private int comment_re_ref; // 원문글의 글번호
 private int comment_re_lev; // 원문이면 0 답글이면 1 답글의 답글은 2
 private int comment_re_seq; //원문이면 0 , 1 레벨이면 1레벨 시퀀스 +1
-private String subject; //제목
+private String profileimg; //members 테이블 프로필 사진 
 
 
-public String getSubject() {
-	return subject;
-}
-public void setSubject(String subject) {
-	this.subject = subject;
-}
 public int getNum() {
 	return num;
 }
@@ -66,4 +60,11 @@ public int getComment_re_seq() {
 public void setComment_re_seq(int comment_re_seq) {
 	this.comment_re_seq = comment_re_seq;
 }
+public String getProfileimg() {
+	return profileimg;
+}
+public void setProfileimg(String profileimg) {
+	this.profileimg = profileimg;
+}
+
 }
