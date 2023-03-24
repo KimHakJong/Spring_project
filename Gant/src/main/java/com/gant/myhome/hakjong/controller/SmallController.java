@@ -102,4 +102,10 @@ private static final Logger logger = LoggerFactory.getLogger(MembersController.c
 		return memo;
 	}
 	
+	@ResponseBody
+	@PostMapping(value="/deletememo")
+	public int deleteMemo(int num) {
+		int result = memoservice.delete(num);
+		return result;
+	}
 }

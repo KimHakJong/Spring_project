@@ -42,7 +42,7 @@ public class ProjectMainController {
 				
 			session.setAttribute("profileimg", m.getProfileimg());
 			session.setAttribute("name", m.getName());
-			mv.setViewName("home/main2");
+			mv.setViewName("pmain/view");
 			return mv;
 	}
 	

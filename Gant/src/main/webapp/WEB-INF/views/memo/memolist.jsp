@@ -29,10 +29,13 @@
 		left: 320px;
   		top: 140px;
 }
-.select_del{
-	width:25px;
-	height:25px;
-	
+.select_del {
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    right: 2px;
+    top: -2px;
+    display:none;
 }
 .btnChange {
     width: 200px;
@@ -63,7 +66,7 @@
 .pen_colors {
     position: relative;
     top: 20px;
-    left: 50px;
+    left: 9px;
 }
 
 .pen_colors > img {
@@ -72,6 +75,16 @@
     cursor: pointer;
 }
 
+.backtolist {
+	position: relative;
+	top: 21px;
+	left: 21px;
+}
+.backtolist > img {
+	width: 25px;
+	height: 25px;
+	cursor: pointer;
+}
 .memo_store {
     width: 50px;
     float: right;
@@ -187,6 +200,7 @@
 	margin:11px;
 	line-height:80px;
 	text-align:center;
+	position:relative;
 	
 }
 
@@ -226,7 +240,16 @@
     margin-left: 88%;
     margin-top: 5%;
 }
-.memolist{display:none}
+.memolist{display:none; z-index:10000}
+
+#mask {
+position:absolute;
+z-index:9000;
+ display:none;
+ left:0;
+ top:0;
+}
+
 </style>
 <script>
 $(document).ready(function(){
@@ -235,6 +258,7 @@ $(document).ready(function(){
 		
 	$('.closebtn').click(function(){ //메모장목록 닫기 클릭
 		$('.memolist').css('display','none');
+		$("#mask").css('display','none');
 	});
 	
 	$('.openmemo').click(function(e){ //메모장 열기 클릭
@@ -248,37 +272,43 @@ $(document).ready(function(){
 			$('.postitlist').empty();
 			$('.memolist').css('display','block');
 			let id = $(".side_userid").text();
-			$.ajax({
-				url : "${pageContext.request.contextPath}/small/memolist",
-				type : "post",
-				data : { "id" : id},
-				dataType : "json",
-				beforeSend : function(xhr)
-	  			{   //데이터를 전송하기 전에 헤더에 csrf값을 설정합니다.
-	    			xhr.setRequestHeader(header, token);			
-	    		},
-	    		success : function(Ldata){
-	    			$(Ldata).each(function(){ //list안에 각각 Memo객체를 뽑아내는 과정
-	    				console.log("메모장리스트:"+this.num + this.subject + this.background);
-	    				let output = '<div class="postits" style="';
-	    				   output += "background-image:url('"
-	    						   + "${pageContext.request.contextPath}/resources/image/memo/postit-"
-	    						   + this.background.substring(5)//뒤에 yellow,blue 등 색상만 뽑아내는 과정
-	    						   + "')"
-	    						   + '"><button type="button" class="select_del">X</button><span class="memolist_subject">'
-	    						   + this.subject
-	    						   + "</span><input type='hidden' value='"+ this.num +"'></div>";
-	    				$('.postitlist').append(output);
-	    			});
-	    		}//success
-			});//ajax*/
+			loadAjax(id);
 		}//if
 	  	}//if
-	})
+	});//메모장열기끝
+	
+	function loadAjax(id){
+		focusMemolist();
+		$.ajax({
+			url : "${pageContext.request.contextPath}/small/memolist",
+			type : "post",
+			data : { "id" : id},
+			dataType : "json",
+			beforeSend : function(xhr)
+  			{   //데이터를 전송하기 전에 헤더에 csrf값을 설정합니다.
+    			xhr.setRequestHeader(header, token);			
+    		},
+    		success : function(Ldata){
+    			$(Ldata).each(function(){ //list안에 각각 Memo객체를 뽑아내는 과정
+    				console.log("메모장리스트:"+this.num + this.subject + this.background);
+    				let output = '<div class="postits" style="';
+    				   output += "background-image:url('"
+    						   + "${pageContext.request.contextPath}/resources/image/memo/postit-"
+    						   + this.background.substring(5)//뒤에 yellow,blue 등 색상만 뽑아내는 과정
+    						   + "')"
+    						   + '"><img src="${pageContext.request.contextPath}/resources/image/memo/memo_closeicon.png" class="select_del"><span class="memolist_subject">'
+    						   + this.subject
+    						   + "</span><input type='hidden' value='"+ this.num +"'></div>";
+    				$('.postitlist').append(output);
+    			});
+    		}//success
+		});//ajax*/
+	}//function
 	
 		$("body").on('click','.postits',function() { //클릭한 메모장 내용 불러오는 코드
 		console.log("클릭");
 		let num = $(this).find('input[type=hidden]').val();
+		$("#mask").css('display','none');
 		$.ajax({
 			url : "${pageContext.request.contextPath}/small/loadmemo",
 			type : "post",
@@ -306,15 +336,16 @@ $(document).ready(function(){
     			storedText=Ldata.content;
     			storedBack =Ldata.background;
     			storedColor = Ldata.color;
+    			
     			$(".memo").css('display','block');
     		}
 			
 		});//ajax
-		
 		});//click
 		
 	$("#creatememo").click(function(){ //생성클릭했을 때 기본 노란배경,검은색글자, 내용,제목 없음 글번호 : -1
 		$(".memolist").css('display','none');
+		$("#mask").css('display','none');
 		$("#memo_num").val('-1');
 		$(".memo_subject").val('');
 		$(".txtMemo").val('');
@@ -331,8 +362,39 @@ $(document).ready(function(){
 	
 	
 	$("#memo_deleteicon").click(function(){ //삭제아이콘 클릭 시 각 메모장 사이드에 삭제버튼 생성
-		
-	});
+		$(".select_del").toggle();
+	});//click 휴지통아이콘
+	
+	$("body").on('click','.select_del',function(event){
+		event.stopPropagation();
+		console.log($(this).next().next().val());
+		let num = $(this).next().next().val();
+		let id = $(".side_userid").text();
+			
+		if(confirm("정말로 삭제하시겠습니까?")){
+			
+		$.ajax({
+			url : "${pageContext.request.contextPath}/small/deletememo",
+			type : "post",
+			dataType : "json",
+			data : { "num" : num},
+			beforeSend : function(xhr)
+  			{   //데이터를 전송하기 전에 헤더에 csrf값을 설정합니다.
+    			xhr.setRequestHeader(header, token);			
+    		},
+    		success : function(Ddata){
+    			if(Ddata==1){
+    				alert("삭제를 완료했습니다.");
+    				$('.postitlist').empty();
+    				loadAjax(id);
+    			}else{
+    				alert("삭제를 실패하였습니다.");
+    			}
+    		}
+			
+		});//ajax
+		}
+	});//click X아이콘
 		
 	$('.btnChange > img').click(function(){ //배경색 이미지목록을 열고 닫음
 		$('.back_colors').toggle();
@@ -368,6 +430,28 @@ $(document).ready(function(){
 			}else{
 				$('.memo').css('display','none');
 			}
+		});
+		
+		$(".backtolist > img").click(function(){
+			let length = $('.memo').css('background-image').length;
+			if(storedSubject!=$('.memo_subject').val() || storedText!=$('.txtMemo').val() || storedBack!=$('.memo').css('background-image').substring(53,length-2) || storedColor!=$('.txtMemo').css('color')){
+				var close = confirm("아직 저장되지 않았습니다. \n 정말 뒤로 가시겠습니까?");
+				
+				if(close) { //확인
+					$('.memo').css('display','none');
+					$('.postitlist').empty();
+					$('.memolist').css('display','block');
+					let id = $(".side_userid").text();
+					loadAjax(id);
+					
+				}
+			}else{
+				$('.memo').css('display','none');
+				$('.postitlist').empty();
+				$('.memolist').css('display','block');
+				let id = $(".side_userid").text();
+				loadAjax(id);
+			}	
 		});
 		
 		$('.memo_store').click(function(){ //메모장 저장
@@ -416,10 +500,20 @@ $(document).ready(function(){
 			}//값이 있을 때 else문
 			
 		})//저장클릭
+		
+		function focusMemolist(){
+			var height = $(window).height();
+			var width = $(window).width();
+			
+			$("#mask").css({'width':width,'height':height});
+			$("#mask").css('display','block');
+			$("#mask").css('background','linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ),url("'+window.location.href+'")');
+		}
 });
 </script>
 </head>
 <body>
+<div id="mask"></div>
 <div class="memolist">
 	<div class="memohead">
 	<span id="memotitle">메모장</span>
@@ -451,6 +545,9 @@ $(document).ready(function(){
 	</div><input type="hidden" id="memo_num" value="">
 	<span class="pen_colors">
 		<img src="${pageContext.request.contextPath}/image/memo/color-white.png">
+	</span>
+	<span class="backtolist">
+		<img src="${pageContext.request.contextPath}/image/memo/back.png">
 	</span>
 	<div class="btnClose">&times;</div>
 	<button class="memo_store" type="button">저장</button>
