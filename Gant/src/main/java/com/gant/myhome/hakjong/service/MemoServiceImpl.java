@@ -48,6 +48,11 @@ public class MemoServiceImpl implements MemoService {
 	public int getMemoNum(String id) {
 		return dao.getMemoNum(id);
 	}
+
+	@Override
+	public int delete(int num) {
+		return dao.delete(num);
+	}
 	
 	
 

@@ -113,7 +113,7 @@
                     </div>
                 </div>
                 <div class="sidemenu navbar-nav w-100">
-                    <a href="main.home" class="nav-item nav-link active"><i class="fas fa-folder-open me-2"></i>프로젝트</a>
+                    <a href="${pageContext.request.contextPath}/pmain/view" class="nav-item nav-link active"><i class="fas fa-folder-open me-2"></i>프로젝트</a>
                     <a href="${pageContext.request.contextPath}/att/main" class="nav-item nav-link"><i class="fas fa-user-clock me-2"></i>근태관리</a>
                     <a href="${pageContext.request.contextPath}/board/main" class="nav-item nav-link"><i class="fas fa-th-list me-2"></i>게시판</a> <!-- 
                     <div class="nav-item dropdown">
