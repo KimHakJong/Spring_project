@@ -22,7 +22,7 @@ public class Calendar {
 	public void setStart(String start) {
 		this.start = start;
 	}
-	public String getEnd() {
+	public String getEnd(){
 		return end;
 	}
 	public void setEnd(String end) {
