@@ -12,9 +12,9 @@ body{text-align:center}
 </head>
 <body>
 에러페이지<br>
-<img src="${pageContext.request.contextPath }/resources/image/tear3.png" width="100px"><br>
-요청하신 <b>${url }</b>처리에 오류가 발생했습니다
-<hr>
-${message }
+<img src="${pageContext.request.contextPath}/resources/image/error/error.png" width="100px"><br>
+<p> 죄송합니다. <br>
+	  	  ${message}</p>
+	  <span>서비스 이용에 불편을 드려 죄송합니다.</span>
 </body>
 </html>

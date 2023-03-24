@@ -4,7 +4,6 @@ package com.gant.myhome.rojoon.board.service;
 import java.util.List;
 
 import com.gant.myhome.rojoon.board.domain.Comment;
-import com.google.gson.JsonArray;
 
 
 public interface CommentService {

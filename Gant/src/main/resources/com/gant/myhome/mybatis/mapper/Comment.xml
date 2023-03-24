@@ -32,14 +32,14 @@
 	</resultMap>
 
    
-   <select id="commentselect">
+   <select id="commentselect" resultType="comment">
      select *
      from com
      where num = #{num}
    </select>
    
    <insert id="commentsInsert">
-    INSERT INTO com 
+    INSERT INTO com (num,id,content,reg_date,comment_board_num,comment_re_lev,comment_re_seq,comment_re_ref)
     VALUES (comm_seq.nextval,#{id},#{content},sysdate,#{comment_board_num},#{comment_re_lev},#{comment_re_seq},comm_seq.nextval)
    </insert>
 

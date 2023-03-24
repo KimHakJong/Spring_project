@@ -25,6 +25,12 @@
         from boardLike
         where id = #{id} and board_num = #{board_num}
       </select>
- 
-       
+      
+      <update id="updateLike">
+      update boardLike
+      set  like_check = #{like_check}
+      where id = #{id} and board_num = #{board_num}
+      </update>
+      
+      
 </mapper>

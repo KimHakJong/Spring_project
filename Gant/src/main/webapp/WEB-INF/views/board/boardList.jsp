@@ -42,14 +42,13 @@ $(function(){
     <tr>
      <th colspan="6" class="th1">
      
-     <form action="main" method="post" id="search">
+     <form action="main" method="get" id="search">
 		   <div class="input-group mb-3">
 		  <input type="text" class="form-control" name="search_name" placeholder="제목을 검색하세요">
 		  <div class="input-group-append">
-		   <button class="btn btn-dark" type="submit" id="search_btn">🔍︎</button>
+		   <button class="btn btn-dark" type="submit" id="search_btn">🔍︎</button> 
 		  </div>
 		</div>
-		
 		</form>
      </th>
    </tr>
@@ -129,8 +128,8 @@ $(function(){
 			                           class="form-control" placeholder=""
 			                           name="input_pass">
 			               </div>
-			               <button type="submit" class="btn btn-dark">전송</button>
-			               <button type="button" class="btn btn-dark"  data-dismiss="modal">닫기</button>
+			               <button type="submit" class="btn btn-primary">전송</button>
+			               <button type="button" class="btn btn-primary"  data-dismiss="modal">닫기</button>
 			               <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 			            </form>
 			         </div>

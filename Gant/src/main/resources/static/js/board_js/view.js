@@ -18,8 +18,6 @@ function getList(state){//현재 선택한 댓글 정렬방식을 저장합니�
 	        	xhr.setRequestHeader(header, token);			
 	        },
 			success:function(rdata){
-			console.log(rdata.boardlist)
-			console.log(rdata.listcount)
 				$('#count').text(rdata.listcount).css('font-family','arial,sans-serif')
 				let red1 ='red';
 				let red2 ='red';
@@ -51,9 +49,9 @@ function getList(state){//현재 선택한 댓글 정렬방식을 저장합니�
 							comment_reply = ' comment-list-item--reply lev2';
 						}
 						const profile=this.profileimg;
-						let src ='${pageContext.request.contextPath}/resources/image/memberupload/user.png';
+						let src ='../image/memberupload/people.png';
 						if(profile){
-							src ='${pageContext.request.contextPath}/resources/image/memberupload/'+profile;
+							src ='../image/memberupload/'+profile;
 						}
 						
 					output += '<li id="' + this.num + '" class="comment-list-item' + comment_reply +'">'
@@ -102,7 +100,7 @@ function getList(state){//현재 선택한 댓글 정렬방식을 저장합니�
 					        +'</li>' // li.ccomment-list-item						    
 					})//each end
 					
-					console.log(output);
+					
 					
 					$('.comment-list').html(output);
 			 }//if(rdata.boardlist.length>0)
@@ -168,7 +166,7 @@ function del(num){//num : 댓글 번호
         	xhr.setRequestHeader(header, token);			
         },
 			success:function(rdata){
-				if(rdata == 1){
+				if(rdata >= 1){
 				getList(option);
 				}	
 			}
@@ -231,7 +229,6 @@ $(function() {
 		$.ajax({
 			url:"../comment/add", //원문 등록
 			data : {
-				id : $('#loginid').val(),
 				content : content,
 				comment_board_num : $("#comment_board_num").val(),
 				comment_re_lev : 0, 			                                    
@@ -323,15 +320,15 @@ $(function() {
 		const seq = $(this).attr('data-seq');
 		$.ajax({
 			url:"../comment/reply", 
+			dataType:'json',	
 			data : {
-				id : $('#loginid').val(),
 				content:content,
 				comment_board_num : $("#comment_board_num").val(),
 			    comment_re_lev : lev,
 				comment_re_ref : comment_re_ref,
 				comment_re_seq : seq
 				},
-				type : 'post',
+				type : 'POST',
 				beforeSend : function(xhr)
         {   //데이터를 전송하기 전에 헤더에 csrf값을 설정합니다.
         	xhr.setRequestHeader(header, token);			
@@ -385,12 +382,10 @@ $(function() {
 			//like_check == false인 상태에서(좋아요 체크하지 않은 상태에서) 좋아요 체크를 했을때
 			if($("#like").val() == 'false'){ 
 				
-			const data = {like_check : "true" , num : $('#comment_board_num').val()}; //json 형식으로 
+			const data = {like_check : "true" , board_num : $('#comment_board_num').val()}; //json 형식으로 
 			$.ajax({
-				   type : "POST" ,
 				   data : data,
 				   url :  "likecheck", 
-				   cache : false,// js는 보통 정적페이지이기때문에(변화가 없기때문에) 미리 저장해놓는다.cache : false는  그것을 막는다. 매번 js를 불러온다. 
 				   beforeSend : function(xhr)
         {   //데이터를 전송하기 전에 헤더에 csrf값을 설정합니다.
         	xhr.setRequestHeader(header, token);			
@@ -410,12 +405,10 @@ $(function() {
 			
 			}else if($("#like").val() == 'true'){//like_check == true인 상태에서(좋아요 체크한상태에서) 좋아요 체크를 해제했을때
 				
-				const data = {like_check : "false" , num : $('#comment_board_num').val()}; //json 형식으로 
+				const data = {like_check : "false" , board_num : $('#comment_board_num').val()}; //json 형식으로 
 				$.ajax({
-					   type : "POST" ,
 					   data : data,
 					   url :  "likecheck",
-					   cache : false,// js는 보통 정적페이지이기때문에(변화가 없기때문에) 미리 저장해놓는다.cache : false는  그것을 막는다. 매번 js를 불러온다. 
 					   beforeSend : function(xhr)
 				        {   //데이터를 전송하기 전에 헤더에 csrf값을 설정합니다.
 				        	xhr.setRequestHeader(header, token);			
@@ -443,7 +436,7 @@ $(function() {
 	$("#bodelete").click(function(){
 		var result = confirm("정말 삭제하시겠습니까?");
 		if(result){
-			location.href="BoardDeleteAction.bo?num="+$('#comment_board_num').val(); 
+			location.href="delete?board_num="+$('#comment_board_num').val(); 
 		}
 		 });
 	

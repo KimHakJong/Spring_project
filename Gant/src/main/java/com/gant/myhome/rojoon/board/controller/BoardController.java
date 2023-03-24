@@ -7,9 +7,9 @@ import java.io.PrintWriter;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
+
 import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
@@ -89,21 +89,21 @@ public class BoardController {
 		
 		//검색어가 없는경우
         if(search_name == null || search_name.equals("")) {	
+        	//총 리스트 수를 받아옵니다.
+			listcount = boardService.getListCount();
+			
+			//리스트를 받아옵니다.
+			//일반게시물 리스트
+			boardlist = boardService.getBoardList(page,limit);
+				
+		}else {// 검색어가있는경우
+
 			//검색어에 포함되어있는 게시글 수 
 			listcount = boardService.getSearchListCount(search_name);
 			
 			//리스트를 받아옵니다.
 			//검색어에 포함되어있는 게시글 리스트
 			boardlist = boardService.getSearchBoardList(page,limit,search_name);
-					
-		}else {// 검색어가있는경우
-			
-			//총 리스트 수를 받아옵니다.
-			listcount = boardService.getListCount();
-			
-			//리스트를 받아옵니다.
-			//일반게시물 리스트
-			boardlist = boardService.getBoardList(page,limit);
 			
 		}
 		
@@ -278,7 +278,7 @@ public class BoardController {
 			  required = false로 설정합니다. 이 경우에는  beforeURL 의 값은 null입니다.
 			 * */
 			logger.info("referer:"+beforeURL);
-			if(beforeURL != null && beforeURL.endsWith("list")) {
+			if(beforeURL != null && beforeURL.endsWith("main")) {
 				boardService.setReadCountUpdate(board_num);
 			}
 			
@@ -298,22 +298,254 @@ public class BoardController {
 				
 			Board board = boardService.getDetail(board_num);
 			board.setId_profileimg(boardService.getprofileimg(board.getBoard_name()));
-			//board=null; // error 페이지 이동 확인하고자 임의로 지정합니다.
-			if(board == null) {
-				logger.info("상세보기 실패");
-				mv.setViewName("error/error");
-				mv.addObject("message","상세보기 실패입니다.");
-			}else {
+		   
+			if(board.getId_profileimg() == null || board.getId_profileimg().equals("") ) {
+				board.setId_profileimg("people.png");
+			}
 				logger.info("상세보기 성공");
 				String admin = boardService.getadmindate(id);
 				mv.setViewName("board/boardView");
 				mv.addObject("boarddata",board);				
 				mv.addObject("admin",admin);			
-			}
-			
+				mv.addObject("id",id);				
 			return mv;
 			
 		}
+		
+		@GetMapping(value = "/delete") 
+		public String BoardDeleteAction(
+				int board_num,
+				Model mv,
+				HttpServletResponse response
+				) throws IOException{
+		
+		 
+		 //비밀번호 일치하는 경우 삭제 처리 합니다.
+		 int result = boardService.boardDelete(board_num);
+
+		 //삭제 처리 실패한 경우
+		 if(result == 0) {
+			logger.info("상세보기 실패");
+			mv.addAttribute("message","삭제 실패");
+			return "error/error";
+		 }
+		    logger.info("게시판 삭제 성공");
+		    init(response);
+			PrintWriter out = response.getWriter();
+			out.println("<script>");
+			out.println("alert('삭제되었습니다.')");
+			out.println("location.href='main';");
+			out.println("</script>");
+			out.close();
+			return null;
+		 
+		}
+		
+		
+		@GetMapping(value = "/likecheck") 
+		public String likecheck(
+				Principal principal,
+				String like_check,
+				int board_num,
+				Model mv,
+				HttpServletResponse response) throws IOException
+		                   {
+			String id = principal.getName();
+			
+			if(like_check.equals("true")) {
+				// like_check 를 false에서 true으로 변경
+				int result = boardlikeService.updateLike(id,board_num,like_check);
+				if(result == 0){
+					logger.info("좋아요 업데이트 실패");
+					mv.addAttribute("message","좋아요 업데이트 실패");
+					return "error/error";
+				 }
+				// board BOARD_LIKE(좋아요수) 를 1 증가시킨다.
+				boardService.BoardupdateLike(board_num,1);
+			}else if(like_check.equals("false")) {
+				// like_check 를 false에서 true으로 변경
+				int result = boardlikeService.updateLike(id,board_num,like_check);
+				if(result == 0){
+					logger.info("좋아요 업데이트 실패");
+					mv.addAttribute("message","좋아요 업데이트 실패");
+					return "error/error";				 }
+				// board BOARD_LIKE(좋아요수) 를 1 감소시킨다.
+				boardService.BoardupdateLike(board_num,-1);
+			}
+			    init(response);
+				PrintWriter out = response.getWriter();
+				out.println("Success");
+				out.close();
+				return null;
+		}
+		
+		
+		@GetMapping(value = "/reply") 
+		public ModelAndView BoardReplyView(
+				                  int num,
+				                  ModelAndView mv,
+				                  HttpServletRequest request
+				                  ) {
+		  Board boarddata = boardService.getDetail(num);
+		  
+		  //글 내용 불러오기 실패한 경우
+		  if(boarddata == null) {
+			  mv.setViewName("error/error");
+			  mv.addObject("message" , "게시판 답변글 가져오기 실패");		  
+		  }else {
+			  mv.addObject("boarddata",boarddata);
+			  mv.setViewName("board/boardReply");  
+		  }
+
+			return mv;
+		}
+		
+		
+		@PostMapping(value = "/replyAction") 
+		public ModelAndView BoardReplyAction(
+				@RequestParam(value = "board_pass",defaultValue = "1" ,required = false) String board_pass, // 비밀글 설정을 안했다면 1을 넣어준다.   
+				Board board,
+				ModelAndView mv
+				){
+		// 비밀글 설정을 안했다면 1
+		board.setBoard_pass(board_pass);
+		
+		int result = boardService.boardReply(board);	
+		if(result == 0 ) {	//답글달기 실패 시
+	      mv.setViewName("error/error");
+		  mv.addObject("message" , "수정보기 실패입니다.");
+		}else { // 답글달기 성공 시 
+		  mv.setViewName("redirect:main");
+		}			
+			return mv;
+		}
+		
+		
+		//파일 다운로드
+		@ResponseBody
+		@PostMapping(value = "/down") 
+		public byte[] BoardFileDown(
+								String filename,
+								HttpServletRequest request,
+								String original,
+								HttpServletResponse response
+								) throws Exception{
+
+			
+		String saveFolder = boardsavefolder.getSavefolder();
+		String sFilePath = saveFolder + filename;
+		
+		File file = new File(sFilePath);
+		
+		// Spring에서 지원하는 메서드
+		byte[] bytes = FileCopyUtils.copyToByteArray(file);
+		
+		String sEncoding = new String(original.getBytes("utf-8"), "ISO-8859-1");
+		
+		//Content-Disposition : attachment: 브라우저는 해당 Content를 처리하지 않고 , 다운로드하게 됩니다.
+		response.setHeader("Content-Disposition","attachment;filename=" + sEncoding);
+		
+		response.setContentLength(bytes.length);
+		return bytes;
+		}
+				
+		
+		
+		@GetMapping(value = "/modify") 
+		public ModelAndView BoardmodifyView(
+				                  int num,
+				                  ModelAndView mv,
+				                  HttpServletRequest request
+				                  ) {
+		  Board boarddata = boardService.getDetail(num);
+		  
+		  //글 내용 불러오기 실패한 경우
+		  if(boarddata == null) {
+			  logger.info("수정 보기 실패");
+			  mv.setViewName("error/error");
+			  mv.addObject("message" , "수정보기 실패입니다.");
+			  return mv;		  
+		  }
+		  
+		  String admin = boardService.getadmindate(boarddata.getBoard_name());
+		  
+		  logger.info("(수정)상세보기 보기 성공");
+		  //수정 폼 페이지로 이동할 때 원문 글 내용을 보여주기 때문에 boarddata 객체를 
+		  // ModelAndView 객체에 저장합니다.
+		  mv.addObject("boarddata" , boarddata);
+		  mv.addObject("admin", admin);
+		  //글 수정 폼 페이지로 이동하기 위해 경로를 설정합니다.
+		  mv.setViewName("board/boardModify");
+			return mv;
+		}
+		
+		
+		
+		
+		@PostMapping(value = "/modifyAction") 
+		public String BoardModifyAction(
+				Board boarddata,
+				String check, Model mv,
+				@RequestParam(value = "noticebox",defaultValue = "false" ,required = false) String noticebox,
+				HttpServletRequest request
+				) throws Exception {
+			 
+			 boarddata.setBoard_notice(noticebox);
+	         
+			 MultipartFile uploadfile = boarddata.getUploadfile();	
+	       
+			 
+	         if(check != null && !check.equals("")) { //기존 파일 그대로 사용하는 경우입니다.
+	        	 //기존의 파일을 그대로 사용
+	        	 boarddata.setBoard_original(check);
+
+	         }else {
+	        	 //답변글의 경우 파일 첨부에 대한 기능이 없습니다.
+	        	 //만약 답변글을 수정할 경우
+	        	 //<input type="file" id="upfile" name="uploadfile">엘리먼트가 존재하지 않아
+	        	 // private MultipartFile uploadfile; 에서 uploadfile은 null입니다.
+	        	 if(uploadfile != null && !uploadfile.isEmpty()) {
+	        		logger.info("파일 변경되었습니다.");
+	        		 
+	        		String fileName = uploadfile.getOriginalFilename();//원래 파일명
+	        		boarddata.setBoard_original(fileName); //원래 파일명 저장
+	        		
+	        		String saveFolder = boardsavefolder.getSavefolder();
+	     	    	String fileDBName = fileDBName(fileName , saveFolder);
+
+	     	    	
+	     	    	// transferTo(Flie path) : 업로드한 파일을 매개변수의 경로에 저장합니다.
+	     	    	uploadfile.transferTo(new File(saveFolder + fileDBName));
+
+	     	    	//바뀐 파일명으로 저장
+	     	    	boarddata.setBoard_file(fileDBName);
+	        	 }else {// 기존 파일이 없는데 파일 선택하지 않은 경우 또는 기존 파일이 있었는데 삭제한 경우
+	        		 logger.info("선택된 파일이 없습니다.");
+	        		// <input type="hidden" name="BOARD_FILE" value="${boarddata.BOARD_FILE}">
+	        	    // 위 태그에 값이  있다면 ""로 값을 변경합니다.
+	        		 boarddata.setBoard_file("");//""로 초기화 합니다.
+	        		 boarddata.setBoard_original("");//""로 초기화 합니다.
+	        	 } // else end        	 
+	         } // else end
+	         
+	         //DAO에서 수정 메서드 호출하여 수정합니다.
+	         int result = boardService.boardModify(boarddata);
+	         String url = "";
+	         //수정에 실패한 경우
+	         if(result == 0) {
+	        	 logger.info("게시파 수정 실패");
+	   		     mv.addAttribute("message" , "게시판 수정 실패");
+	   		     url = "error/error";
+	         }else { // 수정 성공의 경우
+	        	 logger.info("게시판 수정 완료");
+	        	 //수정한 글 내용을 보여주기 위해 글 내용 보기 보기 페이지로 이동하기위해 경로를 설정합니다.
+	        	 url = "redirect:main";
+	         }         
+			return url;
+		}
+		
+		
+		
 	
 	
 	

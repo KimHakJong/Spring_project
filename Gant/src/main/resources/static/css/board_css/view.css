@@ -12,6 +12,9 @@ body>div>table>tbody td:nth-child(1) {
 	font-size: 1.2em
 }
 
+.layer-list{
+	padding-left : 0em !important;
+}
 
 
 td:nth-child(1) {
@@ -42,7 +45,7 @@ body>div>table>tbody tr:last-child {
 	width: 60%
 }
 
-/* Ã­ÂÂ¬ÃªÂ¸Â° Ã¬Â¡Â°Ã¬Â Ë† ÃªÂ³Â Ã¬Â â€¢*/
+/* 횄짯횂혖횂짭횄짧횂쨍횂째 횄짭횂징횂째횄짭횂혻횏�� 횄짧횂쨀횂혻횄짭횂혻창�궗짖*/
 textarea.form-control {
 	resize: none
 }
@@ -212,7 +215,7 @@ textarea.comment-write-area-text {
 }
 
 button, textarea {
-	font-family: Apple SD Gothic Neo, Ã«Â§â€˜Ã¬Ââ‚¬ ÃªÂ³Â Ã«â€â€¢, Malgun Gothic, Ã«Ââ€¹Ã¬â€ºâ‚¬, dotum,
+	font-family: Apple SD Gothic Neo, 횄짬횂짠창�궗�쑦꺜�횂혶창�슿� 횄짧횂쨀횂혻횄짬창�궗혶창�궗짖, Malgun Gothic, 횄짬횂혧창�궗쨔횄짭창�궗쨘창�슿�, dotum,
 		sans-serif;
 }
 
@@ -360,7 +363,7 @@ float:left;
 float:right;	
 }
 
-/* ì¢‹ì•„ìš”ë²„íŠ¼ */
+/* 챙짖�뮨р�™�왗�큄�씳ヂ꿎�왗�힋쩌 */
 
 		.fas,.far,.fa{
 			font-family: "fontawesome";
@@ -478,6 +481,9 @@ float:right;
 		   margin-top:30px;
 	   }
 		
-
+		#imgsub{
+			width:30px;
+			vertical-align:middle;
+		}
 
 

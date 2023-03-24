@@ -19,8 +19,7 @@ public interface BoardService {
     
 	//검색 리스트
 	public List<Board> getSearchBoardList(int page, int limit, String search_name);
-    
-   
+     
 	//글 등록하기
 	public void insertBoard(Board board);
     
@@ -36,35 +35,26 @@ public interface BoardService {
 	//프로필 이미지 가져오기
 	public String getprofileimg(String board_name);
     
-
+	//글 삭제
+	public int boardDelete(int board_num);
 	
+	//좋아요 증가, 감소
+	public void BoardupdateLike(int board_num, int i);
+		
+    //글 답변
+	public int boardReply(Board board);
 	
+	//답변 수정
+	public int boardReplyUpdate(Board board);
 	
-//	
-//	//글 답변
-//	public int boardReply(Board board);
-//	
-//	//답변 수정
-//	public int boardReplyUpdate(Board board);
-//	
-//	//글 수정
-//	public int boardModify(Board modifyboard);
-//	
-//	//글 삭제
-//	public int boardDelete(int num);
-//	
+	//글 수정
+	public int boardModify(Board modifyboard);
 
-//	//글쓴이인지 확인
-//	public boolean isBoardWriter(int num, String pass);
-//	
-
-//    
-//	
-//	// 삭제 파일 리스트 
-//	public List<String> getdeleteFileList();
-//    
-//	//파일 삭제 
-//	public void deleteFileList(String filename);
+	// 삭제 파일 리스트 
+	public List<String> getdeleteFileList();
+    
+	//파일 삭제 
+	public void deleteFileList(String filename);
  
 	
 	

@@ -11,5 +11,11 @@ public interface BoardLikeService {
     
 	//id와 테이블번호에 해당하는 like_check 값을 가져온다.
 	public String selectLikeCheck(String id, int board_num);
+    
+	//like_check 를 false에서 true으로 변경 , true에서 false으로 변경
+	public int updateLike(String id, int board_num, String like_check);
+    
+
 		
+	
 }

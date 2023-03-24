@@ -63,12 +63,10 @@ public class CommentServicelmpl implements CommentService {
 
 	@Override
 	public int commentsreply(Comment comment) {
-		// 
 		dao.pluscomments(comment);
-		Comment comm = dao.commentselect(comment.getNum());
-		comm.setComment_re_lev(comm.getComment_re_lev()+1);
-		comm.setComment_re_seq(comm.getComment_re_seq()+1);
-		return dao.commentsreply(comm);
+		comment.setComment_re_lev(comment.getComment_re_lev()+1);
+		comment.setComment_re_seq(comment.getComment_re_seq()+1);
+		return dao.commentsreply(comment);
 	}
 
 	

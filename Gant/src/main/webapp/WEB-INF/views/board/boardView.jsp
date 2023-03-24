@@ -66,11 +66,17 @@
 	       <td><div id="File">첨부파일</div></td>
 	       <%-- 파일을 첨부한 경우 --%>
 	          <c:if test="${!empty boarddata.board_file}">
-          <td id="Filename"><img src="${pageContext.request.contextPath}/resources/image/board_image/download.png" width="20px">
+          <td id="Filename">
 	          <form method="post" action="down" style="height:0px">
 	             <input type="hidden" value="${boarddata.board_file}" name="filename">
 	             <input type="hidden" value="${boarddata.board_original}" name="original">
-	             <input type="submit" value="${boarddata.board_original}" >
+	             <div id ="submitname">
+	             <input type="image" src="${pageContext.request.contextPath}/resources/image/board_image/download.png" id="imgsub">
+	               <span id="originalname">
+	               ${boarddata.board_original}
+	               </span>
+	              </div>
+	              <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 	          </form>
            </td>
         </c:if>
