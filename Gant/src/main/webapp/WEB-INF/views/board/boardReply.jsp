@@ -2,12 +2,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
 <head>
-<link href="css/home.css" rel="stylesheet" type="text/css">
+<link href="${pageContext.request.contextPath}/resources/css/home/home.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-<link href="board/board_css/modify.css" rel="stylesheet" type="text/css">
+<link href="${pageContext.request.contextPath}/resources/css/board_css/modify.css" rel="stylesheet" type="text/css">
 <script>
 $(document).ready(function(){
 	
@@ -114,7 +114,7 @@ $(document).ready(function(){
 		   
 		   <div class="form-group">     
 		      <label for="board_name">글쓴이</label>
-		      <input name="board_name" id="board_name" value="${id}" readonly
+		      <input name="board_name" id="board_name" value="${boarddata.board_name}" readonly
 		       type="text" class="form-control" placeholder="Enter board_name">
 		
 		   </div>

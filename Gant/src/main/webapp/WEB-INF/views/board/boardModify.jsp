@@ -2,16 +2,24 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
 <head>
-<link href="css/home.css" rel="stylesheet" type="text/css">
-<link href="board/board_css/modify.css" rel="stylesheet" type="text/css">
+<link href="${pageContext.request.contextPath}/resources/css/home/home.css" rel="stylesheet" type="text/css">
+<link href="${pageContext.request.contextPath}/resources/css/board_css/modify.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-
+<style>
+#upfile{display: none;}
+.remove{
+ width:10;
+}
+#fileimg{
+ width:27
+}
+</style>
 <script>
 $(document).ready(function(){
-	
+
 	 // 비밀번호 체크박스 클릭시
 	 $("#passwordbox").change(function(){
 	        if($("#passwordbox").is(":checked")){ // 체크박스 체크했을때 readonly제거
@@ -24,7 +32,7 @@ $(document).ready(function(){
 	    }); 
 
         
-	// 공지사항 체크박스 클릭시
+	 // 공지사항 체크박스 클릭시
 	 $("#noticebox").change(function(){
 	        if($("#noticebox").is(":checked")){ // 체크박스 체크했을때 val = true
 	        	$("#noticebox").attr('value','true');
@@ -77,6 +85,11 @@ $(document).ready(function(){
 		history.back(-1);			
     });
 	
+	
+	
+	//파일 변경사항 체크 0이면 변경하지 않음 , 0보다 크면 변경
+	let check = 0;
+	
 	// 등록 클릭시 이벤트
 	$("#submit").click(function(){
 		
@@ -110,7 +123,52 @@ $(document).ready(function(){
 			return false;
     	}
     	
+    	 //파일첨부를 변경하지 않으면 $('#filevalue').text()의 파일명을 
+    	//파라미터 'check'라는 이름으로 form에 추가하여 전송합니다.
+    	if(check == 0){
+    		const value = $('#filevalue').text();
+    		const html = "<input type='hidden' value='"+value+"' name='check'>";
+    	    console.log(html);
+    	    $(this).append(html);
+    	}
+    	
 	  });//$("#submit").click end
+	  
+	  
+	function show(){
+		//파일 이름이 있는경우 remove 이미지를 보이게 하고
+		//파일 이름이 없는경우 remove 이미지를 보이지 않게 한다.
+		
+		if($('#filevalue').text() == ''){
+			$(".remove").css('display','none');
+		}else{
+			$(".remove").css({'display':'inline-block',
+			                 'position' : 'relative','top' : '-5px'}); 
+		}
+		
+	}
+	
+	show();
+	
+	// 파일 선택시 change이벤트 발생
+	$("#upfile").change(function(){
+		check++;
+		//$(this).val() //c:\fakepath\upload.png
+		const inputfile = $(this).val().split('\\');
+		$('#filevalue').text(inputfile[inputfile.length - 1]);
+		show();
+		 });
+		 
+	// remove 이미지를 클릭하면 파일명을 ''로 변경하고 remove이미지를 보이지 않게 합니다.
+    $(".remove").click(function(){
+	   $('#filevalue').text('');
+	   $(this).css('display','none');
+	   $('#upfile').val(''); // 만약 파일을 선택하고 remove 이미지를 클릭하면 <input type=file> 의 값도 빈문자열로 만들어요
+	})
+	  
+	  
+	  
+	  
 	  
 	  // 가져온 데이터로 글 css 적용
 		$('#board_content').css('font-weight', ${boarddata.fontWeight}).css('font-size', "${boarddata.fontSize}").css('color', "${boarddata.fontColor}");
@@ -125,6 +183,10 @@ $(document).ready(function(){
 		$("#noticebox").attr("checked","checked");
 		$("#noticebox").attr('value','true');
 	 }
+	  
+	  
+	 
+	  
 	  
 	  
 });
@@ -142,11 +204,11 @@ $(document).ready(function(){
          <div class="container" id="container">
 		  <form action="modifyAction" method="post" enctype="multipart/form-data" name="boardform">
 		   
-		   <input type="hidden" name="num" value="${boarddata.board_num}">
+		   <input type="hidden" name="board_num" value="${boarddata.board_num}">
 		   
 		   <div class="form-group">     
 		      <label for="board_name">글쓴이</label>
-		      <input name="board_name" id="board_name" value="${id}" readonly
+		      <input name="board_name" id="board_name" value="${boarddata.board_name}" readonly
 		       type="text" class="form-control" placeholder="Enter board_name">
 		
 		   </div>
@@ -163,16 +225,19 @@ $(document).ready(function(){
 		      </c:if>
 		   </div>
 		   
-		  <c:if test="${boarddata.board_re_lev == 0}"><%-- 원문인경우에만  파일첨부가 가능하기 때문에 원문일경우에만 보이게 한다.--%>
-		  <div class="form-group">
-		    <label id="filelabel">파일첨부</label> 
-		         <input id="fileName" class="fileName" value="${boarddata.board_file}" disabled="disabled" placeholder="파일선택">
-			   <div class="fileRegiBtn">
-				 <label for="myFileUp" id="FileUp">파일등록하기</label>
-				 <input type="file" id="myFileUp" name="board_file" >
-		       </div>
-		  </div>
-		  </c:if>
+		     <%-- 원문글인 경우에만 파일 첨부 수정이 가능합니다. --%>
+		   <c:if test="${boarddata.board_re_lev == 0}">
+		    <div class="form-group read">
+		      <label id="filelabel">파일첨부 </label>
+		       <label for="upfile">
+		        <img src="../resources/image/board_image/download.png" alt="파일첨부"  id="fileimg">
+		       </label> 
+		        <input type="file" id="upfile" name="uploadfile">     
+		        <span id="filevalue">${boarddata.board_original}</span>
+		        <img src="../resources/image/board_image/remove.png" alt="파일삭제"  class="remove">
+		    </div>
+		   </c:if>
+		  
 
 		   <div class="form-group">
 		      <label for="board_subject">제목</label>

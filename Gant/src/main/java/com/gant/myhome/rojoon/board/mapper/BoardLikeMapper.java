@@ -1,6 +1,8 @@
 package com.gant.myhome.rojoon.board.mapper;
 
 import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Mapper;
 
 /*
@@ -20,6 +22,13 @@ public interface BoardLikeMapper {
         
 		//id와 테이블번호에 해당하는 like_check 값을 가져온다.
 		public String selectLikeCheck(HashMap<String, Object> map);
+		
+		//like_check 를 false에서 true으로 변경 , true에서 false으로 변경
+		public int updateLike(Map<String, Object> map);
+        
+
+
+
     
 	
 	

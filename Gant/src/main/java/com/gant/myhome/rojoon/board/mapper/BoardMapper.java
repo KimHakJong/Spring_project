@@ -2,6 +2,7 @@ package com.gant.myhome.rojoon.board.mapper;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -67,6 +68,8 @@ public interface BoardMapper {
 		//프로필이미지가져오기
 		public String getprofileimg(String board_name);
        
+		//like 1 증가 , 감소 
+		public void BoardupdateLike(Map<String, Object> map);
         
 
     

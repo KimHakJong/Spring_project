@@ -2,6 +2,7 @@ package com.gant.myhome.rojoon.board.service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -88,64 +89,62 @@ public class BoardServicelmpl implements BoardService {
 	public String getprofileimg(String board_name) {		
 		return dao.getprofileimg(board_name);
 	}
+     
+	
+	@Override
+	public int boardDelete(int board_num) {
+		int result = 0;
+		Board board = dao.getDetail(board_num);		
+		if(board != null) {
+			result = dao.boardDelete(board);
+		}
+		return result;
+	}
+	
+	
+	@Override
+	public void BoardupdateLike(int board_num, int update) {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("board_num",board_num);
+		map.put("update",update);
+		dao.BoardupdateLike(map);
+	}
+	
+	
+	@Override
+	@Transactional
+	public int boardReply(Board board) {
+		boardReplyUpdate(board);
+		board.setBoard_re_lev(board.getBoard_re_lev()+1);
+		board.setBoard_re_seq(board.getBoard_re_seq()+1);
+		board.setBoard_notice("false");
+		return dao.boardReply(board);
+	}
+	
+	@Override
+	public int boardReplyUpdate(Board board) {
+		return dao.boardReplyUpdate(board);
+	}
+	
+	
+		
+	@Override
+	public int boardModify(Board modifyboard) {
+		return dao.boardModify(modifyboard);
+	}
 
-	
-	
-//	
-//	@Override
-//	public boolean isBoardWriter(int num, String pass) {
-//		HashMap<String,Object> map = new HashMap<String,Object>();
-//		map.put("num",num);
-//		map.put("pass",pass);
-//		Board result = dao.isBoardWriter(map);
-//		if(result == null)			
-//		   return false;
-//		else
-//		   return true;  
-//	}
-//	
-//	@Override
-//	public int boardModify(Board modifyboard) {
-//		return dao.boardModify(modifyboard);
-//	}
-//
-//	@Override
-//	public int boardReplyUpdate(Board board) {
-//		return dao.boardReplyUpdate(board);
-//	}
-//	
-//	
-//	@Override
-//	@Transactional
-//	public int boardReply(Board board) {
-//		boardReplyUpdate(board);
-//		//double i = 1/0;
-//		board.setBOARD_RE_LEV(board.getBOARD_RE_LEV()+1);
-//		board.setBOARD_RE_SEQ(board.getBOARD_RE_SEQ()+1);
-//		return dao.boardReply(board);
-//	}
-//
-//	
-//
-//	@Override
-//	public int boardDelete(int num) {
-//		int result = 0;
-//		Board board = dao.getDetail(num);		
-//		if(board != null) {
-//			result = dao.boardDelete(board);
-//		}
-//		return result;
-//	}
-//
-//	@Override
-//	public List<String> getdeleteFileList() {		
-//		return dao.getDeleteFileList();
-//	}
-//
-//	@Override
-//	public void deleteFileList(String filename) {
-//		dao.deleteFileList(filename);
-//	}
+
+
+
+	@Override
+	public List<String> getdeleteFileList() {		
+		return dao.getDeleteFileList();
+	}
+
+	@Override
+	public void deleteFileList(String filename) {
+		dao.deleteFileList(filename);
+	}
 
 
 	

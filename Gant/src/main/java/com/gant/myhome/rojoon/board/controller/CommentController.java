@@ -2,6 +2,7 @@ package com.gant.myhome.rojoon.board.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -68,30 +70,35 @@ public class CommentController {
 	
 	
 	@PostMapping(value = "/add")
-	public String add(Comment comment,
-			   HttpServletResponse response) throws IOException{
+	public int add(Comment comment,
+			   HttpServletResponse response,
+			   Principal principal) throws IOException{
 		
-		int result = commentService.commentsInsert(comment);		
-		response.getWriter().print(result);
-		
-		return null;
+		String id = principal.getName();
+		comment.setId(id);
+		int result = commentService.commentsInsert(comment);				
+		return result;
 	}
     
 	@PostMapping(value = "/reply")
-	public String Update(Comment comment,
-			   HttpServletResponse response) throws IOException{
+	public int Update(Comment comment,
+			   HttpServletResponse response,
+			   Principal principal) throws IOException{
+		String id = principal.getName();
+		comment.setId(id);
 		int result = commentService.commentsreply(comment);		
-		response.getWriter().print(result);
-		return null;
+		return result;
 	} 
     
-	@PostMapping(value = "/update")
+	@GetMapping(value = "/update")
 	public int Update(Comment comment){
+		System.out.println("getNum = " +comment.getNum());
+		System.out.println("내용 = " +comment.getContent());
 		int result = commentService.commentsUpdate(comment);		
 		return result;
 	} 
 
-	@PostMapping(value = "/delete")
+	@GetMapping(value = "/delete")
 	public int Delete(int num){
 		int result = commentService.commentsDelete(num);		
 		return result;

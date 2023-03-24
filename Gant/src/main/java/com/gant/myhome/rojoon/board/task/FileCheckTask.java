@@ -30,18 +30,17 @@ public class FileCheckTask {
 	    @Autowired
 	    private BoardService boardService;
 			
-
-
+	    
 		public FileCheckTask(BoardService boardService) {
 		this.boardService = boardService;
 		}
 	
-		/*
+		
 		 
 		// cron 사용법
 		// seconds(초:0~59) minutes(분:0~59) hours(시:0~23) day(일:1~31)
 		// month(달:1~12) day of week(요일:0~6) year(optional)     
-		@Scheduled(cron = "0 21 * * * *")//순서대로 초 분 시 일 달 요일  // * : 모든 시간 달 요일 일 에 구애받지 않겠다.
+		@Scheduled(cron = "0 55 * * * *")//순서대로 초 분 시 일 달 요일  // * : 모든 시간 달 요일 일 에 구애받지 않겠다.
 	    public void checkFiles() throws Exception {
 			//추가
 			String saveFolder = boardsavefolder.getSavefolder();
@@ -66,5 +65,5 @@ public class FileCheckTask {
 				}
 			}
 		}
-		*/
+		
 } 

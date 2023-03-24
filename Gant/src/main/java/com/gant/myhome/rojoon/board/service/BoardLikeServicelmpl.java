@@ -1,6 +1,7 @@
 package com.gant.myhome.rojoon.board.service;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,6 +48,19 @@ public class BoardLikeServicelmpl implements BoardLikeService {
 		map.put("board_num",board_num);
 		return dao.selectLikeCheck(map);
 	}
+
+
+	@Override
+	public int updateLike(String id, int board_num, String like_check) {
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("id",id);
+		map.put("board_num",board_num);
+		map.put("like_check",like_check);
+		return dao.updateLike(map);
+	}
+
+
+	
 	
 
 
