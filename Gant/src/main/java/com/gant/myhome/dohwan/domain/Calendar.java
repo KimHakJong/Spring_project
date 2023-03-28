@@ -6,8 +6,8 @@ public class Calendar {
 	String admin;
 	String allday;
 	String name;
-	String start;
-	String end;
+	String startday;
+	String endday;
 	String title;
 
 	public String getId() {
@@ -16,17 +16,17 @@ public class Calendar {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public String getStart() {
-		return start;
+	public String getStartday() {
+		return startday;
 	}
-	public void setStart(String start) {
-		this.start = start;
+	public void setStartday(String startday) {
+		this.startday = startday;
 	}
-	public String getEnd(){
-		return end;
+	public String getEndday(){
+		return endday;
 	}
-	public void setEnd(String end) {
-		this.end = end;
+	public void setEndday(String endday) {
+		this.endday = endday;
 	}
 	public String getTitle() {
 		return title;

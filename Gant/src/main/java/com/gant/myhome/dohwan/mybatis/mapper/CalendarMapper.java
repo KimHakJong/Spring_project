@@ -13,13 +13,15 @@ public interface CalendarMapper {
 		
 		public List<Calendar> getCalList();
 			   
-		public int caldelete(String id);
+		
 			   
-		public String getadminid(String name);
+		public String getadminid(String id);
 				
 		public int update(Calendar c);
 
-		public int add(Calendar c, String admin);
+		public int add(Calendar c);
+		
+		public int caldelete(String id);
 
 
 

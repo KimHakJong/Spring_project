@@ -25,13 +25,16 @@ public class CalendarServicelmpl implements CalendarService {
 	@Override
 	public int add(Calendar c) {  
 		
-		String admin = dao.getadminid(c.getName());
-		
-		return dao.add(c, admin);
+		return dao.add(c);
 	}
 	
-	public String getadminid(String name) {
-		return dao.getadminid(name);
+	@Override
+	public String getadminid(String id) {
+		
+		String ad = dao.getadminid(id);
+		System.out.println("추출전 id " + id + " admin 추출 " + ad);
+		return ad;
+		
 	}
 
 	@Override
