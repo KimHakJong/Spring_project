@@ -94,4 +94,17 @@
   	delete from members 
   	where id = #{listid}
   </delete>
+  
+  <select id="getMembersList_ajax" resultType="members">
+       select * 
+	   from members 
+	   order by name
+  </select>
+  
+    <select id="getSearchMembersList_ajax" resultType="members">
+       select * 
+	   from members 
+	   where name like #{name} 
+	   order by name
+  </select>
 </mapper>

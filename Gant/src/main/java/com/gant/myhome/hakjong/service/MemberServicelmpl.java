@@ -130,6 +130,17 @@ public class MemberServicelmpl implements MemberService {
 		return dao.delete(listid);
 	}
 
+	@Override
+	public List<Members> getMembersList_ajax() {
+		return dao.getMembersList_ajax();
+	}
+
+	@Override
+	public List<Members> getSearchMembersList_ajax(String name) {
+		name = "%" + name + "%";
+		return dao.getSearchMembersList_ajax(name);
+	}
+
 
 
 	

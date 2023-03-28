@@ -67,6 +67,7 @@ margin:0; padding:0; position:relative; top:1.5px; color:white; font-size:21px; 
 .delete{outline:none; border:none; background:#dc3545; 
 		color:white; font-weight:bold; 
 		border-radius:4px}
+		
 .delete:hover{background:#BD2130}
 .addbook>tbody>tr>td:nth-child(4){text-align:center;padding:5px 10px 5px 5px; border-left:none}
 .addbook>tbody>tr>td:nth-child(3){border-right:none}

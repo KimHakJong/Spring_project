@@ -201,6 +201,7 @@
 	line-height:80px;
 	text-align:center;
 	position:relative;
+	cursor:pointer;
 	
 }
 
@@ -226,6 +227,7 @@
     margin-top: 15px;
     outline: none;
     height: 30px;
+    cursor:pointer;
 }
 #memotitle{
 	margin-top:21px; margin-left:35px;
@@ -239,6 +241,7 @@
     height: 60px;
     margin-left: 88%;
     margin-top: 5%;
+    cursor:pointer;
 }
 .memolist{display:none; z-index:10000}
 

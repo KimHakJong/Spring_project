@@ -130,7 +130,7 @@ public class MembersController {
 	@RequestMapping(value = "/joinProcess",method=RequestMethod.POST)
 	public String joinProcess(String jumin1, String jumin2, String phone1, String phone2, String phone3,
 							  String email, String domain, Members m, RedirectAttributes rattr,
-							  Model model, HttpServletRequest request) {
+							  Model model) {
 		
 		m.setAdmin("false");
 		String encPassword = passwordEncoder.encode(m.getPassword());
@@ -146,7 +146,6 @@ public class MembersController {
 			rattr.addFlashAttribute("result","joinSuccess");
 			return "redirect:login";
 		}else {
-			model.addAttribute("url",request.getRequestURI());
 			model.addAttribute("message","회원 가입 실패입니다.");
 			return "error/error";
 		}
@@ -231,7 +230,7 @@ public class MembersController {
 			rattr.addFlashAttribute("update","success");
 			return "redirect:login";
 		}else {
-			model.addAttribute("url", request.getRequestURI());
+			//model.addAttribute("url", request.getRequestURI()); 오류난 url을 보냄
 			model.addAttribute("message","비밀번호 변경 실패");
 			return "error/error";
 		}
@@ -347,15 +346,16 @@ public class MembersController {
 	}
 	
 	@RequestMapping(value="/delete")
-	public String delete(String listid, RedirectAttributes rattr) {
+	public String delete(String listid, RedirectAttributes rattr, Model model) {
 		int result = memberservice.delete(listid);
 
 		if(result==1) {
 			rattr.addFlashAttribute("message","삭제를 완료했습니다.");
+			return "redirect:/member/list";
 		}else {
-			rattr.addFlashAttribute("message","삭제를 실패하였습니다.");
+			model.addAttribute("message","회원삭제 실패입니다.");
+			return "error/error";
 		}
 
-		return "redirect:/member/list";
 	}
 }

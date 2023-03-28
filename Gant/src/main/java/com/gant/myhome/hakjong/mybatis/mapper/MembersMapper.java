@@ -35,6 +35,10 @@ public interface MembersMapper {
 
 	public int delete(String listid);
 
+	public List<Members> getMembersList_ajax();
+
+	public List<Members> getSearchMembersList_ajax(String name);
+
 
 	 
 }
