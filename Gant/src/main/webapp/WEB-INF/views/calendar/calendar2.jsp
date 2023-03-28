@@ -1,34 +1,56 @@
+<%@page import="org.apache.catalina.filters.ExpiresFilter.XServletOutputStream"%>
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
-
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ page import = "com.gant.myhome.dohwan.domain.Calendar" %>
+<%@ page import = "java.util.*" %>
+<%@ page import = "org.json.simple.JSONArray" %>
+<%@ page import = "org.json.simple.JSONObject" %>
 
 
 <%
-request.setCharacterEncoding("utf-8");
-String sessionId = (String) (session.getAttribute("id"));
+	JSONArray list = (JSONArray)request.getAttribute("event");
+	/*
+	System.out.println("list" + list);
+	System.out.println("list[0]" + list.get(0));
+	System.out.println("list.size()" + list.size());
+	
 
-System.out.println(sessionId);
-//if(sessionId == null || sessionId.equals("null")){	
-	//out.println("<script>alert('로그인 해주세요');location.href='login.net';</script>");
-	//response.sendRedirect("redirect:login");
-//}
+	for (int i = 0; i < list.size(); i++){
+		JSONObject c = (JSONObject)list.get(i);
+		
+				
+		
+		System.out.println("start : " + c.get("start"));
+			
+		System.out.println("OBJECT " + list.get(i));
 
 
+	}*/
 %>
+	
+	
+	
+
+
+
 
 <!DOCTYPE html>
 <html>
+
 
 <head>
 
 <meta name="_csrf" content="${_csrf.token}">
 <meta name="_csrf_header" content="${_csrf.headerName}">
 
+
 <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
 var jq1 = jQuery.noConflict();
+
+
 </script>
 
 <!-- bootstrap 4 -->
@@ -51,6 +73,10 @@ var jq1 = jQuery.noConflict();
 
 
 
+
+
+
+
 <style>
 @import
 	url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
@@ -60,6 +86,10 @@ body {
 	background-color: white;
 	
 }
+#loginid{
+	display: none;
+}
+
 .fc-button-primary{
 background-color: #009CFF !important;
 border-color: #009CFF !important;
@@ -92,14 +122,18 @@ border-color: #009CFF !important;
 
 
 <script>
-var g_arg;	//이벤트 글로벌 변수(모달창에서 호출하는 함수에서 참조하기 위함)
+
+ 
+ var g_arg;	//이벤트 글로벌 변수(모달창에서 호출하는 함수에서 참조하기 위함)
  var calendar = null;
  var i=0;
- var all_events = null;
+ var all_events=null;
 
 
 	var token = jq1("meta[name='_csrf']").attr("content");
 	var header = jq1("meta[name='_csrf_header']").attr("content");
+	
+
 	
  jq1(document).ready(function() {
 	    	
@@ -116,23 +150,24 @@ var g_arg;	//이벤트 글로벌 변수(모달창에서 호출하는 함수에�
 
 
 			
-           var calendarEl = document.getElementById('calendar');
+        var calendarEl = document.getElementById('calendar');
+            
+
+       var all_events = <%=list%>;
+        
 
 
-		all_events = loadingEvents();
+				
+		console.log("all_events");
+		console.log(all_events);
+		console.log(all_events.length);
 		
+		//all_events = list;
 	
-		
-		
 		//넘어오는 글제목 title
 		//admin
 
-
-		
-		console.log("sessionId");
-		console.log("<%=sessionId%>");
-		
-		var loginid = "<%=sessionId%>";
+		var loginid = jq1("#loginid").text();		
 		
 		console.log("loginId");
 		console.log(loginid);
@@ -144,6 +179,7 @@ var g_arg;	//이벤트 글로벌 변수(모달창에서 호출하는 함수에�
 	    	
 	          editable: false,
 	          droppable: false,
+	          
 
 	    
 	    
@@ -208,24 +244,23 @@ var g_arg;	//이벤트 글로벌 변수(모달창에서 호출하는 함수에�
                               
                               console.log("start_date");
                               console.log(start_date);
+
                               
-
-                             //console.log(all_events.length);
-     
-                				
-                          	for(var j=0;j<all_events.length();j++)
-                    		{
-
-                    			if(all_events[j].id == title && all_events[j].id != null)
-                    			{           
-                    				
-                    				check = 1;
-                    				
-                    			}
-                    		}
+                            	for(var j=0;j<all_events.length;j++)
+                        		{
+                                    var idcheck = all_events[j].id;
+                                    
+                        			if(  idcheck == title && idcheck != null)
+                        			{           
+                        				
+                        				check = 1;
+                        				
+                        			}
+                        		}
+							
 
                               //내용 입력 여부 확인
-                              if(check == "1"){
+                              if(check == "1" || check == 1 ){
                     				alert("제목은 중복될 수 없습니다.");
                     				jq1('#calendar_title').val('');
                               }
@@ -322,10 +357,10 @@ var g_arg;	//이벤트 글로벌 변수(모달창에서 호출하는 함수에�
 																		 */
 
 																	}
-																	jq1(
-																			'#calendarModal')
-																			.modal(
-																					'hide');
+								jq1(
+								'#calendarModal')
+								.modal(
+										'hide');
 																});
 
 											}
@@ -333,11 +368,12 @@ var g_arg;	//이벤트 글로벌 변수(모달창에서 호출하는 함수에�
 									},
 
 									initialView : 'dayGridMonth',
-									editable : true,
+									editable : false,
 									displayEventTime : false,
 									dayMaxEvents : true,
 									locale : 'ko',
 									events : all_events,
+											
 									buttonText : {
 										today : '오늘',
 										month : '달력',
@@ -362,20 +398,23 @@ var g_arg;	//이벤트 글로벌 변수(모달창에서 호출하는 함수에�
 
 									},
 									eventClick : function(arg) {
+										
 										jq1('#calendarModal #modifyCalendar')
 												.css('display', 'inline');
 										jq1('#calendarModal #deleteCalendar')
 												.css('display', 'inline');
 										
-										var arg_admin, arg_name; 
+
 										
-										for(var i=0;i<all_events.length;i++)
+										var arg_name, arg_admin; 
+										
+										for(var j=0;j<all_events.length;j++)
 										{
 											
-											if(all_events[i].title == arg.event.title)
+											if(all_events[j].title == arg.event.title)
 											{
 												
-												arg_name = all_events[i].name;
+												arg_name = all_events[j].name;
 												//admin을 calendar 테이블에 입력하는게 아니라
 												//로그인 한 아이디의 admin 여부를 판별해야함
 												
@@ -384,22 +423,22 @@ var g_arg;	//이벤트 글로벌 변수(모달창에서 호출하는 함수에�
 		
 											}	
 										}
-										console.log("여기까지왔어요");
 										
-										var arg_admin = getadmin(loginid);
+										
+										
+										arg_admin = getadmin(loginid);
 		
-										
+										console.log("admin 여부");
 										console.log(arg_admin);
+										console.log(getadmin(loginid));
 										
-										console.log("arg_name");
+										
+										console.log("arg_name 글 쓴 사람 id");
 										console.log(arg_name);
-										
-										//console.log("arg_id");
-										//console.log(arg_id);
-										
+																				
 										console.log("loginid");
 										console.log(loginid);
-
+										
 										insertModalOpen(arg, arg_admin, arg_name, loginid);//이벤트 클릭 시 모달 호출
 
 									}
@@ -407,39 +446,43 @@ var g_arg;	//이벤트 글로벌 변수(모달창에서 호출하는 함수에�
 								});
 						calendar.render();
 					});(jQuery);
+					
 
+					
 	function loadingEvents() {
-		var resultdata;
-		jq1.ajax({
-			type : 'POST',
-			url : '${pageContext.request.contextPath}/calendar/show',
-			dataType : "json",
-			async : false,
-			beforeSend : function(xhr)
-  			{   //데이터를 전송하기 전에 헤더에 csrf값을 설정합니다.
-    			xhr.setRequestHeader(header, token);			
-    		},
+		
 
-			success : function(result) {
-				resultdata = result;
-				console.log('db에서 값 가져오기 완료');
+						var resultdata;
+						jq1.ajax({
+							type : 'POST',
+							url : '${pageContext.request.contextPath}/calendar/list',
+							dataType : "json",
+							async : false,
 
-				console.log(result);
-				console.log('resultdata = ');
-				console.log(resultdata);
-			},
-			error : function(request, status, error) {
-			},
-			complete : function() {
+							success : function(result) {
+								resultdata = result;
+								console.log('db에서 값 가져오기 완료');
 
-			}
-		})
+								console.log(result);
+								console.log('resultdata = ');
+								console.log(resultdata);
+							},
+							error : function(request, status, error) {
+							},
+							complete : function() {
 
-		return resultdata;
+							}
+						})
+
+						return resultdata;
 	}
 
+
 	function adddata(jsondata) {
+		
+		console.log("추가하기 위해 넘겨받은 jsondata")
 		console.log(jsondata);
+		
 		jq1.ajax({
 			type : 'POST',
 			url : '${pageContext.request.contextPath}/calendar/add',
@@ -452,7 +495,7 @@ var g_arg;	//이벤트 글로벌 변수(모달창에서 호출하는 함수에�
     		},
 			success : function(rdata) {
 				console.log('db 저장 완료.');
-				document.location.reload();
+				//document.location.reload();
 			},
 			error : function(request, status, error) {
 			},
@@ -541,8 +584,9 @@ var g_arg;	//이벤트 글로벌 변수(모달창에서 호출하는 함수에�
 			},
 			error : function(data) {
 				//alert(xhr.responseText);
+				jq1('#calendarModal').modal('hide');
 				alert('일정 수정 실패, 새로고침 후 재시도 해주세요');
-				document.location.reload();
+				//document.location.reload();
 			}
 		});
 	
@@ -562,7 +606,7 @@ var g_arg;	//이벤트 글로벌 변수(모달창에서 호출하는 함수에�
 		
 		//관리자 admin은 나중에 추가
 		
-		if(name != loginid && admin !="true")
+		if(name != loginid && (admin !="true" || admin != true))
 		{
             jq1('#calendarModal #modifyCalendar').css('display', 'none');
 			jq1('#calendarModal #deleteCalendar').css('display', 'none');
@@ -656,19 +700,26 @@ var g_arg;	//이벤트 글로벌 변수(모달창에서 호출하는 함수에�
 	
 	function getadmin(loginid) {
 			var admin2;
-			var data = {
+			
+			var data2 = {
 				"id" : loginid
 			};
+			
 			console.log("admin 정보의 loginid");
 			console.log(loginid);
+			
+			console.log("getadmin data의 data");
+			console.log(data2);
 
 			
+			
+			console.log(loginid);
 
 			jq1.ajax({
-				url : "${pageContext.request.contextPath}/calendar/getadmin",
 				type : "POST",
-				data : data,
-				dataType : "text",
+				url : "${pageContext.request.contextPath}/calendar/getadmin",
+				data : data2,
+				dataType : "json",
 				async: false,
 				beforeSend : function(xhr)
 	  			{   //데이터를 전송하기 전에 헤더에 csrf값을 설정합니다.
@@ -682,22 +733,30 @@ var g_arg;	//이벤트 글로벌 변수(모달창에서 호출하는 함수에�
 					console.log("admin");
 					console.log(admin2);
 					console.log("admin 가져오기 완료");
-
+					
 					
 				},
 				error : function(data) {
 					//alert(xhr.responseText);
+					console.log("실패 결과");
+					console.log(data);
 					jq1('#calendarModal').modal('hide');
-					document.location.reload();
+					//document.location.reload();
 					alert('admin 생성 실패');
 				}
 			});
 			
+			console.log("리턴 전 admin");
+			console.log(admin2);
+			
 			return admin2;
+			
 
 		}
 	
 </script>
+
+
 </head>
 <style>
 
@@ -710,14 +769,21 @@ var g_arg;	//이벤트 글로벌 변수(모달창에서 호출하는 함수에�
 
 
 <div class="content">
-<jsp:include page="../home/header2.jsp" />
-<div id='calendar'></div>
-<div class="container-fluid pt-4 px-4">
 
-		
 
-	</div>
-	</div>
+
+
+	<jsp:include page="../home/header2.jsp" />
+		<sec:authorize access="isAuthenticated()">
+			<sec:authentication property="principal" var="pinfo"/>
+
+		<div id='calendar'>
+			<span id="loginid">${pinfo.username}</span>
+		</div>
+			</sec:authorize>
+
+		<div class="container-fluid pt-4 px-4">		</div>
+</div>
 
 
 
@@ -754,7 +820,7 @@ var g_arg;	//이벤트 글로벌 변수(모달창에서 호출하는 함수에�
 							class="col-form-label">종료 날짜</label> <input type="date"
 							class="form-control" id="calendar_end_date"
 							name="calendar_end_date">
-							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+							
 					</div>
 				</div>
 				<div class="modal-footer">
@@ -770,7 +836,7 @@ var g_arg;	//이벤트 글로벌 변수(모달창에서 호출하는 함수에�
 						id="sprintSettingModalClose" data-backdrop="static"
 						data-keybord="false">닫기</button>
 				</div>
-
+			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			</div>
 		</div>
 	</div>

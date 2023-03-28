@@ -7,7 +7,7 @@
 
 
  <insert id="add">
- insert into calendar (#{id}, #{name}, #{startday}, #{endday}, #{title}, #{admin})
+ insert into calendar(id, name, startday, endday, title, admin) values(#{id}, #{name}, #{startday}, #{endday}, #{title}, #{admin})
  </insert>
  
    <select id="getCalList" resultType="calendar">
@@ -15,16 +15,16 @@
   </select>
   
   <delete id="caldelete">
-			delete from calendar where name = #{id}                   
+			delete from calendar where id = #{id}                   
    </delete>
 
   
   <select id="getadminid" resultType="String">
-	select admin from members where id = #{name}
+	select admin from members where id = #{id}
   </select>
   
   <update id="update">
-		update calendar set startday = #{startday}, endday = #{endday}, title = #{title} where name = #{id}     
+		update calendar set startday = #{startday}, endday = #{endday}, title = #{title} where id = #{id}
    </update>   
 
   
