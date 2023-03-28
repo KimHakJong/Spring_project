@@ -7,9 +7,6 @@ public class Attendance{
 	private String overTime;
 	private String work_today;
 	private String work_week;
-	private String overtime_date;
-	private String overtime_content;
-	private String overtime_reason;
 	private String checkbutton;
 	private String work_date;
 	private int check_work_week;
@@ -51,18 +48,7 @@ public class Attendance{
 	public void setWork_week(String work_week) {
 		this.work_week = work_week;
 	}
-	public String getOvertime_content() {
-		return overtime_content;
-	}
-	public void setOvertime_content(String overtime_content) {
-		this.overtime_content = overtime_content;
-	}
-	public String getOvertime_reason() {
-		return overtime_reason;
-	}
-	public void setOvertime_reason(String overtime_reason) {
-		this.overtime_reason = overtime_reason;
-	}
+	
 	public String getCheckbutton() {
 		return checkbutton;
 	}
@@ -75,12 +61,7 @@ public class Attendance{
 	public void setWork_date(String work_date) {
 		this.work_date = work_date;
 	}
-	public String getOvertime_date() {
-		return overtime_date;
-	}
-	public void setOvertime_date(String overtime_date) {
-		this.overtime_date = overtime_date;
-	}
+	
 	public int getCheck_work_week() {
 		return check_work_week;
 	}

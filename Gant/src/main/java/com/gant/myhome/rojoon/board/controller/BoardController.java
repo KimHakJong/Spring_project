@@ -84,8 +84,6 @@ public class BoardController {
 		//개시물 갯수
 		int listcount = 0 ; 
 		
-		//공지게시글 수
-		int noticeCount = 0;
 		
 		//검색어가 없는경우
         if(search_name == null || search_name.equals("")) {	
