@@ -198,6 +198,7 @@ public class AttController {
 	        // 포맷팅 정의
 			SimpleDateFormat Day = new SimpleDateFormat("yyyyMMdd");
 			 // 포맷팅 적용
+			
 			// 현재 년월일.
 			String now_Day = Day.format(now); 
 			
@@ -324,9 +325,26 @@ public class AttController {
 			 att.setOverTime(overTime);
 			 
 			 int result = attService.endTimeUpdate(att); // 데이터를 넣는다.
-             int result2 = attService.Update_commute_record(now_Day,startTime1,endTime,id,work_today); //출퇴근을 기록한다. attendance테이블의 경우 출퇴근시간을 매번 리셋하기 때문에 출퇴근 시간을 기록하는용도로 생성
 			 
-			 if(result == 0 || result2 == 0){
+			 //출근을 클릭했을때와 퇴근을 클릭했을때 날짜가 다르다면 commute_record(출퇴근 기록 테이블)에 퇴근 기록을 남기지 않는다.
+			 if(last_Work_date.equals(now_Day)){
+				 int result2 = attService.Update_commute_record(now_Day,startTime1,endTime,id,work_today); //출퇴근을 기록한다. attendance테이블의 경우 출퇴근시간을 매번 리셋하기 때문에 출퇴근 시간을 기록하는용도로 생성	 
+			 
+				 if(result2 == 0){
+					 logger.info("퇴근기록 등록실패");
+					    init(response);
+						PrintWriter out = response.getWriter();
+						out.println("<script>");
+						out.println("alert('퇴근기록등록 실패')");
+						out.println("</script>");
+						out.flush();
+						return null;  
+				 }
+
+			 }
+			 
+          			 
+			 if(result == 0){
 				 logger.info("퇴근등록실패");
 				    init(response);
 					PrintWriter out = response.getWriter();
