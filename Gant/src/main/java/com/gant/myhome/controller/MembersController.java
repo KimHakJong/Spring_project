@@ -28,10 +28,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.gant.myhome.hakjong.domain.MailVO;
-import com.gant.myhome.hakjong.domain.Members;
-import com.gant.myhome.hakjong.service.MemberService;
-import com.gant.myhome.hakjong.task.SendMail;
+import com.gant.myhome.domain.MailVO;
+import com.gant.myhome.domain.Members;
+import com.gant.myhome.service.MemberService;
+import com.gant.myhome.task.SendMail;
 
 @Controller
 @RequestMapping(value = "/member")//http://localhost:9696/gant/member/ 로 시작하는 주소 맴핑

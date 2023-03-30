@@ -1,4 +1,4 @@
-package com.gant.myhome.hakjong.domain;
+package com.gant.myhome.domain;
 
 public class MailVO {
 	private String from = "tosil980702@naver.com"; // mail.properties에서 작성한 id에 해당하는 이메일 주서 작성합니다.

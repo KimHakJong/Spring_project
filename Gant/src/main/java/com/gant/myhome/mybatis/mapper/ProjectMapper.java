@@ -1,4 +1,4 @@
-package com.gant.myhome.hakjong.mybatis.mapper;
+package com.gant.myhome.mybatis.mapper;
 
 
 
@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.gant.myhome.hakjong.domain.Project;
+import com.gant.myhome.domain.Project;
 
 
 @Mapper

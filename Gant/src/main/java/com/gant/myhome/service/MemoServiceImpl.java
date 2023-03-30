@@ -1,4 +1,4 @@
-package com.gant.myhome.hakjong.service;
+package com.gant.myhome.service;
 
 
 import java.text.SimpleDateFormat;
@@ -8,8 +8,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.gant.myhome.hakjong.domain.Memo;
-import com.gant.myhome.hakjong.mybatis.mapper.MemoMapper;
+import com.gant.myhome.domain.Memo;
+import com.gant.myhome.mybatis.mapper.MemoMapper;
 
 @Service
 public class MemoServiceImpl implements MemoService {

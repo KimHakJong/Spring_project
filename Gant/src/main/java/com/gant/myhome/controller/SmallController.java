@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.gant.myhome.hakjong.domain.Members;
-import com.gant.myhome.hakjong.domain.Memo;
-import com.gant.myhome.hakjong.service.MemberService;
-import com.gant.myhome.hakjong.service.MemoService;
+import com.gant.myhome.domain.Members;
+import com.gant.myhome.domain.Memo;
+import com.gant.myhome.service.MemberService;
+import com.gant.myhome.service.MemoService;
 
 @Controller
 @RequestMapping(value="/small")

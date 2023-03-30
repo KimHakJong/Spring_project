@@ -1,10 +1,10 @@
-package com.gant.myhome.hakjong.mybatis.mapper;
+package com.gant.myhome.mybatis.mapper;
 
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.gant.myhome.hakjong.domain.Memo;
+import com.gant.myhome.domain.Memo;
 
 @Mapper
 public interface MemoMapper {

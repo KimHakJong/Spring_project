@@ -1,8 +1,8 @@
-package com.gant.myhome.hakjong.service;
+package com.gant.myhome.service;
 
 import java.util.List;
 
-import com.gant.myhome.hakjong.domain.Memo;
+import com.gant.myhome.domain.Memo;
 
 public interface MemoService {
 

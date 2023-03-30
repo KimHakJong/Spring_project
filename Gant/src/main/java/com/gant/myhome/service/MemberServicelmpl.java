@@ -1,4 +1,4 @@
-package com.gant.myhome.hakjong.service;
+package com.gant.myhome.service;
 
 import java.util.HashMap;
 import java.util.List;
@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.gant.myhome.hakjong.domain.Members;
-import com.gant.myhome.hakjong.mybatis.mapper.MembersMapper;
+import com.gant.myhome.domain.Members;
+import com.gant.myhome.mybatis.mapper.MembersMapper;
 
 @Service
 public class MemberServicelmpl implements MemberService {

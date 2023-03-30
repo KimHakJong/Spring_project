@@ -1,4 +1,4 @@
-package com.gant.myhome.hakjong.service;
+package com.gant.myhome.service;
 
 public interface ReserveService {
 
