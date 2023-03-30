@@ -1,10 +1,10 @@
-package com.gant.myhome.dohwan.mybatis.mapper;
+package com.gant.myhome.mybatis.mapper;
 
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.gant.myhome.dohwan.domain.Calendar;
+import com.gant.myhome.domain.Calendar;
 
 @Mapper
 public interface CalendarMapper {

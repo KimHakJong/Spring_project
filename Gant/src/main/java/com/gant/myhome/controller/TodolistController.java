@@ -1,4 +1,4 @@
-package com.gant.myhome.dohwan.controller;
+package com.gant.myhome.controller;
 
 import java.util.HashMap;
 import java.util.List;
