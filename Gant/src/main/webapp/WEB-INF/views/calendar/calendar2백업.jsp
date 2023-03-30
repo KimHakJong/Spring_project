@@ -193,7 +193,7 @@ border-color: #009CFF !important;
            headerToolbar: {
                left: 'prev,next,today,addEventButton',
 
-                right: 'dayGridMonth',
+                right: 'dayGridMonth,listWeek',
                 center: 'title'
 
              },

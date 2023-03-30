@@ -45,8 +45,6 @@
 <meta name="_csrf" content="${_csrf.token}">
 <meta name="_csrf_header" content="${_csrf.headerName}">
 
-<title>일정 공유 캘린더</title>
-
 
 <script	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
@@ -88,10 +86,6 @@ body {
 	background-color: white;
 	
 }
-.btn-group{
-	margin-left: 10px;
-}
-
 #loginid{
 	display: none;
 }
@@ -138,6 +132,16 @@ border-color: #009CFF !important;
 
 	var token = jq1("meta[name='_csrf']").attr("content");
 	var header = jq1("meta[name='_csrf_header']").attr("content");
+	
+	/*
+		프로젝트 번호를 받아서 그 번호를 기준으로
+		프로젝트 참여자 id를 따서  그 사람들에게만 띄워주는 기능(프로젝트 번호도 일치) 
+		
+		hostid에 수정, 삭제 권한 주는거 추가
+		
+		
+	*/
+	
 	
 
 	
@@ -193,7 +197,7 @@ border-color: #009CFF !important;
            headerToolbar: {
                left: 'prev,next,today,addEventButton',
 
-                right: 'dayGridMonth',
+                right: 'dayGridMonth,listWeek',
                 center: 'title'
 
              },
@@ -776,23 +780,10 @@ border-color: #009CFF !important;
 
 <div class="content">
 
-
-
-
-
-
 	<jsp:include page="../home/header2.jsp" />
-	
-				<!--  <div class="btn-group" role="group">
-                  <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked="">
-                    <label class="btn btn-outline-primary" for="btnradio1">게시판</label>
 
-                    <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
-                    <label class="btn btn-outline-primary" for="btnradio2">할일 리스트</label>
 
-                    <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
-                    <label class="btn btn-outline-primary" for="btnradio3">캘린더</label>
-                 </div>-->
+
 		<sec:authorize access="isAuthenticated()">
 			<sec:authentication property="principal" var="pinfo"/>
 
@@ -809,7 +800,7 @@ border-color: #009CFF !important;
 
 
 	<!-- modal 추가 -->
-	
+
 	<div class="modal fade insertModal" id="calendarModal" tabindex="-1"
 		role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog" role="document">
