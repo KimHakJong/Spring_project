@@ -1,8 +1,10 @@
-package com.gant.myhome.rojoon.board.service;
+package com.gant.myhome.service;
 
 import java.util.List;
 
-import com.gant.myhome.rojoon.board.domain.Board;
+import com.gant.myhome.domain.Board;
+
+
 
 
 

@@ -1,7 +1,6 @@
-package com.gant.myhome.rojoon.board.controller;
+package com.gant.myhome.controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
@@ -15,13 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gant.myhome.rojoon.board.domain.Comment;
-import com.gant.myhome.rojoon.board.service.CommentService;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-
+import com.gant.myhome.domain.Comment;
+import com.gant.myhome.service.CommentService;
 
 
 

@@ -1,4 +1,4 @@
-package com.gant.myhome.rojoon.board.domain;
+package com.gant.myhome.domain;
 
 import org.springframework.web.multipart.MultipartFile;
 

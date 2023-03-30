@@ -1,4 +1,4 @@
-package com.gant.myhome.rojoon.att.service;
+package com.gant.myhome.service;
 
 import java.util.HashMap;
 import java.util.List;
@@ -7,8 +7,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.gant.myhome.rojoon.att.domain.Attendance;
-import com.gant.myhome.rojoon.att.mapper.AttMapper;
+import com.gant.myhome.domain.Attendance;
+import com.gant.myhome.mybatis.mapper.AttMapper;
+
 
 
 

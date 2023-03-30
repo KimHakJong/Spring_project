@@ -3,7 +3,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!--  Mapper 인터페이스의 패키지 명과 이름을 namespace로 설정합니다. -->
-<mapper namespace="com.gant.myhome.rojoon.board.mapper.BoardLikeMapper">
+<mapper namespace="com.gant.myhome.mybatis.mapper.BoardLikeMapper">
         
       <select id="selectLike" resultType="String">
 	      select id

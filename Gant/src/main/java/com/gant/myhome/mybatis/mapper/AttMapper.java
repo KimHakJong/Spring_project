@@ -1,11 +1,13 @@
-package com.gant.myhome.rojoon.att.mapper;
+package com.gant.myhome.mybatis.mapper;
 
 import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.gant.myhome.rojoon.att.domain.Attendance;
+import com.gant.myhome.domain.Attendance;
+
+
 
 
 /*

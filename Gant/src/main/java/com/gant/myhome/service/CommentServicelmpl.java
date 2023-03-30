@@ -1,4 +1,4 @@
-package com.gant.myhome.rojoon.board.service;
+package com.gant.myhome.service;
 
 import java.util.HashMap;
 import java.util.List;
@@ -7,11 +7,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.gant.myhome.rojoon.board.domain.Board;
-import com.gant.myhome.rojoon.board.domain.Comment;
-import com.gant.myhome.rojoon.board.mapper.CommentMapper;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.gant.myhome.domain.Comment;
+import com.gant.myhome.mybatis.mapper.CommentMapper;
+
 
 
 @Service

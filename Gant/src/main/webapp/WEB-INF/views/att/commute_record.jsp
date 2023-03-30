@@ -203,7 +203,7 @@ height:25px; font-size:16px}
 				        <a class="page-link">${i}</a>
 				      </li>
 				    </c:if>
-				    
+			   
 				    <%--다른 페이지는 누르면 검색필드,검색어,페이지들고 commute_record.bo갔다온다 --%>
 				    <c:if test="${i != page}">
 				      <c:url var="move" value="commute_record">

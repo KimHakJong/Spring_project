@@ -1,4 +1,4 @@
-package com.gant.myhome.rojoon.att.domain;
+package com.gant.myhome.domain;
 
 public class Vacation_num{
 	private String id;

@@ -1,4 +1,4 @@
-package com.gant.myhome.rojoon.board.mapper;
+package com.gant.myhome.mybatis.mapper;
 
 import java.util.HashMap;
 import java.util.Map;
