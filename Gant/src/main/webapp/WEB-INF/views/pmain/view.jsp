@@ -35,11 +35,12 @@
 			
 			<div class="project">
 				<input type="hidden" class="p_no" value="${p.p_no}">
+				<input type="hidden" class="sendids" value="${p.p_mids}">
 				<div class="project_people">
 					<a class="godetail" data-toggle="modal" href="#detailmodal">
 						<img class="project_peopleimg" src="../image/pmain/project_user4.png"><span></span>
 					</a>
-					<input type="hidden" id="p_mnames" value="${p.p_mnames}">
+					<input type="hidden" class="p_mnames" value="${p.p_mnames}">
 				</div>
 				<c:if test="${p.p_hostid==check_id || check_id=='admin'}"> 
 				<a class="goupdate" data-toggle="modal" href="#updatemodal" data-backdrop="static"><img class="project_editimg" src="../image/pmain/pencil.png"></a>
@@ -224,7 +225,7 @@ let token = $("meta[name='_csrf']").attr("content");
 let header = $("meta[name='_csrf_header']").attr("content");
 
 $(".project").each(function(){ //인원수 넣기
-	let names = $(this).find("#p_mnames").val();
+	let names = $(this).find(".p_mnames").val();
 	let s_name = names.split(",");
 	$(this).find(".project_peopleimg").next().text(s_name.length);
 });
@@ -255,7 +256,9 @@ if('${create}'==1){
 	
 	$(".project").click(function(){
 		let p_no =$(this).find('.p_no').val();
-		location.href="todolist/receive?p_no="+p_no;
+		let p_mids = $(this).find('.sendids').val();
+		let p_mnames = $(this).find('.p_mnames').val();
+		location.href="${pageContext.request.contextPath}/todolist/receive?p_no="+p_no+"&p_mids="+p_mids+"&p_mnames="+p_mnames;
 	});
 	
 	//닫기버튼 눌렀을 때 잘 닫히도록
