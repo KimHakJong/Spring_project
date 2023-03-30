@@ -1,4 +1,4 @@
-package com.gant.myhome.hakjong.service;
+package com.gant.myhome.service;
 
 import java.util.HashMap;
 import java.util.List;
@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.gant.myhome.hakjong.domain.Project;
-import com.gant.myhome.hakjong.mybatis.mapper.ProjectMapper;
+import com.gant.myhome.domain.Project;
+import com.gant.myhome.mybatis.mapper.ProjectMapper;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {

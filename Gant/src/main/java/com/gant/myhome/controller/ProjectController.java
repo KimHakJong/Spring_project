@@ -20,10 +20,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.gant.myhome.hakjong.domain.Members;
-import com.gant.myhome.hakjong.domain.Project;
-import com.gant.myhome.hakjong.service.MemberService;
-import com.gant.myhome.hakjong.service.ProjectService;
+import com.gant.myhome.domain.Members;
+import com.gant.myhome.domain.Project;
+import com.gant.myhome.service.MemberService;
+import com.gant.myhome.service.ProjectService;
 
 @Controller
 @RequestMapping(value="/pmain")

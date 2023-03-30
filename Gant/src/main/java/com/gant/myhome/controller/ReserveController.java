@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.gant.myhome.hakjong.service.MemberService;
-import com.gant.myhome.hakjong.service.ReserveService;
+import com.gant.myhome.service.MemberService;
+import com.gant.myhome.service.ReserveService;
 
 @Controller
 @RequestMapping(value="/reserve")

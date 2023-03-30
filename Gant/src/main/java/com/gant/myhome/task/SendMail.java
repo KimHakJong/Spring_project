@@ -1,4 +1,4 @@
-package com.gant.myhome.hakjong.task;
+package com.gant.myhome.task;
 
 import javax.mail.internet.MimeMessage;
 
@@ -10,7 +10,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Component;
 
-import com.gant.myhome.hakjong.domain.MailVO;
+import com.gant.myhome.domain.MailVO;
 
 @Component
 public class SendMail {

@@ -1,4 +1,4 @@
-package com.gant.myhome.hakjong.domain;
+package com.gant.myhome.domain;
 
 public class Project {
 	private int p_no;

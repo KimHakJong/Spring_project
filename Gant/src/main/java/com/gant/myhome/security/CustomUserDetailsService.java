@@ -1,4 +1,4 @@
-package com.gant.myhome.hakjong.security;
+package com.gant.myhome.security;
 
 import java.util.ArrayList;
 
@@ -14,8 +14,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 
-import com.gant.myhome.hakjong.domain.Members;
-import com.gant.myhome.hakjong.mybatis.mapper.MembersMapper;
+import com.gant.myhome.domain.Members;
+import com.gant.myhome.mybatis.mapper.MembersMapper;
 
 /*
  1. UserDetailsService 인터페이스는 DB에서 유저 정보를 불러오는 loadUserByUsername()가 존재합니다.

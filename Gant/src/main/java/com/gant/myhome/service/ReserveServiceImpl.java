@@ -1,9 +1,9 @@
-package com.gant.myhome.hakjong.service;
+package com.gant.myhome.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.gant.myhome.hakjong.mybatis.mapper.ReserveMapper;
+import com.gant.myhome.mybatis.mapper.ReserveMapper;
 
 @Service
 public class ReserveServiceImpl implements ReserveService {

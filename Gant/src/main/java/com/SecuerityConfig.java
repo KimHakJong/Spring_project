@@ -13,10 +13,10 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
-import com.gant.myhome.hakjong.security.CustomAccessDeniedHandler;
-import com.gant.myhome.hakjong.security.CustomUserDetailsService;
-import com.gant.myhome.hakjong.security.LoginFailHandler;
-import com.gant.myhome.hakjong.security.LoginSuccessHandler;
+import com.gant.myhome.security.CustomAccessDeniedHandler;
+import com.gant.myhome.security.CustomUserDetailsService;
+import com.gant.myhome.security.LoginFailHandler;
+import com.gant.myhome.security.LoginSuccessHandler;
 
 @EnableWebSecurity // 스프링 시큐리티 결합
 @Configuration
