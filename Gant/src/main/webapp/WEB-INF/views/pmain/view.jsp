@@ -258,7 +258,7 @@ if('${create}'==1){
 		let p_no =$(this).find('.p_no').val();
 		let p_mids = $(this).find('.sendids').val();
 		let p_mnames = $(this).find('.p_mnames').val();
-		location.href="todolist/receive?p_no="+p_no+"&p_mids="+p_mids+"&p_mnames="+p_mnames;
+		location.href="${pageContext.request.contextPath}/todolist/receive?p_no="+p_no+"&p_mids="+p_mids+"&p_mnames="+p_mnames;
 	});
 	
 	//닫기버튼 눌렀을 때 잘 닫히도록
