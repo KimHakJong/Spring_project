@@ -126,7 +126,7 @@
                     </div>
                      -->
                     <a href="${pageContext.request.contextPath}/calendar/list" class="nav-item nav-link"><i class="far fa-calendar-alt me-2"></i>캘린더</a>
-                    <a href="main.calendar" class="nav-item nav-link"><i class="fas fa-clock me-2"></i>예약</a>
+                    <a href="${pageContext.request.contextPath}/reserve/main" class="nav-item nav-link"><i class="fas fa-clock me-2"></i>예약</a>
                     <a href="${pageContext.request.contextPath}/member/list" class="nav-item nav-link"><i class="fa fa-address-book me-2"></i>주소록</a>
                     <a href="jjokji" class="nav-item nav-link"><i class="far fa-envelope me-2"></i>쪽지</a>
                     <a href="junja" class="nav-item nav-link"><i class="fas fa-file me-2"></i>전자결재</a>
