@@ -1,4 +1,4 @@
-package com.gant.myhome.dohwan.domain;
+package com.gant.myhome.domain;
 
 public class Calendar {
 	

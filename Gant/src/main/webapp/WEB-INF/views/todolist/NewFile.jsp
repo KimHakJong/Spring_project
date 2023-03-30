@@ -28,16 +28,47 @@ var header = jq1("meta[name='_csrf_header']").attr("content");
 
 	<jsp:include page="../home/header2.jsp" />
 	
-				<div class="btn-group" role="group">
-                  <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked="">
-                    <label class="btn btn-outline-primary" for="btnradio1">할일 리스트</label>
 
-                    <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
-                    <label class="btn btn-outline-primary" for="btnradio2">게시판</label>
-
-                    <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
-                    <label class="btn btn-outline-primary" for="btnradio3">캘린더</label>
-                 </div>
+    <div class="container">
+        <h1>To-Do List</h1>
+        <div class="row mb-3">
+            <div class="col">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addScheduleModal">Add Schedule</button>
+            </div>
+            <div class="col-auto">
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
+            <div class="col">
+                <button type="button" class="btn btn-success">Sent Schedule</button>
+                <button type="button" class="btn btn-danger">Send Schedule</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Schedule Details</th>
+                            <th>Who Does This Schedule</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach items="${schedules}" var="schedule">
+                            <tr>
+                                <td>${schedule.title}</td>
+                                <td>${schedule.details}</td>
+                                <td>${schedule.assignee}</td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 		<sec:authorize access="isAuthenticated()">
 			<sec:authentication property="principal" var="pinfo"/>
 
@@ -48,6 +79,5 @@ var header = jq1("meta[name='_csrf_header']").attr("content");
 
 		<div class="container-fluid pt-4 px-4">		</div>
 </div>
-
 </body>
 </html>

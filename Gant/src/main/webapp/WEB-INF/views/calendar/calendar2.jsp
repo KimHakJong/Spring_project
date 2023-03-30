@@ -3,7 +3,7 @@
 	pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<%@ page import = "com.gant.myhome.dohwan.domain.Calendar" %>
+<%@ page import = "com.gant.myhome.domain.Calendar" %>
 <%@ page import = "java.util.*" %>
 <%@ page import = "org.json.simple.JSONArray" %>
 <%@ page import = "org.json.simple.JSONObject" %>
@@ -220,7 +220,7 @@ border-color: #009CFF !important;
 
                   		
                           jq1('#calendarModal #modifyCalendar').css('display', 'none');
-            				jq1('#calendarModal #deleteCalendar').css('display', 'none');
+            			jq1('#calendarModal #deleteCalendar').css('display', 'none');
             				jq1('#calendar_title').val('');
                           jq1('#calendar_content').val('');
                           jq1('#calendar_start_date').val('');
@@ -238,18 +238,7 @@ border-color: #009CFF !important;
                               
                               var end_date = jq1("#calendar_end_date").val();
                               var check = 0; // 조건에 걸리는지 확인
-                              
-                              console.log("title");
-                              console.log(title);
-                              
-                              console.log("content");
-                              console.log(content);
-                              
-                              console.log("end_date");
-                              console.log(end_date);
-                              
-                              console.log("start_date");
-                              console.log(start_date);
+
 
                               
                             	for(var j=0;j<all_events.length;j++)
@@ -864,10 +853,6 @@ border-color: #009CFF !important;
 <jsp:include page="../home/bottom.jsp" />
 </footer>
 
-<script>
-
-
-</script>
 
 </body>
 </html>

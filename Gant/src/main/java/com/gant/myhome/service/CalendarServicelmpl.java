@@ -1,4 +1,4 @@
-package com.gant.myhome.dohwan.service;
+package com.gant.myhome.service;
 
 
 import java.util.List;
@@ -6,8 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.gant.myhome.dohwan.domain.Calendar;
-import com.gant.myhome.dohwan.mybatis.mapper.CalendarMapper;
+import com.gant.myhome.domain.Calendar;
+import com.gant.myhome.mybatis.mapper.CalendarMapper;
 
 
 
