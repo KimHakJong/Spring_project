@@ -1,4 +1,4 @@
-package com.gant.myhome.hakjong.controller;
+package com.gant.myhome.controller;
 
 import java.security.Principal;
 import java.util.ArrayList;

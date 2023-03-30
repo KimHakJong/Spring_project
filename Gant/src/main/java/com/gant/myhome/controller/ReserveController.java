@@ -1,4 +1,4 @@
-package com.gant.myhome.hakjong.controller;
+package com.gant.myhome.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
