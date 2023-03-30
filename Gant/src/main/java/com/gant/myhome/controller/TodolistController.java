@@ -17,15 +17,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.gant.myhome.dohwan.domain.Calendar;
-import com.gant.myhome.dohwan.service.CalendarService;
+import com.gant.myhome.domain.Calendar;
+import com.gant.myhome.service.CalendarService;
 
 
-@Controller
-@RequestMapping(value="/todolist")
+//@Controller
+//@RequestMapping(value="/todolist")
 //http://localhost:8088/myhome4/calendar/ 로 시작하는 주소 
 public class TodolistController {
-   
+   /*
    private static final Logger logger = LoggerFactory.getLogger(TodolistController.class);
    
    private CalendarService calservice;
@@ -158,7 +158,7 @@ public class TodolistController {
 	   
 	   return "redirect:list";
 	   
-   }
+   }*/
    
    
    
