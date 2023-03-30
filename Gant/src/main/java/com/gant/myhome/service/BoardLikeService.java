@@ -1,4 +1,4 @@
-package com.gant.myhome.rojoon.board.service;
+package com.gant.myhome.service;
 
 public interface BoardLikeService {
     

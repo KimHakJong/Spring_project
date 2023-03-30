@@ -1,8 +1,9 @@
-package com.gant.myhome.rojoon.att.service;
+package com.gant.myhome.service;
 
 import java.util.List;
 
-import com.gant.myhome.rojoon.att.domain.Attendance;
+import com.gant.myhome.domain.Attendance;
+
 
 public interface AttService {
     

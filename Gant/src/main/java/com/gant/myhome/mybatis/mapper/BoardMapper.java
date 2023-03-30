@@ -1,4 +1,4 @@
-package com.gant.myhome.rojoon.board.mapper;
+package com.gant.myhome.mybatis.mapper;
 
 import java.util.HashMap;
 import java.util.List;
@@ -6,7 +6,8 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.gant.myhome.rojoon.board.domain.Board;
+import com.gant.myhome.domain.Board;
+
 
 
 /*

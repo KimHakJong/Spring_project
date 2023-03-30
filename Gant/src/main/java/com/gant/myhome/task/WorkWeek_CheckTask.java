@@ -1,4 +1,4 @@
-package com.gant.myhome.rojoon.att.task;
+package com.gant.myhome.task;
 
 
 
@@ -9,7 +9,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import com.gant.myhome.rojoon.att.service.AttService;
+
+import com.gant.myhome.service.AttService;
+
 
 
 

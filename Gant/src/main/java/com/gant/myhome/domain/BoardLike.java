@@ -1,4 +1,4 @@
-package com.gant.myhome.rojoon.board.domain;
+package com.gant.myhome.domain;
 
 public class BoardLike {
 	private String id;

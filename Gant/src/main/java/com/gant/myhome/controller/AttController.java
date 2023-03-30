@@ -1,4 +1,4 @@
-package com.gant.myhome.rojoon.att.controller;
+package com.gant.myhome.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -24,9 +24,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.gant.myhome.rojoon.att.domain.Attendance;
-import com.gant.myhome.rojoon.att.service.AttService;
-import com.gant.myhome.rojoon.board.domain.Board;
+import com.gant.myhome.domain.Attendance;
+import com.gant.myhome.service.AttService;
+
+
 
 
 

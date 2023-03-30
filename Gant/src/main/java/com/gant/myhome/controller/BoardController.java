@@ -1,4 +1,4 @@
-package com.gant.myhome.rojoon.board.controller;
+package com.gant.myhome.controller;
 
 
 import java.io.File;
@@ -30,13 +30,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.gant.myhome.rojoon.board.domain.Board;
-import com.gant.myhome.rojoon.board.domain.BoardSaveFolder;
-import com.gant.myhome.rojoon.board.service.BoardLikeService;
-import com.gant.myhome.rojoon.board.service.BoardService;
-import com.gant.myhome.rojoon.board.service.CommentService;
+import com.gant.myhome.domain.Board;
+import com.gant.myhome.domain.BoardSaveFolder;
+import com.gant.myhome.service.BoardLikeService;
+import com.gant.myhome.service.BoardService;
+import com.gant.myhome.service.CommentService;
+
+
 
 
 

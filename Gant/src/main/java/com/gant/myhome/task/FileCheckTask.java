@@ -1,4 +1,4 @@
-package com.gant.myhome.rojoon.board.task;
+package com.gant.myhome.task;
 
 import java.io.File;
 import java.util.List;
@@ -11,8 +11,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import com.gant.myhome.rojoon.board.domain.BoardSaveFolder;
-import com.gant.myhome.rojoon.board.service.BoardService;
+import com.gant.myhome.domain.BoardSaveFolder;
+import com.gant.myhome.service.BoardService;
+
+
 
 
 
