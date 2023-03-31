@@ -7,12 +7,12 @@
     height: 81%;
     color: black;
     top: 14%;
-    background: #F3F6F9;
+    /*background: #F3F6F9;*/
     border-radius: 15px;
 }
 #search_div {
     position: absolute;
-    top: 40px;
+    top: 25px;
     width: 100%;
 }
 
@@ -163,8 +163,8 @@ width:90px;
     text-align: center;
     line-height: 150px;
     position: relative;
-    left: 940px;
-    top: 460px;
+	left: 75%;
+	top: 74%;
     border-radius: 20px;
     box-sizing: border-box;
     background: white;

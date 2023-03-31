@@ -1,5 +1,5 @@
 package com.gant.myhome.domain;
 
-public class Reserve {
+public class Reservation {
 
 }

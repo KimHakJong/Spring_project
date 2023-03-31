@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gant.myhome.mybatis.mapper.ReservationCheckMapper">
+	
+	<select id="getTime" resultType="ReservationCheck">
+		select resource_name, day, reserved_time 
+		from ReservationItem natural join ReservationCheck 
+		where resource_name= #{resource_name} 
+		and day = #{day}
+	</select>
+</mapper>

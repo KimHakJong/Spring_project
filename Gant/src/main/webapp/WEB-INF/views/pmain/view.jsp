@@ -426,7 +426,7 @@ if('${create}'==1){
 	$("body").on('change','input[type="checkbox"]',function(){
 		let change_id = $(this).val(); //체크된 아이디
 		if($(this).is(":checked")){//새로 체크되었을 때
-			if(!check_id.includes(change_id)){ //기존 체크 id에 방금 체크한 아이디가 없는 경우
+			if(!check_id.includes(change_id+",")){ //기존 체크 id에 방금 체크한 아이디가 없는 경우
 				if(check_id.substr(-1)==',' || check_id.length==0){ //맨마지막이 ,인 경우
 					check_id += change_id + ",";
 				}else{
@@ -463,7 +463,7 @@ if('${create}'==1){
 				if(rdata!=null){
 					output += "<table class='table msearch_table_body'>";
 					$(rdata).each(function(){
-						if(check_id.includes(this.id)){ //check_id에 값이 있다면 자동으로 체크되도록!
+						if(check_id.includes(this.id+",")){ //check_id에 값이 있다면 자동으로 체크되도록!
 						output += '<tr><td><input type="checkbox" value="' + this.id +'" checked></td><td>'+this.name+'</td><td>'+this.department+'</td></tr>';
 						}else{
 						output += '<tr><td><input type="checkbox" value="' + this.id +'"</td><td>'+this.name+'</td><td>'+this.department+'</td></tr>';
@@ -488,10 +488,18 @@ if('${create}'==1){
 		
 		//생성,수정이든 각각 명단아이디가 저장되어있으면 그 값을 check_id변수에도 저장
 		if(gocreate==true){
-			check_id = $("#create_member").val();
+			if($("#create_member").val()==""){
+				check_id = $("#create_member").val();
+			}else{
+				check_id = $("#create_member").val()+",";
+			}
 			console.log("create"+check_id);
 		}else if (goupdate==true) {
-			check_id = $("#update_member").val();
+			if($("update_member").val()==""){
+				check_id = $("#update_member").val();
+			}else{
+				check_id = $("#update_member").val()+",";
+			}
 			console.log("update"+check_id);
 		}
 		
@@ -510,7 +518,7 @@ if('${create}'==1){
 				if(rdata!=null){
 					output += "<table class='table msearch_table_body'>";
 					$(rdata).each(function(){
-						if(check_id.includes(this.id)){ //명단에 있으면 다시 명단 검색갔을 때 체크되어있다.
+						if(check_id.includes(this.id+",")){ //명단에 있으면 다시 명단 검색갔을 때 체크되어있다.
 						output += '<tr><td><input type="checkbox" value="' + this.id +'" checked></td><td>'+this.name+'</td><td>'+this.department+'</td></tr>';
 						}else{
 						output += '<tr><td><input type="checkbox" value="' + this.id +'"></td><td>'+this.name+'</td><td>'+this.department+'</td></tr>';
@@ -545,7 +553,7 @@ if('${create}'==1){
 		if($("#msearch_input").val()==""){
 			
 		$("input[type='checkbox']").each(function(){
-			if(check_id.includes($(this).val())) { //명단에 있으면 다시 명단 검색갔을 때 체크되어있다.
+			if(check_id.includes($(this).val()+",")) { //명단에 있으면 다시 명단 검색갔을 때 체크되어있다.
 				//각각 체크박스에서 val가 만약 check_id에 포함되면 해당 id와 name저장
 				check_name += $(this).parent().next().text()+",";
 			}
