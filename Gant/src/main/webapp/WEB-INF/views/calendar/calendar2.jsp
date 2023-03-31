@@ -599,9 +599,12 @@ border-color: #009CFF !important;
 		console.log("loginid");
 		console.log(loginid);
 		
+		console.log("admin");
+		console.log(admin);
+		
 		//관리자 admin은 나중에 추가
 		
-		if(name != loginid && (admin !="true" || admin != true))
+		if(!(name == loginid ||  admin == true))
 		{
             jq1('#calendarModal #modifyCalendar').css('display', 'none');
 			jq1('#calendarModal #deleteCalendar').css('display', 'none');

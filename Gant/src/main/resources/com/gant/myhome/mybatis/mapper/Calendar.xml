@@ -7,11 +7,11 @@
 
 
  <insert id="add">
- insert into calendar(id, name, startday, endday, title, admin) values(#{id}, #{name}, #{startday}, #{endday}, #{title}, #{admin})
+ insert into calendar(id, name, startday, endday, title) values(#{id}, #{name}, #{startday}, #{endday}, #{title})
  </insert>
  
    <select id="getCalList" resultType="calendar">
-	select id, name, allday, startday, endday, title, admin from calendar
+	select id, name, allday, startday, endday, title from calendar
   </select>
   
   <delete id="caldelete">
