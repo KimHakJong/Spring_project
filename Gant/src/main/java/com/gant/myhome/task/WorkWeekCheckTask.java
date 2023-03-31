@@ -19,17 +19,17 @@ import com.gant.myhome.service.AttService;
 @Service
 @EnableScheduling // 아래의 클래스를 스케줄링 목적으로 사용하도록 하겠다는 명시합니다. @Configuration와 같이 사용해야 합니다.
 @Configuration // @Configuration을 사용하지 않으면 스케줄링이 동작하지 않습니다.
-public class WorkWeek_CheckTask {
+public class WorkWeekCheckTask {
 
 
-	private static final Logger logger = LoggerFactory.getLogger(WorkWeek_CheckTask.class);
+	private static final Logger logger = LoggerFactory.getLogger(WorkWeekCheckTask.class);
 	    
 	
 	    @Autowired
 	    private AttService attService;
 			
 	    
-		public WorkWeek_CheckTask(AttService attService) {
+		public WorkWeekCheckTask(AttService attService) {
 			this.attService = attService;
 		}
 	
