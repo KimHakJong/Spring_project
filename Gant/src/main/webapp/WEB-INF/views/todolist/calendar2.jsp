@@ -3,7 +3,7 @@
 	pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<%@ page import = "com.gant.myhome.dohwan.domain.Calendar" %>
+<%@ page import = "com.gant.myhome.domain.ProjectCalendar" %>
 <%@ page import = "java.util.*" %>
 <%@ page import = "org.json.simple.JSONArray" %>
 <%@ page import = "org.json.simple.JSONObject" %>
@@ -11,9 +11,11 @@
 
 <%
 	JSONArray list = (JSONArray)request.getAttribute("event");
-	/*
+	String p_no = (String)request.getAttribute("p_no");
+	
 	System.out.println("list" + list);
-	System.out.println("list[0]" + list.get(0));
+	System.out.println("p_no : " + p_no);
+	//System.out.println("list[0]" + list.get(0));
 	System.out.println("list.size()" + list.size());
 	
 
@@ -22,12 +24,11 @@
 		
 				
 		
-		System.out.println("start : " + c.get("start"));
-			
+					
 		System.out.println("OBJECT " + list.get(i));
 
 
-	}*/
+	}
 %>
 	
 	
@@ -36,7 +37,6 @@
 
 
 
-<!DOCTYPE html>
 <html>
 
 
@@ -160,9 +160,12 @@ border-color: #009CFF !important;
             
 
        var all_events = <%=list%>;
+       var p_no = <%=p_no%>;
+       
         
 
-
+		console.log("p_no");
+		console.log(p_no);
 				
 		console.log("all_events");
 		console.log(all_events);
@@ -318,7 +321,8 @@ border-color: #009CFF !important;
 																			"title" : content,
 																			"start" : start_date,
 																			"end" : m_end_dt,
-																			"allDay" : true
+																			"allDay" : true,
+																			"p_no" : p_no
 																		}//전송할 객체 생성
 
 																		console
@@ -433,10 +437,11 @@ border-color: #009CFF !important;
 										
 										
 										arg_admin = getadmin(loginid);
+										hostid = gethostid(p_no);
 		
 										console.log("admin 여부");
 										console.log(arg_admin);
-										console.log(getadmin(loginid));
+										
 										
 										
 										console.log("arg_name 글 쓴 사람 id");
@@ -445,7 +450,11 @@ border-color: #009CFF !important;
 										console.log("loginid");
 										console.log(loginid);
 										
-										insertModalOpen(arg, arg_admin, arg_name, loginid);//이벤트 클릭 시 모달 호출
+										console.log("hostid");
+										console.log(hostid);
+										
+										
+										insertModalOpen(arg, arg_admin, arg_name, loginid, hostid);//이벤트 클릭 시 모달 호출
 
 									}
 
@@ -454,34 +463,7 @@ border-color: #009CFF !important;
 					});(jQuery);
 					
 
-					
-	function loadingEvents() {
-		
 
-						var resultdata;
-						jq1.ajax({
-							type : 'POST',
-							url : '${pageContext.request.contextPath}/calendar/list',
-							dataType : "json",
-							async : false,
-
-							success : function(result) {
-								resultdata = result;
-								console.log('db에서 값 가져오기 완료');
-
-								console.log(result);
-								console.log('resultdata = ');
-								console.log(resultdata);
-							},
-							error : function(request, status, error) {
-							},
-							complete : function() {
-
-							}
-						})
-
-						return resultdata;
-	}
 
 
 	function adddata(jsondata) {
@@ -491,7 +473,7 @@ border-color: #009CFF !important;
 		
 		jq1.ajax({
 			type : 'POST',
-			url : '${pageContext.request.contextPath}/calendar/add',
+			url : '${pageContext.request.contextPath}/pcalendar/add',
 			data : jsondata,
 			dataType : "text",
 			async : true,
@@ -569,7 +551,7 @@ border-color: #009CFF !important;
 		console.log(data);
 
 		jq1.ajax({
-			url : "${pageContext.request.contextPath}/calendar/update",
+			url : "${pageContext.request.contextPath}/pcalendar/update",
 			type : "POST",
 			data : data,
 			dataType : "text",
@@ -598,21 +580,14 @@ border-color: #009CFF !important;
 	
 	}
 
-	function insertModalOpen(arg, admin, name, loginid) {
+	function insertModalOpen(arg, admin, name, loginid, hostid) {
 
 		jq1('#calendarModal #addCalendar').css('display', 'none');
 		jq1("#calendarModal #calendar_title").attr("readonly",true); 
 
 		
-		console.log("name");
-		console.log(name);
-		
-		console.log("loginid");
-		console.log(loginid);
-		
-		//관리자 admin은 나중에 추가
-		
-		if(name != loginid && (admin !="true" || admin != true))
+				
+		if(!(name == hostid || name == loginid ||  admin == true))
 		{
             jq1('#calendarModal #modifyCalendar').css('display', 'none');
 			jq1('#calendarModal #deleteCalendar').css('display', 'none');
@@ -675,7 +650,7 @@ border-color: #009CFF !important;
 			//DB 삭제
 
 			jq1.ajax({
-				url : "${pageContext.request.contextPath}/calendar/delete",
+				url : "${pageContext.request.contextPath}/pcalendar/delete",
 				type : "POST",
 				data : data,
 				dataType : "text",
@@ -723,7 +698,7 @@ border-color: #009CFF !important;
 
 			jq1.ajax({
 				type : "POST",
-				url : "${pageContext.request.contextPath}/calendar/getadmin",
+				url : "${pageContext.request.contextPath}/pcalendar/getadmin",
 				data : data2,
 				dataType : "json",
 				async: false,
@@ -760,6 +735,55 @@ border-color: #009CFF !important;
 
 		}
 	
+	function gethostid(p_no) {
+		var host2;
+		
+		var data2 = {
+			"p_no" : p_no
+		};
+		
+
+		console.log(data2);
+
+
+		jq1.ajax({
+			type : "POST",
+			url : "${pageContext.request.contextPath}/pcalendar/gethost",
+			data : data2,
+			dataType : "text",
+			async: false,
+			beforeSend : function(xhr)
+  			{   //데이터를 전송하기 전에 헤더에 csrf값을 설정합니다.
+    			xhr.setRequestHeader(header, token);			
+    		},
+
+			success : function(data) {
+
+				host2 = data;
+				
+				console.log("host2");
+				console.log(host2);
+				
+				
+			},
+			error : function(data) {
+				//alert(xhr.responseText);
+				console.log("실패 결과");
+				console.log(data);
+				jq1('#calendarModal').modal('hide');
+				//document.location.reload();
+				alert('host 생성 실패');
+			}
+		});
+		
+		console.log("리턴 전 host2");
+		console.log(host2);
+		
+		return host2;
+		
+
+	}
+	
 </script>
 
 
@@ -773,26 +797,24 @@ border-color: #009CFF !important;
 <jsp:include page="../home/side.jsp" />
 
 
-
 <div class="content">
 
 
-
-
-
-
 	<jsp:include page="../home/header2.jsp" />
-	
-				<!--  <div class="btn-group" role="group">
-                  <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked="">
+	    
+    				  <div class="btn-group" role="group">
+                  <input type="radio" class="btn-check" name="btnradio" id="btnradio1">
                     <label class="btn btn-outline-primary" for="btnradio1">게시판</label>
 
-                    <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
-                    <label class="btn btn-outline-primary" for="btnradio2">할일 리스트</label>
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio2" >
+                    <label class="btn btn-outline-primary" for="btnradio2" onclick="window.location.href='${pageContext.request.contextPath}/todolist/receive?p_no=<%=p_no %>';">할일 리스트</label>
 
-                    <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
-                    <label class="btn btn-outline-primary" for="btnradio3">캘린더</label>
-                 </div>-->
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio3" checked>
+                    <label class="btn btn-outline-primary" for="btnradio3" >캘린더</label>
+                 </div>
+    	<br><br>
+	
+
 		<sec:authorize access="isAuthenticated()">
 			<sec:authentication property="principal" var="pinfo"/>
 

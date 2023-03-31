@@ -1,9 +1,9 @@
 drop table calendar cascade constraints purge;
+drop table members cascade constraints purge;
 drop table project cascade constraints purge;
 
 create table calendar(
 id  varchar2(15), 
-admin varchar2(15),
 allday varchar2(15) default 'true',
 startday varchar2(30),
 endday varchar2(30),

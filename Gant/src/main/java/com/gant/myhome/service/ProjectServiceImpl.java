@@ -34,6 +34,7 @@ public class ProjectServiceImpl implements ProjectService {
 	public List<Project> getProjectList(String id, String p_name, String admin, String position) {
 		id = "%" + id + "%";
 		p_name = "%" + p_name + "%";
+		
 		Map<String,String> map = new HashMap<String,String>();
 		map.put("id", id);
 		if(!p_name.equals("")) {
