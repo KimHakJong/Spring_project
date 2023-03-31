@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- SQL맵퍼파일은 xml이기 때문에 제일먼저 xml선언이 옵니다. -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--  Mapper 인터페이스의 패키지 명과 이름을 namespace로 설정합니다. -->
+<mapper namespace="com.gant.myhome.mybatis.mapper.RequestMapper">
+     
+     <!-- 
+		1. 태크에 id 속성은 Mapper 인터페이스에 추가한 메서드명과 동일하게 작성됩니다.
+		2. resultType속성은 연동시킬 메서드에 명시된 반환 타입을 작성해 줍니다.
+		-->
+		
+    <select id="getMembersCount" resultType="int">
+	select count(*)
+	from members
+	</select>
+    
+ 
+	<select id="getMembersList" resultType="members">
+	select name,id,department,position
+	from members
+	</select>
+		
+	
+	<select id="MemberSearchList" resultType="members">
+	select *
+	from members
+	WHERE name like '%'||#{search_name}||'%'
+	</select>
+	
+	
+
+</mapper>

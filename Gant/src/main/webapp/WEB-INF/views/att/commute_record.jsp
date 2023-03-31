@@ -42,13 +42,11 @@ thead{
 }
 
 </style>
-<script type="text/javascript">
+<script>
     $(document).ready(function () {
             $.datepicker.setDefaults($.datepicker.regional['ko']);
             
             $( "#Date_Search" ).datepicker({
-                 changeMonth: true, 
-                 changeYear: true,
                  nextText: '다음 달',
                  prevText: '이전 달', 
                  dayNames: ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'],
