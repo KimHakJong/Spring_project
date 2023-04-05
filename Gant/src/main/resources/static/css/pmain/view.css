@@ -47,7 +47,7 @@ width:90px;
 	border:1px solid #009CFF;
 }
 #projects {
-    border: 1px solid #F3F6F9;
+    border: 1px solid #d4d6d7;
     clear: both;
     position: absolute;
     top: 19.5%;
@@ -58,10 +58,13 @@ width:90px;
     background: white;
     border-radius: 20px;
     padding:0px 40px 0px 40px;
+    
 }
 
 #projects{
-	overflow-y:scroll
+	overflow-y:scroll;
+	scrollbar-width: thin;
+scrollbar-color: #26abff transparent;
 	}
 
 	
@@ -190,23 +193,31 @@ color:black;
     
 }
 
+#createmodal .modal-dialog{
+	top:7%;
+}
 #createmodal .modal-content {
 	width:600px !important;
-	height:613px;
+	height:590px;
 }
 #updatemodal .modal-content{
 	width:600px !important;
+	height:665px;
 }
 /* 모달 시작 */
 #create_subject, #update_subject {
-	text-align:center;
-	margin-top:40px;
+    text-align: left;
+    margin-top: 40px;
+    color: #26abff;
+    font-size: 28px;
+    margin-left: 35px;
 }
 
 #createForm label, #updateForm label{
 display:inline-block;
 width:25%;
 color:black;
+font-weight:bold;
 }
 
 #createForm input, #updateForm input {
@@ -233,7 +244,7 @@ color:black;
 }
 
 #createForm, #updateForm {
-    padding: 10px 30px;
+    padding: 10px 25px;
     height: 100%;
 }
 #create_membername, #update_membername{
@@ -287,22 +298,25 @@ color:black;
     height: 30px;
     position: absolute;
     left: 515px;
-    bottom: 126px;
+    bottom: 109px;
 }
 #create_submit, #update_submit {
-    height: 65px;
-    width: 100%;
+    height: 50px;
+    width: 120px;
     display: block;
     margin: 0 auto;
     opacity: 1;
     border-radius: 10px;
-    font-size: 22px;
-    background-color: #009CFF;
-    color: white;
+    font-size: 18px;
+    background-color: white;
+    color: #26abff;
     border: 1px solid #009CFF;
     outline: none;
-    margin-top: 9px;
-    font-weight:bold
+    font-weight: bold;
+    float: right;
+}
+#update_submit{
+	margin-top:9px !important;
 }
 #create_submit:hover, #update_submit:hover{background:#26ABFF; border:1px solid #26ABFF}
 
@@ -364,6 +378,11 @@ color:black;
 #msearch_table_div h5 {
 	margin-top:25%
 }
+
+#msearch_table_div{
+	scrollbar-width: none;
+}
+
 #msearch_table_div::-webkit-scrollbar {
            width: 0px; /*스크롤바의 너비*/
 }

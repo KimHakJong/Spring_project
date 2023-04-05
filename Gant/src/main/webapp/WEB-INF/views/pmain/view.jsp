@@ -138,7 +138,7 @@
 		<label for="create_content">내&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;용</label>
 			<textarea name="p_content" id="create_content"></textarea>
 		 
-		  		<button type="submit" id="create_submit" >생성하기</button>
+		  		<button type="submit" id="create_submit" >추가</button>
 		  		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 		  		</form>
 		  	</div>
@@ -612,9 +612,13 @@ if('${create}'==1){
     					console.log(this.profileimg +this.name+this.department+this.position+this.phone_num);
 	    				output += "<tr><td>"
 	    						+ '<div class="user-info">'
-	    						+ 	'<div class="user-info__img">'
-	    						+ 		'<img src="../resources/image/member/defaultprofile.png" alt="User Img">'
-	    						+ 	'</div>'
+	    						+ 	'<div class="user-info__img">';
+	    				if(this.profileimg==null){
+	    				output +='<img src="../resources/image/member/defaultprofile.png" alt="User Img">';
+	    				}else{
+	    				output +='<img src="../resources/image/memberupload/'+this.profileimg+'" alt="User Img">';
+	    				}
+	    				output += 	'</div>'
 	    						+ 	'<div class="user-info__basic">'
 	    						+ 		'<h6 class="mb-0">'+this.name+'</h6>'
 	    						+ 	'</div>'

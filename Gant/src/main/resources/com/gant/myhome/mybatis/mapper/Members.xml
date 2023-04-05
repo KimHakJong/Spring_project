@@ -107,4 +107,10 @@
 	   where name like #{name} 
 	   order by name
   </select>
+  
+  <select id="getMemberInfo2" resultType="members">
+  	select * 
+  	from members 
+  	where name = #{name}
+  </select>
 </mapper>

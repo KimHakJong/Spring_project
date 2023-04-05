@@ -70,7 +70,7 @@ background:transparent;
 	    									<img class="rounded-circle" src="${pageContext.request.contextPath}/resources/image/home/defaultprofile.png"  alt="" style="width: 40px; height: 40px;">
 	    								</c:if>
 	    								<c:if test="${!empty profileimg}">
-	    									<img class="rounded-circle" src="memberupload/${profileimg}"  alt="" style="width: 40px; height: 40px;">
+	    									<img class="rounded-circle" src="${pageContext.request.contextPath}/resources/image/memberupload/${profileimg}"  alt="" style="width: 40px; height: 40px;">
 	    								</c:if>                          
                                     <div class="ms-2">
                                         <h6 class="fw-normal mb-0">Jhon send you a message</h6>
@@ -85,7 +85,7 @@ background:transparent;
 	    									<img class="rounded-circle" src="${pageContext.request.contextPath}/resources/image/home/defaultprofile.png"  alt="" style="width: 40px; height: 40px;">
 	    								</c:if>
 	    								<c:if test="${!empty profileimg}">
-	    									<img class="rounded-circle" src="memberupload/${profileimg}"  alt="" style="width: 40px; height: 40px;">
+	    									<img class="rounded-circle" src="${pageContext.request.contextPath}/resources/image/memberupload/${profileimg}"  alt="" style="width: 40px; height: 40px;">
 	    								</c:if>                                      
                                     <div class="ms-2">
                                         <h6 class="fw-normal mb-0">Jhon send you a message</h6>
@@ -100,7 +100,7 @@ background:transparent;
 	    									<img class="rounded-circle" src="${pageContext.request.contextPath}/resources/image/home/defaultprofile.png"  alt="" style="width: 40px; height: 40px;">
 	    								</c:if>
 	    								<c:if test="${!empty profileimg}">
-	    									<img class="rounded-circle" src="memberupload/${profileimg}"  alt="" style="width: 40px; height: 40px;">
+	    									<img class="rounded-circle" src="${pageContext.request.contextPath}/resources/image/memberupload/${profileimg}"  alt="" style="width: 40px; height: 40px;">
 	    								</c:if>       
                                     <div class="ms-2">
                                         <h6 class="fw-normal mb-0">Jhon send you a message</h6>
@@ -132,7 +132,7 @@ background:transparent;
 	    					<img class="rounded-circle me-lg-2" src="${pageContext.request.contextPath}/resources/image/home/defaultprofile.png"  alt="" style="width: 40px; height: 40px;">
 	    				</c:if>
 	    				<c:if test="${!empty profileimg}">
-	    					<img class="rounded-circle me-lg-2" src="memberupload/${profileimg}"  alt="" style="width: 40px; height: 40px;">
+	    					<img class="rounded-circle me-lg-2" src="${pageContext.request.contextPath}/resources/image/memberupload/${profileimg}"  alt="" style="width: 40px; height: 40px;">
 	    				</c:if>         
                             <span class="d-none d-lg-inline-flex">${name}</span>
                         </a>

@@ -15,5 +15,7 @@ public interface ReservationItemMapper {
 
 	public List<String> getResourcesByType(String type);
 
+	public int getMaxPerson(String resource_name);
+
 
 }

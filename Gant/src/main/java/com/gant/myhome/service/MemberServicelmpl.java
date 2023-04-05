@@ -141,6 +141,11 @@ public class MemberServicelmpl implements MemberService {
 		return dao.getSearchMembersList_ajax(name);
 	}
 
+	@Override
+	public Members getMemberInfo2(String name) {
+		return dao.getMemberInfo2(name);
+	}
+
 
 
 	

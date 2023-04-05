@@ -35,6 +35,12 @@ public class ReservationItemServiceImpl implements ReservationItemService {
 	}
 
 
+	@Override
+	public int getMaxPerson(String resource_name) {
+		return dao.getMaxPerson(resource_name);
+	}
+
+
 	
 	
 }

@@ -11,7 +11,10 @@
 .organization {border:1px solid #C4C5C8;
 display:inline-block;
  width:100%; height:100%; padding:10px;
- overflow:auto}
+ overflow:auto;
+ scrollbar-width: thin;
+scrollbar-color: #26abff transparent;	
+ }
  
 .organization::-webkit-scrollbar {
            width: 5px; /*스크롤바의 너비*/
