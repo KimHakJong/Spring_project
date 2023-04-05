@@ -7,40 +7,35 @@
 
 <%
 	int p_no = (Integer)request.getAttribute("p_no");
-	String p_name = null;
-	String p_id = null;
+	String p_name[] = null;
+	String p_id[] = null;
 			
-	System.out.println(p_no);
+	System.out.println("todolist에 넘어오는 p_no 값 : " + p_no);
 	
-	if(request.getAttribute("p_id") != null)
-	{
-		p_id = (String)request.getAttribute("p_id");
-		String p_ids[] = p_id.split(",");
+	if(request.getAttribute("p_id") != null) {
+		p_id = (String [])request.getAttribute("p_id");
 	}
 	
-	if(request.getAttribute("p_name") != null)
-	{
-		p_name = (String)request.getAttribute("p_name");
-		String p_names[] = p_name.split(",");
-	}
-	
-	if (p_name != null && p_id != null)
-	{
-		
+	if(request.getAttribute("p_name") != null) {
+		p_name = (String [])request.getAttribute("p_name");
 		
 	}
+
 	
 %>
 <!DOCTYPE html>
 <html>
 
 <head>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/todolist/list.js"></script>
 
 <meta name="_csrf" content="${_csrf.token}">
 <meta name="_csrf_header" content="${_csrf.headerName}">
 
 <meta charset="utf-8">
 <style>
+
 #loginid{
 	display: none;
 }
@@ -63,6 +58,7 @@ float: right;}
 
 
 <jsp:include page="../home/side.jsp" />
+
 <script>
 var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
@@ -71,52 +67,20 @@ var header = $("meta[name='_csrf_header']").attr("content");
 
 <script>
 
-function project_member(p_no) {
-	
-	var data = {
-			"p_no" : p_no
-			
-		};
-	
-	console.log(data);
-	console.log("cal 호출 성공");
-	
-	var resultdata;
-	
-	$.ajax({
-		type : 'get',
-		url : '${pageContext.request.contextPath}/pcalendar/cal?p_no='+p_no,
-		data: {},
-		//dataType : "text",
-		
-		beforeSend : function(xhr)
-			{   //데이터를 전송하기 전에 헤더에 csrf값을 설정합니다.
-			xhr.setRequestHeader(header, token);			
-		},
 
-		success : function(result) {
-			console.log('cal 로딩 성공');
-			console.log(result);
 
-		},
-		error : function() {
-			console.log('cal 로딩 실패');
-		},
-		complete : function() {
-			console.log('cal 완료');
-		}
-	})
-
-}
-
+</script>
+<script>
 
 </script>
 
 <div class="content">
 
+
 	<jsp:include page="../home/header2.jsp" />
 	
 	
+
 	
 	
 
@@ -135,11 +99,16 @@ function project_member(p_no) {
     	<br><br>
         <h1>To-Do List</h1>
         <div class="row mb-3">
-            <div class="col">
-                
-                                <button type="button" class="btn btn-success">받은 할일</button>
-                <button type="button" class="btn btn-danger">보낸 할일</button>
-            </div>
+		<div class="col">
+		    <label>
+		        <input type="radio" name="todo-type" class="btn-check" autocomplete="off">
+		        <span class="btn btn-success">받은 할일</span>
+		    </label>
+		    <label>
+		        <input type="radio" name="todo-type" class="btn-check" autocomplete="off">
+		        <span class="btn btn-danger">보낸 할일</span>
+		    </label>
+		</div>
             <div class="col-auto">
                 <form class="d-flex">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
@@ -152,32 +121,116 @@ function project_member(p_no) {
                 
             </div>
             <div class="col-auto">
-				<button type="button"   class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addScheduleModal">할일 추가</button>
+				<button type="button"   class="btn btn-primary" onclick="window.location.href='${pageContext.request.contextPath}/todolist/write?p_no=<%=p_no %>';" >할일 추가</button>
 			</div>
 
         </div>
-        <div class="row">
-            <div class="col">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>제목</th>
-                            <th>내용</th>
-                            <th>상태</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <c:forEach items="${schedules}" var="schedule">
-                            <tr>
-                                <td>${schedule.subject}</td>
-                                <td>${schedule.content}</td>
-                                <td>${schedule.state}</td>
-                            </tr>
-                        </c:forEach>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        
+     	<c:if test="${listcount > 0}">
+	
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th colspan="3">할일 리스트</th>
+					<th colspan="2">
+						<span>글 개수 : ${listcount }</span>
+					</th>
+				</tr>
+				<tr>
+					<th><div>번호</div></th>
+					<th><div>제목</div></th>
+					<th><div>작성자</div></th>
+					<th><div>작성일</div></th>
+					<th><div>조회수</div></th>
+	
+				</tr>
+			</thead>
+			<tbody>
+      <c:set var="num" value="${listcount-(page-1) * limit }"/>
+      <c:forEach var="b" items="${boardlist }">
+      <tr>
+      <td><%--번호 --%>
+         <c:out value="${num }"/><%-- num 출력 --%>
+         <c:set var="num" value="${num-1 }"/> <%-- num= num-1의 의미 --%>
+      </td>
+      <td><%--제목 --%>
+      <div>
+         <%--답변글 제목 앞에 여백 처리부분 --%>
+         <c:if test="${b.BOARD_RE_LEV !=0 }"><%--답글인경우 --%>
+            <c:forEach var="a" begin="0" end="${b.BOARD_RE_LEV*2 }" step="1">
+            &nbsp;	
+            </c:forEach>
+            <img src='${pageContext.request.contextPath}/resources/image/line.gif'>
+         </c:if>
+         <c:if test="${b.BOARD_RE_LEV ==0 }"><!--  원문 인경우 -->
+         	 &nbsp;
+         </c:if>
+         
+         <a href="detail?num=${b.BOARD_NUM }">
+
+               <c:out value="${b.BOARD_SUBJECT}" escapeXml="true"/> <!--  html태그를 화면에서 출력 -->
+				<span class="gray small">[<c:out value="${b.CNT}"/>]</span>
+            </a>
+         </div>
+      </td>
+      
+      <td><div>${b.BOARD_NAME }</div></td>
+      <td><div>${b.BOARD_DATE }</div></td>
+      <td><div>${b.BOARD_READCOUNT }</div></td>
+      </tr>
+      </c:forEach>
+      </tbody>
+		</table>
+		
+		<div class="center-block">
+			<ul class="pagination justify-content-center">
+				<c:if test="${page<=1}">
+					<li class="page-item">
+						<a class="page-link gray">이전&nbsp;</a>
+					</li>
+				</c:if>
+				<c:if test="${page>1}">
+					<li class="page-item">
+						<a href="list?page=${page-1}" class="page-link">이전&nbsp;</a>
+					</li>
+				</c:if>
+				
+				<c:forEach var="a" begin="${startpage}" end="${endpage}">
+					<c:if test="${a==page }">
+						<li class="page-item active">
+							<a class="page-link">${a}</a>
+						</li>
+					</c:if>
+					<c:if test="${a!=page }">
+						<li class="page-item">
+							<a href="list?page=${a}" class="page-link">${a}</a>
+						</li>
+					</c:if>
+				</c:forEach>
+				
+				<c:if test="${page >= maxpage }">
+						<li class="page-item">
+							<a class="page-link gray">&nbsp;다음</a>
+						</li>
+				</c:if>
+				<c:if test="${page < maxpage }">
+						<li class="page-item">
+							<a href="list?page=${page+1}" class="page-link">&nbsp;다음</a>
+						</li>
+				</c:if>
+		
+			</ul>			
+		</div>
+	</c:if>
+	
+	<%-- 게시글이 없는 경우 --%>
+	
+	<c:if test="${listcount==0 }">
+		<h3 style = "text-align:center">등록된 글이 없습니다.</h3>
+	</c:if>
+	
+	
+
     </div>
 		<sec:authorize access="isAuthenticated()">
 			<sec:authentication property="principal" var="pinfo"/>

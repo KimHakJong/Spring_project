@@ -149,6 +149,7 @@ public class ProjectCalendarController {
 	   c.setStartday(startday);
 	   c.setEndday(endday);
 	   c.setTitle(title);
+	   c.setP_no(p_no);
 	   
 	   
 	   
@@ -158,7 +159,7 @@ public class ProjectCalendarController {
 	   if(result != 0)
 		   System.out.println("수정 성공");
 	   
-	   return "redirect:cal";
+	   return "redirect:cal?p_no=" + p_no;
 	   
    }
    
@@ -172,15 +173,18 @@ public class ProjectCalendarController {
 	   	   
 	   c.setId(id);
 	   c.setTitle(title);
+	   c.setP_no(p_no);
+	   
+	   System.out.println("delete의 p_no" + p_no);
 
 	   
 	   int result = 0;
-	   result = calservice.caldelete(id);
+	   result = calservice.caldelete(id, p_no);
 	   
 	   if(result != 0)
 		   System.out.println("삭제 성공");
 	   
-	   return "redirect:cal";
+	   return "redirect:cal?p_no=" + p_no;
 	   
    }
    

@@ -12,13 +12,13 @@ import com.gant.myhome.mybatis.mapper.CalendarMapper;
 
 
 @Service
-public class CalendarServicelmpl implements CalendarService {
+public class CalendarServiceImpl implements CalendarService {
 
 	private CalendarMapper dao;
 	
 	
 	@Autowired
-	public CalendarServicelmpl(CalendarMapper dao) {
+	public CalendarServiceImpl(CalendarMapper dao) {
 		this.dao = dao;
 	}
 	

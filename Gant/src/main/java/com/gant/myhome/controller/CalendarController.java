@@ -73,6 +73,7 @@ public class CalendarController {
 
 	}
    
+   //requset body로 한번에 받아오는것도 고려
    @RequestMapping(value="/add", method=RequestMethod.POST)//name이 loginid
    public String addCal( @RequestParam("start") String startday, 
 		   			@RequestParam("end") String endday,

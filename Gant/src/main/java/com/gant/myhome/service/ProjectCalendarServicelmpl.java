@@ -60,8 +60,9 @@ public class ProjectCalendarServicelmpl implements ProjectCalendarService {
 
 	
 	@Override
-	public int caldelete(String id) {
-		return dao.caldelete(id);
+	public int caldelete(String id, String p_no){
+		
+		return dao.caldelete(id, p_no);
 		
 	}
 
