@@ -34,6 +34,8 @@ public interface MemberService {
 
 	public List<Members> getSearchMembersList_ajax(String name);
 
+	public Members getMemberInfo2(String name);
+
 	
 
 	

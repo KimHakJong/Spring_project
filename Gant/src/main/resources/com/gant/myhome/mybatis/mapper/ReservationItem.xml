@@ -7,8 +7,8 @@
 	
 	<insert id="insert">
 		insert into ReservationItem 
-		(type, resource_name) 
-		values (#{type}, #{resource_name})
+		(type, resource_name, max_person) 
+		values (#{type}, #{resource_name}, #{max_person})
 	</insert>
 	
 	<select id="getTypeList" resultType="String">
@@ -22,5 +22,11 @@
 		select resource_name 
 		from ReservationItem 
 		where type = #{type} 
+	</select>
+	
+	<select id="getMaxPerson" resultType="int">
+		select max_person 
+		from ReservationItem 
+		where resource_name = #{resource_name} 
 	</select>
 </mapper>

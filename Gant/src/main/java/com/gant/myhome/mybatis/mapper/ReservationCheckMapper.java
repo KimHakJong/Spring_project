@@ -10,6 +10,12 @@ import com.gant.myhome.domain.ReservationCheck;
 @Mapper
 public interface ReservationCheckMapper {
 
-	List<ReservationCheck> getTime(Map<String, String> parameter_map);
+	public List<ReservationCheck> getTime(Map<String, String> parameter_map);
+
+	public int insert(ReservationCheck rv_check);
+
+	public int deletePastData(String yesterday);
+
+	public int delete(int num);
 
 }

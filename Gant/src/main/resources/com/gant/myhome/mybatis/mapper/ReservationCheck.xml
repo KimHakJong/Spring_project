@@ -5,9 +5,25 @@
 <mapper namespace="com.gant.myhome.mybatis.mapper.ReservationCheckMapper">
 	
 	<select id="getTime" resultType="ReservationCheck">
-		select resource_name, day, reserved_time 
+		select num, resource_name, day, reserved_time 
 		from ReservationItem natural join ReservationCheck 
 		where resource_name= #{resource_name} 
 		and day = #{day}
 	</select>
+	
+	<insert id="insert">
+		insert into ReservationCheck 
+		(num, resource_name, day, reserved_time) 
+		values (#{num}, #{resource_name}, #{day}, #{reserved_time})
+	</insert>
+	
+	<delete id="deletePastData">
+		delete from ReservationCheck 
+		where day &lt;= #{yesterday}
+	</delete>
+	
+	<delete id="delete">
+		delete from ReservationCheck 
+		where num = #{num}
+	</delete>
 </mapper>

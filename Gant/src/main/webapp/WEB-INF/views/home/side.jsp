@@ -100,7 +100,7 @@
 	    				<img class="rounded-circle" src="${pageContext.request.contextPath}/resources/image/home/defaultprofile.png"  alt="" style="width: 40px; height: 40px;">
 	    			</c:if>
 	    			<c:if test="${!empty profileimg}">
-	    				<img class="rounded-circle" src="memberupload/${profileimg}"  alt="" style="width: 40px; height: 40px;">
+	    				<img class="rounded-circle" src="${pageContext.request.contextPath}/resources/image/memberupload/${profileimg}"  alt="" style="width: 40px; height: 40px;">
 	    			</c:if>                    	                    
                         <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
                     </div>
