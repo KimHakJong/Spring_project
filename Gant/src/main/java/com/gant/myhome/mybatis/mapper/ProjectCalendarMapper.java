@@ -22,14 +22,8 @@ public interface ProjectCalendarMapper {
 		public String gethostid(String p_no);
 		
 		public int update(ProjectCalendar c);
-		
-		public int caldelete(String id);
 
-			   
+		public int caldelete(String id, String p_no);
 
-				
-
-
-
-
+	
 }

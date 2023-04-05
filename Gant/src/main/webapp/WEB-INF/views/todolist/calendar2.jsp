@@ -13,7 +13,7 @@
 	JSONArray list = (JSONArray)request.getAttribute("event");
 	String p_no = (String)request.getAttribute("p_no");
 	
-	System.out.println("list" + list);
+	/*System.out.println("list" + list);
 	System.out.println("p_no : " + p_no);
 	//System.out.println("list[0]" + list.get(0));
 	System.out.println("list.size()" + list.size());
@@ -28,7 +28,7 @@
 		System.out.println("OBJECT " + list.get(i));
 
 
-	}
+	}*/
 %>
 	
 	
@@ -152,6 +152,8 @@ border-color: #009CFF !important;
                 jq1('#calendarModal').modal('hide');
             })
             
+            
+            jq1('.col-form-label').css('font-weigth','bold !important');
   
 
 
@@ -492,7 +494,7 @@ border-color: #009CFF !important;
 		})
 	}
 
-	function updatedata(arg) {
+	function updatedata(arg, p_no) {
 
 		var title = jq1("#calendar_title").val();
 		var content = jq1("#calendar_content").val();
@@ -545,7 +547,8 @@ border-color: #009CFF !important;
 			"id" : title,
 			"start" : start_date,
 			"end" : m_end_dt,
-			"allDay" : true
+			"allDay" : true,
+			"p_no" : p_no
 		};
 
 		console.log(data);
@@ -638,14 +641,20 @@ border-color: #009CFF !important;
 	}
 
 	
-	function deletecal(arg) {
+	function deletecal(arg, p_no) {
+		
+		console.log(p_no);
+		
 		if (confirm('일정을 삭제하시겠습니까?')) {
 			var data = {
 				"title" : arg.event.title,
-				"id" : arg.event.id
+				"id" : arg.event.id,
+				"p_no" : p_no
+				
 			};
 
-			console.log(arg.event.id);
+			console.log("data");
+			console.log(data);
 
 			//DB 삭제
 
@@ -672,7 +681,7 @@ border-color: #009CFF !important;
 										
 					alert('일정 삭제 실패 새로고침 후 재시도 해주세요');
 					jq1('#calendarModal').modal('hide');
-					document.location.reload();
+					//document.location.reload();
 				}
 			});
 			//
@@ -738,6 +747,8 @@ border-color: #009CFF !important;
 	function gethostid(p_no) {
 		var host2;
 		
+		
+		
 		var data2 = {
 			"p_no" : p_no
 		};
@@ -788,10 +799,8 @@ border-color: #009CFF !important;
 
 
 </head>
-<style>
 
 
-</style>
 <body>
 
 <jsp:include page="../home/side.jsp" />
@@ -801,8 +810,10 @@ border-color: #009CFF !important;
 
 
 	<jsp:include page="../home/header2.jsp" />
+	
+
 	    
-    				  <div class="btn-group" role="group">
+    			<div class="btn-group" role="group">
                   <input type="radio" class="btn-check" name="btnradio" id="btnradio1">
                     <label class="btn btn-outline-primary" for="btnradio1">게시판</label>
 
@@ -830,6 +841,7 @@ border-color: #009CFF !important;
 
 
 
+
 	<!-- modal 추가 -->
 	
 	<div class="modal fade insertModal" id="calendarModal" tabindex="-1"
@@ -847,29 +859,26 @@ border-color: #009CFF !important;
 				</div>
 				<div class="modal-body">
 					<div class="form-group">
-						<label for="taskId" class="col-form-label">일정 제목</label> <input
-							type="text" class="form-control" id="calendar_title"
-							name="calendar_title"> <label for="taskId"
-							class="col-form-label">일정 내용</label> <input type="text"
-							class="form-control" id="calendar_content"
-							name="calendar_content"> 
-							<label for="taskId"
-							class="col-form-label">시작 날짜</label> <input type="date"
-							class="form-control" id="calendar_start_date"
-							name="calendar_start_date" value="2023-02-14">
-							<label for="taskId"
-							class="col-form-label">종료 날짜</label> <input type="date"
-							class="form-control" id="calendar_end_date"
-							name="calendar_end_date">
+						<label for="taskId" class="col-form-label" style="font-weight:bold">일정 제목</label> 
+						<input type="text" class="form-control" id="calendar_title"	name="calendar_title">
+						 
+						<label for="taskId"	class="col-form-label" style="font-weight:bold">일정 내용</label> 
+						<input type="text" class="form-control" id="calendar_content" name="calendar_content">
+						 
+						<label for="taskId" class="col-form-label" style="font-weight:bold">시작 날짜</label> 
+						<input type="date" class="form-control" id="calendar_start_date" name="calendar_start_date">
+						
+						<label for="taskId"	class="col-form-label" style="font-weight:bold">종료 날짜</label> 
+						<input type="date" class="form-control" id="calendar_end_date" name="calendar_end_date">
 							
 					</div>
 				</div>
 				<div class="modal-footer">
 
 					<button type="button" class="btn btn-success" id="modifyCalendar"
-						onclick="updatedata(g_arg)">수정</button>
+						onclick="updatedata(g_arg,<%=p_no%>)">수정</button>
 					<button type="button" class="btn btn-danger" id="deleteCalendar"
-						onclick="deletecal(g_arg)">삭제</button>
+						onclick="deletecal(g_arg,<%=p_no%>)">삭제</button>
 
 					<button type="button" class="btn btn-secondary" id="addCalendar">추가</button>
 
@@ -892,4 +901,5 @@ border-color: #009CFF !important;
 </script>
 
 </body>
+
 </html>

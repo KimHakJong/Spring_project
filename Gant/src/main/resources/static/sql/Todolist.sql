@@ -2,6 +2,7 @@ drop table todolist cascade constraints purge;
 
 create table todolist(
 board_num number,
+p_no number,
 board_id varchar2(30), --현재 로그인아이디
 board_name varchar2(30), --references members(id) on delete cascade  --보내는사람
 board_r_id varchar2(30), --받는사람 아이디 
