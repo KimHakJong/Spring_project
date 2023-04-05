@@ -39,8 +39,16 @@ text-align: center;
 thead{
 	background-color:009CFF;
 	color:fff;
+	opacity:0.8
 }
 
+.btn-primary{
+	opacity:0.8
+}
+
+td{
+	font-weight:500
+}
 </style>
 <script>
     $(document).ready(function () {

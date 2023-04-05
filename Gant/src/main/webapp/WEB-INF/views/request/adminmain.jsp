@@ -74,9 +74,9 @@
                         <div class="rounded h-100 p-4">
                             <nav>
                                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                    <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab"
-                                        data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home"
-                                        aria-selected="true" onclick="location.href='getMian'">받은결재함</button>
+                                   <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab"
+                                        data-bs-target="#nav-contact" type="button" role="tab"
+                                        aria-controls="nav-contact" aria-selected="false"  onclick="location.href='getMian'">받은결재함</button>
                                         
                                     <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab"
                                         data-bs-target="#nav-profile" type="button" role="tab"
@@ -87,9 +87,9 @@
                                         aria-controls="nav-contact" aria-selected="false"  onclick="location.href='writeOvertime'">작성하기</button>
                                 
                                     <c:if test="${department == '인사부' || admin == 'true' }">
-                                     <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab"
-                                        data-bs-target="#nav-contact" type="button" role="tab"
-                                        aria-controls="nav-contact" aria-selected="false"  onclick="location.href='getAdmin'">관리자</button>
+                                     <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab"
+                                        data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home"
+                                        aria-selected="true" onclick="location.href='getAdmin'">관리자</button>               
                                     </c:if> 
                                 
                                 </div>
@@ -100,9 +100,9 @@
 						         <button class="btn btn-primary dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown"
 						            aria-expanded="false"></button>
 						         <ul class="dropdown-menu" aria-labelledby="filterDropdown">
-						            <li><a class="dropdown-item" href="getMian">전체</a></li>
-						            <li><a class="dropdown-item" href="getMian?only=휴가신청서">휴가신청서</a></li>
-						            <li><a class="dropdown-item" href="getMian?only=초과근무신청서">초과근무신청서</a></li>
+						            <li><a class="dropdown-item" href="getAdmin">전체</a></li>
+						            <li><a class="dropdown-item" href="getAdmin?only=휴가신청서">휴가신청서</a></li>
+						            <li><a class="dropdown-item" href="getAdmin?only=초과근무신청서">초과근무신청서</a></li>
 						         </ul>
 						      </div>
                              
@@ -130,6 +130,8 @@
 									   <c:url var="detail" value="getDetail">
 								        <c:param name="paper_num" value="${b.PAPER_NUM}"/>
 								        <c:param name="classification" value="${b.CLASSIFICATION}"/>
+								        <c:param name="send" value="send"/>
+								        <c:param name="admin_delete" value="admin_delete"/>
 								       </c:url>							       
 								     <td>
 								     <a href="${detail}" ><c:out value="${b.CLASSIFICATION}"/></a>
@@ -180,9 +182,9 @@ height:25px; font-size:16px}
 				    </li>
 				  </c:if>
 				  
-				  <%-- 1페이지보다 크면: 이전버튼 누르면 page값 ,board/getMian으로 보냄 --%>
+				  <%-- 1페이지보다 크면: 이전버튼 누르면 page값 ,board/getAdmin으로 보냄 --%>
 				  <c:if test="${page>1}">
-				    <c:url var="first" value="getMian">
+				    <c:url var="first" value="getAdmin">
 				    	<c:param name="page" value="${1}"/>
 				    	<c:if test="${search_name != ''}">
 					      	<c:param name="search_name" value="${search_name}"/>
@@ -192,7 +194,7 @@ height:25px; font-size:16px}
 					    </c:if>
 				    </c:url>
 				    
-				   	<c:url var="back" value="getMian">
+				   	<c:url var="back" value="getAdmin">
 				        <c:param name="page" value="${page-1}"/>
 				        <c:if test="${search_name != ''}">
 					      	<c:param name="search_name" value="${search_name}"/>
@@ -219,9 +221,9 @@ height:25px; font-size:16px}
 				      </li>
 				    </c:if>
 			       
-				    <%--다른 페이지는 누르면 검색필드,검색어,페이지들고 getMian.bo갔다온다 --%>
+				    <%--다른 페이지는 누르면 검색필드,검색어,페이지들고 getAdmin.bo갔다온다 --%>
 				    <c:if test="${i != page}">
-				      <c:url var="move" value="getMian">
+				      <c:url var="move" value="getAdmin">
 				        <c:param name="page" value="${i}"/>
 				        <c:if test="${search_name != ''}">
 					      	<c:param name="search_name" value="${search_name}"/>
@@ -231,7 +233,7 @@ height:25px; font-size:16px}
 					    </c:if>
 				      </c:url>
 				      <li class="paga-item">
-				        <a href="${move}" class="page-link">${i}&nbsp;&nbsp;</a>
+				        <a href="${move}" class="page-link">${i}</a>
 				      </li> 
 				    </c:if>
 				  </c:forEach>
@@ -246,9 +248,9 @@ height:25px; font-size:16px}
 				      </li>
 				    </c:if>
 				    
-					    <%--최대페이지미만: 다음 버튼누르면 page+1값, 검색필드, 검색어 들고 getMian.bo 갔다옴 --%>
+					    <%--최대페이지미만: 다음 버튼누르면 page+1값, 검색필드, 검색어 들고 getAdmin.bo 갔다옴 --%>
 					    <c:if test="${page < maxpage}">
-					      <c:url var="last" value="getMian">
+					      <c:url var="last" value="getAdmin">
 					      	<c:param name="page" value="${maxpage}"/>
 					      	<c:if test="${search_name != ''}">
 					      	<c:param name="search_name" value="${search_name}"/>
@@ -258,7 +260,7 @@ height:25px; font-size:16px}
 					        </c:if>
 					     </c:url>
 					      
-					      <c:url var="next" value="getMian">
+					      <c:url var="next" value="getAdmin">
 					        <c:param name="page" value="${page+1}"/>
 					        <c:if test="${search_name != ''}">
 					      	<c:param name="search_name" value="${search_name}"/>
@@ -282,7 +284,7 @@ height:25px; font-size:16px}
  <!-- 테이블  끝  -->                                   
 
                     
-                          <form action="getMian" method="get">       
+                          <form action="getAdmin" method="get">       
                           <div class="d-flex justify-content-end mb-3">
 						      <div class="input-group">
 						         <input type="text" class="form-control" placeholder="작성자를 입력하세요" name="search_name" id="Search">

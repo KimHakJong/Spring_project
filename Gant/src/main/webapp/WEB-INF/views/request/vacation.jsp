@@ -7,7 +7,6 @@
  <meta charset="utf-8">
 <title>초과근무 신청서</title>
 
-
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" />  
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
@@ -74,8 +73,9 @@
          }); 
     	  
          //submit click 이벤트 
-         $(".btn.btn-dark.btn-block").click(function(){
-		    	//공백 검사
+         $("#submit").click(function(){
+		    	
+        	//공백 검사 
          	if($("#startDate").val() == ""){
 		    		alert('휴가 시작일을 선택하세요.');
 		    		$("#startDate").focus();
@@ -112,7 +112,13 @@
 		    		$("#details").focus();
 					return false;
 		    	}
-      	
+         	
+         	
+         	if($("#reference_person").val() == ""){
+	    		alert('참조자를 선택하세요');
+				return false;
+	    	}
+         
 		  });
          
          // 휴가 시작날짜 입력시 유효성 검사
@@ -252,15 +258,22 @@
                    //직접입력을 누를 때 나타남
                   if($("#division").val() == "direct") {
                       $("#selboxDirect").show();
-                      
-                  }  else {
-                	 
+                      $('#selboxDirect').prop('required', true);
+                      $('#division').removeProp('required');
+                  }  else {                	 
                 	  $("#selboxDirect").hide();
-                      
+                	  $('#selboxDirect').removeProp('required');
+                	  $('#division').prop('required', true);
                   }
               })    
-         
-    
+              
+              //모달 스크롤 
+              $(document).ready(function() {
+            	  if ($("#myModal .modal-body table tbody tr").length > 5) {
+            	    $("#myModal .modal-body").animate({ scrollTop: $("#myModal .modal-body table tbody tr:last-child").position().top }, 1000);
+            	  }
+            	});
+
     });
       
       //명단검색에서 체크한 사람을 #reference_person에 넣는다.
@@ -386,6 +399,22 @@ width: 20px
     padding-bottom:5px
 }
 
+#myModal .modal-body {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+
+#myModal .modal-body::-webkit-scrollbar {
+  width: 8px;
+  background-color: #f5f5f5;
+}
+
+#myModal .modal-body::-webkit-scrollbar-thumb {
+  background-color: #b8d3e4;
+  border-radius: 20px;
+}
+
 </style>
 </head>
 
@@ -415,6 +444,13 @@ width: 20px
                                     <button class="nav-link active" id="nav-contact-tab" data-bs-toggle="tab"
                                         data-bs-target="#nav-contact" type="button" role="tab"
                                         aria-controls="nav-contact" aria-selected="true"  onclick="location.href='writeOvertime'">작성하기</button>
+                                    
+                                    <c:if test="${department == '인사부' || admin == 'true' }">
+                                     <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab"
+                                        data-bs-target="#nav-contact" type="button" role="tab"
+                                        aria-controls="nav-contact" aria-selected="false"  onclick="location.href='getAdmin'">관리자</button>
+                                    </c:if> 
+                                    
                                 </div>
                             </nav>
                             <div class="tab-content pt-3" id="nav-tabContent">
@@ -427,7 +463,7 @@ width: 20px
 			          <h4 class="card-title" style="color: white">휴가신청서</h4>
 			        </div>
 			        <div class="card-body">
-			  <form action="OvertimeRequest.att" method="get" name="boardform">
+			  <form action=vacationAction method="post">
 			     
 			   <div class="form-group">
 			    <label for="Classification">서류선택</label>
@@ -443,7 +479,7 @@ width: 20px
 			    <div class="form-group">
 			    <label for="Classification">휴가종류</label>
 			
-			                                <select class="form-control" 
+			                                <select class="form-control"  required
 			                                    aria-label="Floating label select example" name="division" id="division">
 			                                    <option value="" selected>선택</option>
 			                                    <option value="연차">연차</option>
@@ -451,10 +487,11 @@ width: 20px
 			                                    <option value="출산휴가">출산휴가</option>
 			                                    <option value="direct">직접입력</option>
 			                                </select>
-			                                <input type="text" class="form-control" id="selboxDirect" name="selboxDirect"/>
-			                                                            
+			                                &nbsp; 
+			                                <input type="text" class="form-control" id="selboxDirect" name="division_direct">                                               
 			   </div>   
-			     
+			  
+		    
 			   <div class="form-group">
 			    <label for="vacation">휴가기간</label>
 			    <div class="input-group mb-3">
@@ -493,7 +530,7 @@ width: 20px
 			
 			   </div> 
 			   
-			      
+			    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">  
 			    <div class="form-group">
 			    <button type="submit" class="btn btn-primary m-2 float-right" id="submit">신청</button>
 			     <button type="button" class="btn btn-danger m-2 float-right" onclick="location.href='getMian'">취소</button>
@@ -521,7 +558,7 @@ width: 20px
 							</div>
 						
 				
-				   <div style="width:100%; height:200px; overflow:auto">
+				   <div>
 			        <table class="table">
 			         <thead>
 			         <tr>
