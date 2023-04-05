@@ -6,6 +6,8 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.gant.myhome.domain.Members;
+import com.gant.myhome.domain.Overtime;
+import com.gant.myhome.domain.Vacation;
 
 
 
@@ -17,11 +19,67 @@ import com.gant.myhome.domain.Members;
 @Mapper
 public interface RequestMapper {
 
-	List<Members> getMembersList();
+	List<Members> getMembersList(String id);
 
-	int getMembersCount();
+	int getMembersCount(String id);
 
 	List<Members> MemberSearchList(String search_name);
+
+	int insertOvertime(Overtime overtime);
+
+	int OvertimePaperNum();
+
+	int OvertimeConditionreInsert(Map<String,Object> map);
+
+	int insertVacation(Vacation vacation);
+
+	int VacationPaperNum();
+
+	int VacationConditionreInsert(Map<String, Object> map);
+
+	List<Integer> getPaperNum(String id);
+
+	List<Map<String, Object>> getPaperList(Map<String, Object> map);
+
+	List<Map<String, Object>> getOnlyPaperList(Map<String, Object> map);
+
+	int getListCount(Map<String, Object> map);
+
+	List<Integer> getSendPaperNum(String id);
+
+	int getSendListCount(Map<String, Object> map);
+
+	String selectCondition(Map<String, Object> map);
+
+	Overtime selectOvertime(int paper_num);
+
+	List<Map<String, Object>> selectReferencePersonList(Map<String, Object> map);
+
+	Vacation selectVacation(int paper_num);
+
+	int updateReferencePersonCondition(Map<String, Object> map);
+
+	List<String> getConditionList(Map<String, Object> map);
+
+	int updateCondition(Map<String, Object> map);
+
+	int updateVacationNum(Map<String, Object> map);
+
+	Members SelectMember(String id);
+
+	List<Integer> getAllPaperNum();
+
+	int getAllListCount(String table_name);
+
+	int getSearchListCount(String search_name);
+
+	List<String> getSearchId(String search_name);
+
+	int delete(Map<String, Object> map);
+
+
+
+	
 
 	
 }

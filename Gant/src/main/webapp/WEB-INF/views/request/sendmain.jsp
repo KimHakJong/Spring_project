@@ -44,7 +44,7 @@
     	 
     	 
     	  $('.condition').each(function() {
-    		    
+  		    
     		  // 결재상태에따라 결재상태 글자색을 변경한다.
     		  var condition = $(this).text();
 
@@ -74,24 +74,25 @@
                         <div class="rounded h-100 p-4">
                             <nav>
                                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                    <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab"
-                                        data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home"
-                                        aria-selected="true" onclick="location.href='getMian'">받은결재함</button>
-                                        
+                                
                                     <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab"
                                         data-bs-target="#nav-profile" type="button" role="tab"
-                                        aria-controls="nav-profile" aria-selected="false" onclick="location.href='sendMain'">보낸결재함</button>
-                                        
+                                        aria-controls="nav-profile" aria-selected="false" onclick="location.href='getMian'">받은결재함</button>
+                                
+                                    <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab"
+                                        data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home"
+                                        aria-selected="true" onclick="location.href='sendMain'">보낸결재함</button>
+                                                                                                         
                                     <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab"
                                         data-bs-target="#nav-contact" type="button" role="tab"
                                         aria-controls="nav-contact" aria-selected="false"  onclick="location.href='writeOvertime'">작성하기</button>
-                                
+                                    
                                     <c:if test="${department == '인사부' || admin == 'true' }">
                                      <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab"
                                         data-bs-target="#nav-contact" type="button" role="tab"
                                         aria-controls="nav-contact" aria-selected="false"  onclick="location.href='getAdmin'">관리자</button>
                                     </c:if> 
-                                
+                                           
                                 </div>
                             </nav>
                             <div class="tab-content pt-3" id="nav-tabContent">
@@ -100,9 +101,9 @@
 						         <button class="btn btn-primary dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown"
 						            aria-expanded="false"></button>
 						         <ul class="dropdown-menu" aria-labelledby="filterDropdown">
-						            <li><a class="dropdown-item" href="getMian">전체</a></li>
-						            <li><a class="dropdown-item" href="getMian?only=휴가신청서">휴가신청서</a></li>
-						            <li><a class="dropdown-item" href="getMian?only=초과근무신청서">초과근무신청서</a></li>
+						            <li><a class="dropdown-item" href="sendMain">전체</a></li>
+						            <li><a class="dropdown-item" href="sendMain?only=휴가신청서">휴가신청서</a></li>
+						            <li><a class="dropdown-item" href="sendMain?only=초과근무신청서">초과근무신청서</a></li>
 						         </ul>
 						      </div>
                              
@@ -124,15 +125,17 @@
 								    <c:forEach var="b" items="${paper_list}" >
 								    <tr>
 								     <td><c:out value="${b.RNUM}" /></td>
-								     								     
+								     
+								   							     
 								    <td><c:out value="${b.NAME}" /></td>
-								    								    
-									   <c:url var="detail" value="getDetail">
-								        <c:param name="paper_num" value="${b.PAPER_NUM}"/>
-								        <c:param name="classification" value="${b.CLASSIFICATION}"/>
-								       </c:url>							       
+								    
+										  <c:url var="detail" value="getDetail">
+									        <c:param name="paper_num" value="${b.PAPER_NUM}"/>
+									        <c:param name="classification" value="${b.CLASSIFICATION}"/>
+									        <c:param name="send" value="send"/>
+									      </c:url>								  
 								     <td>
-								     <a href="${detail}" ><c:out value="${b.CLASSIFICATION}"/></a>
+								     <a href="${detail}" ><c:out value="${b.CLASSIFICATION}"/></a> 
 								     </td>
 								     
 								     <td><c:out value="${b.WRITE_DATE}"/></td>
@@ -180,9 +183,9 @@ height:25px; font-size:16px}
 				    </li>
 				  </c:if>
 				  
-				  <%-- 1페이지보다 크면: 이전버튼 누르면 page값 ,board/getMian으로 보냄 --%>
+				  <%-- 1페이지보다 크면: 이전버튼 누르면 page값 ,board/sendMian으로 보냄 --%>
 				  <c:if test="${page>1}">
-				    <c:url var="first" value="getMian">
+				    <c:url var="first" value="sendMain">
 				    	<c:param name="page" value="${1}"/>
 				    	<c:if test="${search_name != ''}">
 					      	<c:param name="search_name" value="${search_name}"/>
@@ -192,7 +195,7 @@ height:25px; font-size:16px}
 					    </c:if>
 				    </c:url>
 				    
-				   	<c:url var="back" value="getMian">
+				   	<c:url var="back" value="sendMain">
 				        <c:param name="page" value="${page-1}"/>
 				        <c:if test="${search_name != ''}">
 					      	<c:param name="search_name" value="${search_name}"/>
@@ -219,9 +222,9 @@ height:25px; font-size:16px}
 				      </li>
 				    </c:if>
 			       
-				    <%--다른 페이지는 누르면 검색필드,검색어,페이지들고 getMian.bo갔다온다 --%>
+				    <%--다른 페이지는 누르면 검색필드,검색어,페이지들고 sendMian.bo갔다온다 --%>
 				    <c:if test="${i != page}">
-				      <c:url var="move" value="getMian">
+				      <c:url var="move" value="sendMain">
 				        <c:param name="page" value="${i}"/>
 				        <c:if test="${search_name != ''}">
 					      	<c:param name="search_name" value="${search_name}"/>
@@ -246,9 +249,9 @@ height:25px; font-size:16px}
 				      </li>
 				    </c:if>
 				    
-					    <%--최대페이지미만: 다음 버튼누르면 page+1값, 검색필드, 검색어 들고 getMian.bo 갔다옴 --%>
+					    <%--최대페이지미만: 다음 버튼누르면 page+1값, 검색필드, 검색어 들고 sendMian.bo 갔다옴 --%>
 					    <c:if test="${page < maxpage}">
-					      <c:url var="last" value="getMian">
+					      <c:url var="last" value="sendMain">
 					      	<c:param name="page" value="${maxpage}"/>
 					      	<c:if test="${search_name != ''}">
 					      	<c:param name="search_name" value="${search_name}"/>
@@ -258,7 +261,7 @@ height:25px; font-size:16px}
 					        </c:if>
 					     </c:url>
 					      
-					      <c:url var="next" value="getMian">
+					      <c:url var="next" value="sendMain">
 					        <c:param name="page" value="${page+1}"/>
 					        <c:if test="${search_name != ''}">
 					      	<c:param name="search_name" value="${search_name}"/>
@@ -282,14 +285,7 @@ height:25px; font-size:16px}
  <!-- 테이블  끝  -->                                   
 
                     
-                          <form action="getMian" method="get">       
-                          <div class="d-flex justify-content-end mb-3">
-						      <div class="input-group">
-						         <input type="text" class="form-control" placeholder="작성자를 입력하세요" name="search_name" id="Search">
-						         <button class="btn btn-primary" type="submit">검색</button>
-						      </div>
-						   </div>
-                          </form>
+                          
                             
                             </div>
                         </div>

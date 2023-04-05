@@ -39,6 +39,7 @@ public class SecuerityConfig extends WebSecurityConfigurerAdapter {
 		          .antMatchers("/member/findpassok").permitAll()
 		          .antMatchers("/member/findpassokProcess").permitAll()
 		          .antMatchers("/member/info").access("hasRole('ROLE_ADMIN')")
+		          .antMatchers("/request/getAdmin").access("hasRole('ROLE_ADMIN')")
 		          .antMatchers("/**").access("hasAnyRole('ROLE_MEMBER','ROLE_ADMIN')");
 		
 		http.formLogin().loginPage("/member/login")

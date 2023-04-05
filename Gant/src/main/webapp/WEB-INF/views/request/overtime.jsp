@@ -50,7 +50,7 @@
           });  
             
             //submit click 이벤트 
-            $(".btn.btn-dark.btn-block").click(function(){
+            $("#submit").click(function(){
 		    	//공백 검사
             	if($("#overtime_date").val() == ""){
 		    		alert('근무일자를 선택하세요.');
@@ -81,6 +81,11 @@
 		    		$("#overtime_reason").focus();
 					return false;
 		    	}
+            	
+            	if($("#reference_person").val() == ""){
+    	    		alert('참조자를 선택하세요');
+    				return false;
+    	    	}
             	
   		  });
             
@@ -157,7 +162,11 @@
         	});  
             
            
-         
+            $(document).ready(function() {
+            	  if ($("#myModal .modal-body table tbody tr").length > 5) {
+            	    $("#myModal .modal-body").animate({ scrollTop: $("#myModal .modal-body table tbody tr:last-child").position().top }, 1000);
+            	  }
+            	});
     
     });
       
@@ -284,6 +293,21 @@ width: 20px
     padding-bottom:5px
 }
 
+#myModal .modal-body {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+#myModal .modal-body::-webkit-scrollbar {
+  width: 8px;
+  background-color: #f5f5f5;
+}
+
+#myModal .modal-body::-webkit-scrollbar-thumb {
+  background-color: #b8d3e4;
+  border-radius: 20px;
+}
+
 </style>
 </head>
 
@@ -313,6 +337,13 @@ width: 20px
                                     <button class="nav-link active" id="nav-contact-tab" data-bs-toggle="tab"
                                         data-bs-target="#nav-contact" type="button" role="tab"
                                         aria-controls="nav-contact" aria-selected="true"  onclick="location.href='writeOvertime'">작성하기</button>
+                                
+                                    <c:if test="${department == '인사부' || admin == 'true' }">
+                                     <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab"
+                                        data-bs-target="#nav-contact" type="button" role="tab"
+                                        aria-controls="nav-contact" aria-selected="false"  onclick="location.href='getAdmin'">관리자</button>
+                                    </c:if> 
+                                
                                 </div>
                             </nav>
                             <div class="tab-content pt-3" id="nav-tabContent">
@@ -325,7 +356,7 @@ width: 20px
 			          <h4 class="card-title" style="color: white">초과근무신청서</h4>
 			        </div>
 			        <div class="card-body">
-			  <form action="OvertimeRequest.att" method="get" name="boardform">
+			  <form action="overtimeAction" method="post">
 			     
 			   <div class="form-group">
 			    <label for="Classification">서류선택</label>
@@ -379,7 +410,7 @@ width: 20px
 			
 			   </div> 
 			   
-			      
+			    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">  
 			    <div class="form-group">
 			    <button type="submit" class="btn btn-primary m-2 float-right" id="submit">신청</button>
 			     <button type="button" class="btn btn-danger m-2 float-right" onclick="location.href='getMian'">취소</button>
@@ -407,7 +438,7 @@ width: 20px
 							</div>
 						
 				
-				   <div style="width:100%; height:200px; overflow:auto">
+				   <div>
 			        <table class="table">
 			         <thead>
 			         <tr>
@@ -431,7 +462,7 @@ width: 20px
 			         <td>${b.department}</td>
 			         </tr>
 			         </c:forEach>
-			         
+	 
 			         </c:if>
 			         <%-- 회원이 없을때 --%>
 			         <c:if test="${membercount == 0}">
