@@ -415,6 +415,7 @@ width: 20px
   border-radius: 20px;
 }
 
+
 </style>
 </head>
 
@@ -537,7 +538,11 @@ width: 20px
 			    </div>
 			  </form>
 			  
-			
+<style>
+.modal-footer{
+    border-top:none;
+}
+</style>			
    <!-- Modal -->
 			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 			  <div class="modal-dialog" role="document">
@@ -554,19 +559,19 @@ width: 20px
 							
 						    <div class="input-group mb-3" id="search_group">      
 								<input type="text" class="form-control" id="search_name" placeholder="이름을 검색하세요">
-								<button  class="btn btn-primary">🔍︎</button>						
+								<button  class="btn btn-outline-primary">🔍︎</button>						
 							</div>
 						
 				
 				   <div>
 			        <table class="table">
-			         <thead>
+
 			         <tr>
 			         <th>체크</th>
 			         <th>이름</th>
 			         <th>부서</th>
 			         </tr>
-			         </thead>
+
 			         <tbody id="tbody">
 			         <%-- 회원이 있을때 --%>
 			        
@@ -576,7 +581,9 @@ width: 20px
 			         <c:forEach var="b" items="${memberlist}"  varStatus="vs">    
 			         <tr>
 			         <td>
-			         <input type="checkbox" name="memberlist" value="${b.name},${b.id}">
+			         <div class="form-check">
+			         <input type="checkbox" name="memberlist" value="${b.name},${b.id}" class="form-check-input">
+			         </div>
 			         </td>
 			         <td>${b.name}</td>
 			         <td>${b.department}</td>
@@ -593,8 +600,8 @@ width: 20px
 			        </div>
 			      </div>
 			      <div class="modal-footer">
-			        <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
-			        <button type="button" class="btn btn-primary" data-dismiss="modal" id="modalSubmit">입력</button>
+			        <button type="button" class="btn btn-outline-danger" data-dismiss="modal">닫기</button>
+			        <button type="button" class="btn btn-outline-primary" data-dismiss="modal" id="modalSubmit">입력</button>
 			      </div>
 			    </div>
 			  </div>

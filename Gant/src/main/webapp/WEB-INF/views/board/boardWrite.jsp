@@ -43,14 +43,8 @@ $(document).ready(function(){
 		
 		//readURL 함수
 		 function readURL(input) {
-
-		        if (input.files && input.files[0]) {
-		        let reader = new FileReader();
-		        reader.onload = function (e) {
-		                $('#cover').attr('src', e.target.result);        //cover src로 붙여지고
-		                $('#fileName').val(input.files[0].name);    //파일선택 form으로 파일명이 들어온다
-		            }
-	          reader.readAsDataURL(input.files[0]);
+		        if (input.files && input.files[0]) {	               
+		                $('#fileName').val(input.files[0].name);    //파일선택 form으로 파일명이 들어온다		        	          
 		        }
 		    }
 

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.gant.myhome.domain.Members;
+import com.gant.myhome.domain.Note;
 import com.gant.myhome.domain.Overtime;
 import com.gant.myhome.domain.Vacation;
 import com.gant.myhome.mybatis.mapper.RequestMapper;
@@ -283,6 +284,10 @@ public class RequestServicelmpl implements RequestService {
 		map.put("classification", classification);
 		return dao.delete(map);
 	}
+
+
+
+
 
 
 

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.gant.myhome.domain.Members;
+import com.gant.myhome.domain.Note;
 import com.gant.myhome.domain.Overtime;
 import com.gant.myhome.domain.Vacation;
 
@@ -97,6 +98,7 @@ public interface RequestService {
 	//해당 문서번호에 해당하는 문서를 삭제한다.
 	int delete(int paper_num, String classification);
     
+	
 
 	
 	
