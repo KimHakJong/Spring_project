@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gant.myhome.mybatis.mapper.FFileinfoMapper">
+	
+	<insert id="insert">
+		insert into f_fileinfo 
+		(file_num, file_name, extension, included_folder_num, file_save_path) 
+		values(#{file_num}, #{file_name}, #{extension}, #{included_folder_num}, #{file_save_path})
+	</insert>
+	
+	<update id="update">
+		update f_fileinfo 
+		set file_name = #{name} 
+		where file_num = #{num} 
+	</update>
+	
+	<select id="selectAllFileInFolder" resultType="ffileinfo">
+		select file_name, extension, file_save_path
+		from f_fileinfo
+		where included_folder_num in (select folder_num 
+									  from f_folder 
+							  		  where p_no = #{p_no}
+								      and folder_path like #{folder_path}||'%')		
+	</select>
+	
+	<update id="updateLocation">
+		update f_fileinfo 
+		set included_folder_num = (select folder_num 
+								   from f_folder 
+								   where p_no = #{p_no} 
+								   and folder_path = #{folder_path} )
+		where file_num = #{file_num}
+	</update>
+</mapper>

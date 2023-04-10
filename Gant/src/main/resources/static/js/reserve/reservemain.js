@@ -209,7 +209,6 @@
 		});
 		
 //예약확인모달 시작
-
 //예약수정모달 시작
 		$("#detail_to_update").click(function(){//수정: 예약번호보냄
 			goupdate = true;
@@ -221,6 +220,7 @@
 				type : "post",
 				data : { "num" : num },
 				dataType : "json",
+				async: false,
 				beforeSend : function(xhr)
 		  		{   //데이터를 전송하기 전에 헤더에 csrf값을 설정합니다.
 		    			xhr.setRequestHeader(header, token);			
@@ -276,8 +276,9 @@
 	   				if(compare_now > dayval || day==""){
 	    				$(".update_time").css('display','none');
 	   				}else{
-	   					$("#start_time2").val((rdata.start_time.substring(0,2)*2) + (rdata.start_time.substring(3,5)/30));
-		    			$("#end_time2").val((rdata.end_time.substring(0,2)*2) + (rdata.end_time.substring(3,5)/30)-1);
+	   					$("#start_time2").val( (rdata.start_time.substring(0,2)*2) + ( rdata.start_time.substring(3,5)/30) );
+		    			$("#end_time2").val( (rdata.end_time.substring(0,2)*2) + ( (rdata.end_time.substring(3,5)/30)-1) );
+		    			updatemodalon=false;
 	   					modal_loadTime(resource_name,day,dayval,compare_now);
 		    			$(".update_time").css('display','inline-block');
 		    		}
@@ -285,6 +286,8 @@
 		    		//전에 예약했던 시간 보냄
 				}//success
 			});//ajax
+			
+		    updatemodalon=true;
 		    $("#reserve_update").modal("show");
 	   	});//detail_to_update 	
 	   	
@@ -543,6 +546,7 @@
 	   			type: "post",
 	   			data : {"resource_name" : resource_name, "day" : day},
 	   			dataType : "json",
+	   			async: false,
 	   			beforeSend : function(xhr)
 	  			 {   //데이터를 전송하기 전에 헤더에 csrf값을 설정합니다.
 	    			xhr.setRequestHeader(header, token);			
@@ -606,7 +610,7 @@
 						$(this).addClass('check');
 						$(this).append('<img src="../resources/image/reserve/check.png">');
 					}else{ //새로 체크한 것의 좌우 옆옆이 체크한 것이 없으면 경고창!
-						alert("연속된 예약시간으로 체크해주세요");
+							alert("연속된 예약시간으로 체크해주세요");
 				}				
 				}else if(goupdate==true){
 					if($(this).next().next().attr('class')=='update_time check' || $(this).prev().prev().attr('class')=='update_time check'){
@@ -614,7 +618,9 @@
 						$(this).addClass('check');
 						$(this).append('<img src="../resources/image/reserve/check.png">');
 					}else{ //새로 체크한 것의 좌우 옆옆이 체크한 것이 없으면 경고창!
-						alert("연속된 예약시간으로 체크해주세요");
+						if(updatemodalon==true){
+							alert("연속된 예약시간으로 체크해주세요");
+						}
 					}
 				}
 			}else{
