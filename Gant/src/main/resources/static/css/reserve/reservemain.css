@@ -28,7 +28,9 @@
 	font-weight:bold;
 	display:none;
 }
-
+#add_resource:focus{
+    box-shadow: 0 0 0 0.25rem #33c43c7d;
+}
 .show_date {
     display: inline-block;
     width: 200px;
@@ -67,6 +69,10 @@
     font-weight: bold;
     border-radius: 5px;
 }
+.head_button1:focus, .head_button2:focus{
+    box-shadow: 0 0 0 0.25rem rgba(0,156,255,0.5);	
+}
+
 button.head_button1 {
     color: #26abff;
     background: white;

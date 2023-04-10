@@ -7,7 +7,8 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-
+<meta http-equiv="page-enter" content="blendTrans(duration=0.3)">
+<meta http-equiv="page-exit" content="blendTrans(duration=0.3)">
 	<link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="../css/reserve/style.css">
@@ -24,6 +25,11 @@
 #mylist_head span {
   color: black;
   font-size: 18px;
+}
+#mylist_head input:focus{
+	border:2px solid #26abff;
+	outline:none;
+	
 }
 #mylist_head span:first-child{
   font-weight: bold;
@@ -91,6 +97,16 @@ a, a:hover {
         display: inline-block;
       	cursor:pointer;
         width: 36px; 
+}
+#notable{
+	margin-top:39px;
+	text-align:center;
+	height:350px;
+	border:1px solid #ced4da;
+}
+#notable > h4{
+	height:100%;
+	line-height:350px;
 }
 .list_table {
         	color:black !important;
@@ -297,6 +313,7 @@ $(document).ready(function(){
 	<button type="submit">검색</button>
 	</div>
 	</form>
+						<c:if test="${!empty list}">
 						<table class="table list_table">
 						  <thead>
 						    <tr>
@@ -309,7 +326,7 @@ $(document).ready(function(){
 						    </tr>
 						  </thead>
 						  <tbody>
-						  <c:if test="${!empty list}">
+						  
 						  <c:forEach var="rs" items="${list}">
 						   <tr class="alert" role="alert">
 						      <th scope="row">${rs.name}</th>
@@ -344,12 +361,14 @@ $(document).ready(function(){
 							</td>
 						    </tr>
 						  </c:forEach>
-						  </c:if>
-						  <c:if test="${empty list}">
-						  <h4>예약내역이 없습니다.</h4>
-						  </c:if>
 						  </tbody>
 						</table>
+						 </c:if>
+						 <c:if test="${empty list}">
+						 <div id="notable">
+						 <h4>예약내역이 없습니다.</h4>
+						 </div>
+						 </c:if>
 
 	<button type="button" id="hidden_show"><img src="../resources/image/reserve/hiddenshowicon.png"></button>
 	</div>

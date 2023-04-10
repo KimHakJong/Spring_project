@@ -4,6 +4,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta http-equiv="page-enter" content="blendTrans(duration=0.3)">
+<meta http-equiv="page-exit" content="blendTrans(duration=0.3)">
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <link href="../resources/css/reserve/reservemain.css" rel="stylesheet">
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -58,7 +60,7 @@
 						<c:if test="${types==null}">
 							<option selected value="">자원을 추가하세요</option>
 							<script>
-								alert("자원을 추가하세요");
+								
 							</script>
 						</c:if>
 					</select>
@@ -122,7 +124,6 @@
 		  	</div>
 		  </div>
 		</div>
-	</div>
 <!-- 해당예약확인 모달 끝 -->
 <!-- 예약수정모달 시작 -->
 	<div class="modal" id="reserve_update">
@@ -357,6 +358,9 @@
 //관리자인 경우 : 자원추가버튼 보임
 if('${admin}'=='true'){
 	$("#add_resource").css('display','block');
+	if(!'${types}'){
+		alert("자원을 추가하세요");
+	}
 }
 //자원추가 성공
 if('${add_item}'==1){

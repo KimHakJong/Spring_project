@@ -14,6 +14,7 @@ display:inline-block;
  overflow:auto;
  scrollbar-width: thin;
 scrollbar-color: #26abff transparent;	
+color:black;
  }
  
 .organization::-webkit-scrollbar {

@@ -40,7 +40,7 @@
 	where id = #{id}
   </select>
   
-    <sql id="search_">
+   <sql id="search_">
    <if test="searchfield != null">
 	  and
 		<choose>
