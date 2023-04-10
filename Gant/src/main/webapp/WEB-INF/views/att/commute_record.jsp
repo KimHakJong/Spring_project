@@ -26,7 +26,7 @@ th,td{
 text-align: center;
 }
 
-#submit,.mb-0,.card-header.bg-primary.text-white{
+.mb-0,.card-header.bg-primary.text-white{
 	background-color:009CFF !important;
 	border-color : 009CFF
 }
@@ -36,19 +36,13 @@ text-align: center;
 	border-radius: 0px 4px 4px 0px;
 }
 
-thead{
-	background-color:009CFF;
-	color:fff;
-	opacity:0.8
-}
+
 
 .btn-primary{
 	opacity:0.8
 }
 
-td{
-	font-weight:500
-}
+
 </style>
 <script>
     $(document).ready(function () {
@@ -117,7 +111,7 @@ td{
 							<div class="form-group">
 							<div class="input-group mb-3">
 						    <input type="text" class="form-control" name="Date_Search" id="Date_Search" placeholder="날짜를 선택하세요">
-						    <button type="submit" class="btn btn-primary" id="submit">검색</button>
+						    <button type="submit" class="btn btn-outline-primary" id="submit">검색</button>
 						   </div>
 						   
 							</div>

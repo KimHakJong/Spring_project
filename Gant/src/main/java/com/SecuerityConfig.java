@@ -26,6 +26,10 @@ public class SecuerityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		
+		//네이버 에디터를 사용하기위한 코드 
+		http.headers().frameOptions().sameOrigin();   
+		
+		
 		http.authorizeRequests()
 		          .antMatchers("/resources/**/**").permitAll()
 		          .antMatchers("/member/login").permitAll()
@@ -41,6 +45,7 @@ public class SecuerityConfig extends WebSecurityConfigurerAdapter {
 		          .antMatchers("/member/info").access("hasRole('ROLE_ADMIN')")
 		          .antMatchers("/request/getAdmin").access("hasRole('ROLE_ADMIN')")
 		          .antMatchers("/**").access("hasAnyRole('ROLE_MEMBER','ROLE_ADMIN')");
+		     
 		
 		http.formLogin().loginPage("/member/login")
 		                .loginProcessingUrl("/member/loginProcess")

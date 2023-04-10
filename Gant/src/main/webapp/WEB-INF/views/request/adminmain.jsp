@@ -7,7 +7,7 @@
  <meta charset="utf-8">
 
     <link href="${pageContext.request.contextPath}/resources/css/home/bootstrap.min.css" rel="stylesheet"> 
-    <link href="${pageContext.request.contextPath}/resources/css/home/style.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/resources/css/request/style.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
     <style>
     .d-flex.justify-content-end.mb-3{
@@ -30,6 +30,16 @@
 .dropdown{
     float:left
 }	
+
+.leftside.sidebar.pe-4.pb-3{
+    padding-left:0;
+     padding-top:0;
+}
+.navbar.bg-light.navbar-light{
+    padding-left:16px;
+    padding-right:16px;
+}
+
     </style>
 <script>
       $(document).ready(function () {   
