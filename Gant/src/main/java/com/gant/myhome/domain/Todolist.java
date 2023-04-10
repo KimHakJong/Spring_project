@@ -4,6 +4,13 @@ package com.gant.myhome.domain;
 public class Todolist {
 	
 	private int    board_num;
+	private int    p_no;
+	public int getP_no() {
+		return p_no;
+	}
+	public void setP_no(int p_no) {
+		this.p_no = p_no;
+	}
 	private String board_id;
 	private String board_name;
 	private String board_r_id;

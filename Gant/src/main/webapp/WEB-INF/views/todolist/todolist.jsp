@@ -7,10 +7,15 @@
 
 <%
 	int p_no = (Integer)request.getAttribute("p_no");
+
+	String status = (String)request.getAttribute("status");
+	
+	
+	
 	String p_name[] = null;
 	String p_id[] = null;
 			
-	System.out.println("todolist에 넘어오는 p_no 값 : " + p_no);
+	
 	
 	if(request.getAttribute("p_id") != null) {
 		p_id = (String [])request.getAttribute("p_id");
@@ -26,9 +31,20 @@
 <!DOCTYPE html>
 <html>
 
-<head>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/todolist/list.js"></script>
+
+<head>
+<script>
+	const result = "${result}";
+	
+	if(result == 'deleteSuccess'){
+		alert("삭제 성공입니다");
+	} else if(result =='updateSuccess'){
+		alert("회원 정보가 수정되었습니다.");
+	}
+</script>
+
 
 <meta name="_csrf" content="${_csrf.token}">
 <meta name="_csrf_header" content="${_csrf.headerName}">
@@ -39,13 +55,17 @@
 #loginid{
 	display: none;
 }
-.btn-outline-success{
-	width: 75px;
+.btn-link m-2{
+	
 }
 .btn-primary{
 float: right;}
+
 .col{
 	flex: 0.8 0 0 !important;
+}
+.row mb-3{
+	
 }
 
 
@@ -57,68 +77,71 @@ float: right;}
 <body>
 
 
+
 <jsp:include page="../home/side.jsp" />
 
 <script>
 var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
 
+var s = "${status}";
+
+
+$(document).ready(function(){
+	
+	if(s == 'r'){
+		$('#option1').prop('checked', true);
+	}
+	else if(s =='s'){
+		$('#option2').prop('checked', true);
+	}
+});
+
 </script>
 
-<script>
-
-
-
-</script>
-<script>
-
-</script>
 
 <div class="content">
 
-
 	<jsp:include page="../home/header2.jsp" />
-	
-	
 
-	
-	
-
+	<div class="container-fluid pt-4 px-4">		
     <div class="container">
     
-    				  <div class="btn-group" role="group">
-                  <input type="radio" class="btn-check" name="btnradio" id="btnradio1">
-                    <label class="btn btn-outline-primary" for="btnradio1">게시판</label>
-
-                    <input type="radio" class="btn-check" name="btnradio" id="btnradio2" checked="checked">
-                    <label class="btn btn-outline-primary" for="btnradio2">할일 리스트</label>
-
-                    <input type="radio" class="btn-check" name="btnradio" id="btnradio3" >
-                    <label class="btn btn-outline-primary" for="btnradio3" onclick="window.location.href='${pageContext.request.contextPath}/pcalendar/cal?p_no=<%=p_no %>';" >캘린더</label>
-                 </div>
+    	<div class="btn-group" role="group">
+	        <input type="radio" class="btn-check" name="btnradio" id="btnradio1">
+	        <label class="btn btn-outline-primary" for="btnradio1" onclick="window.location.href='${pageContext.request.contextPath}/filebox/home?p_no=<%=p_no %>';" >파일 보관함</label>
+	
+	        <input type="radio" class="btn-check" name="btnradio" id="btnradio2" checked="checked">
+	        <label class="btn btn-outline-primary" for="btnradio2">할일 리스트</label>
+	
+	        <input type="radio" class="btn-check" name="btnradio" id="btnradio3" >
+	        <label class="btn btn-outline-primary" for="btnradio3" onclick="window.location.href='${pageContext.request.contextPath}/pcalendar/cal?p_no=<%=p_no %>';" >캘린더</label>
+		</div>
+		
     	<br><br>
+    	
         <h1>To-Do List</h1>
+        
         <div class="row mb-3">
 		<div class="col">
-		    <label>
-		        <input type="radio" name="todo-type" class="btn-check" autocomplete="off">
-		        <span class="btn btn-success">받은 할일</span>
-		    </label>
-		    <label>
-		        <input type="radio" name="todo-type" class="btn-check" autocomplete="off">
-		        <span class="btn btn-danger">보낸 할일</span>
-		    </label>
-		</div>
+			<div class="btn-group" role="group">
+			
+		        <input type="radio" class="btn-check" name="options" id="option1" autocomplete="off">
+		        <label class="btn btn-outline-success" for="option1" onclick="window.location.href='${pageContext.request.contextPath}/todolist/receive?p_no=<%=p_no %>';">받은 할일</label>
+		    
+		    
+		        <input type="radio" class="btn-check" name="options" id="option2" autocomplete="off" >
+		        <label class="btn btn-outline-danger" for="option2" onclick="window.location.href='${pageContext.request.contextPath}/todolist/send?p_no=<%=p_no %>';">보낸 할일</label>
+		    </div>
+		  </div>
+		
             <div class="col-auto">
                 <form class="d-flex">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">검색</button>
+                    <button class="btn btn-outline-success" type="submit" style="width: 75px;">검색</button>
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                 </form>
 
-                
-
-                
             </div>
             <div class="col-auto">
 				<button type="button"   class="btn btn-primary" onclick="window.location.href='${pageContext.request.contextPath}/todolist/write?p_no=<%=p_no %>';" >할일 추가</button>
@@ -131,58 +154,66 @@ var header = $("meta[name='_csrf_header']").attr("content");
 		<table class="table table-striped">
 			<thead>
 				<tr>
-					<th colspan="3">할일 리스트</th>
+					<th colspan="3">할 일 리스트</th>
 					<th colspan="2">
-						<span>글 개수 : ${listcount }</span>
+						<span>할 일 개수 : ${listcount }</span>
 					</th>
 				</tr>
 				<tr>
 					<th><div>번호</div></th>
 					<th><div>제목</div></th>
-					<th><div>작성자</div></th>
-					<th><div>작성일</div></th>
-					<th><div>조회수</div></th>
+					<th><div>보낸 사람</div></th>
+					<th><div>기한</div></th>
+					<th><div>상태</div></th>
 	
 				</tr>
 			</thead>
 			<tbody>
       <c:set var="num" value="${listcount-(page-1) * limit }"/>
-      <c:forEach var="b" items="${boardlist }">
-      <tr>
+      <c:forEach var="b" items="${todolist }">
+      <tr>	
       <td><%--번호 --%>
          <c:out value="${num }"/><%-- num 출력 --%>
          <c:set var="num" value="${num-1 }"/> <%-- num= num-1의 의미 --%>
       </td>
       <td><%--제목 --%>
       <div>
-         <%--답변글 제목 앞에 여백 처리부분 --%>
-         <c:if test="${b.BOARD_RE_LEV !=0 }"><%--답글인경우 --%>
-            <c:forEach var="a" begin="0" end="${b.BOARD_RE_LEV*2 }" step="1">
-            &nbsp;	
-            </c:forEach>
-            <img src='${pageContext.request.contextPath}/resources/image/line.gif'>
-         </c:if>
-         <c:if test="${b.BOARD_RE_LEV ==0 }"><!--  원문 인경우 -->
-         	 &nbsp;
-         </c:if>
-         
-         <a href="detail?num=${b.BOARD_NUM }">
 
-               <c:out value="${b.BOARD_SUBJECT}" escapeXml="true"/> <!--  html태그를 화면에서 출력 -->
-				<span class="gray small">[<c:out value="${b.CNT}"/>]</span>
+         &nbsp;<%-- 1이면 send, 0이면 receive --%>
+         <% if(status.equals("s")) {%>
+         <a href="detail?num=${b.board_num }&s=1&p_no=<%=p_no %>">
+         <% } else {%>
+         	<a href="detail?num=${b.board_num }&s=0&p_no=<%=p_no %>">
+		<% }%>
+               <c:out value="${b.board_subject}" escapeXml="true"/> <!--  html태그를 화면에서 출력 -->
+				
             </a>
          </div>
       </td>
       
-      <td><div>${b.BOARD_NAME }</div></td>
-      <td><div>${b.BOARD_DATE }</div></td>
-      <td><div>${b.BOARD_READCOUNT }</div></td>
+      <td><div>${b.board_id }</div></td>
+      <td><div>~${b.deadline }</div></td>
+
+	<c:choose>
+		<c:when test="${b.state eq 'false'}">
+	 		<td>
+		      완료 <i class="bi bi-stop-circle" style="color:#DC3545"></i>				
+			</td>
+		</c:when>
+		<c:otherwise>
+			<td>
+		      진행중 <i class="bi bi-check-circle" style="color:#198754"></i>
+			</td>
+		</c:otherwise>
+	 </c:choose>
+
       </tr>
       </c:forEach>
       </tbody>
 		</table>
 		
 		<div class="center-block">
+				
 			<ul class="pagination justify-content-center">
 				<c:if test="${page<=1}">
 					<li class="page-item">
@@ -190,9 +221,19 @@ var header = $("meta[name='_csrf_header']").attr("content");
 					</li>
 				</c:if>
 				<c:if test="${page>1}">
-					<li class="page-item">
-						<a href="list?page=${page-1}" class="page-link">이전&nbsp;</a>
-					</li>
+
+					<% if(status.equals("s")) {%>
+						<li class="page-item">
+							<a href="send?p_no=${p_no}&page=${page-1}" class="page-link">이전&nbsp;</a>
+						</li>
+					<% } else {%>
+					
+					
+						<li class="page-item">
+							<a href="receive?p_no=${p_no}&page=${page-1}" class="page-link">이전&nbsp;</a>
+						</li>
+					<% }%>
+
 				</c:if>
 				
 				<c:forEach var="a" begin="${startpage}" end="${endpage}">
@@ -202,9 +243,18 @@ var header = $("meta[name='_csrf_header']").attr("content");
 						</li>
 					</c:if>
 					<c:if test="${a!=page }">
-						<li class="page-item">
-							<a href="list?page=${a}" class="page-link">${a}</a>
-						</li>
+					
+						<% if(status.equals("s")) {%>
+							<li class="page-item">
+								<a href="send?p_no=${p_no}&page=${a}" class="page-link">${a}</a>
+							</li>
+						<% } else {%>
+
+							<li class="page-item">
+								<a href="receive?p_no=${p_no}&page=${a}" class="page-link">${a}</a>
+							</li>
+						<% }%>
+
 					</c:if>
 				</c:forEach>
 				
@@ -214,9 +264,19 @@ var header = $("meta[name='_csrf_header']").attr("content");
 						</li>
 				</c:if>
 				<c:if test="${page < maxpage }">
-						<li class="page-item">
-							<a href="list?page=${page+1}" class="page-link">&nbsp;다음</a>
-						</li>
+					
+						<% if(status.equals("s")) {%>
+							
+							<li class="page-item">
+								<a href="send?p_no=${p_no}&page=${page+1}" class="page-link">&nbsp;다음</a>
+							</li>
+						<% } else {%>
+
+							<li class="page-item">
+								<a href="receive?p_no=${p_no}&page=${page+1}" class="page-link">&nbsp;다음</a>
+							</li>
+						<% }%>
+
 				</c:if>
 		
 			</ul>			
@@ -230,17 +290,9 @@ var header = $("meta[name='_csrf_header']").attr("content");
 	</c:if>
 	
 	
-
+	</div>
     </div>
-		<sec:authorize access="isAuthenticated()">
-			<sec:authentication property="principal" var="pinfo"/>
 
-		
-			<span id="loginid">${pinfo.username}</span>
-		
-			</sec:authorize>
-
-		<div class="container-fluid pt-4 px-4">		</div>
 </div>
 </body>
 </html>

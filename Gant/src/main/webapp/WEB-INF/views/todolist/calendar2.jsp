@@ -13,22 +13,7 @@
 	JSONArray list = (JSONArray)request.getAttribute("event");
 	String p_no = (String)request.getAttribute("p_no");
 	
-	/*System.out.println("list" + list);
-	System.out.println("p_no : " + p_no);
-	//System.out.println("list[0]" + list.get(0));
-	System.out.println("list.size()" + list.size());
-	
 
-	for (int i = 0; i < list.size(); i++){
-		JSONObject c = (JSONObject)list.get(i);
-		
-				
-		
-					
-		System.out.println("OBJECT " + list.get(i));
-
-
-	}*/
 %>
 	
 	
@@ -815,7 +800,7 @@ border-color: #009CFF !important;
 	    
     			<div class="btn-group" role="group">
                   <input type="radio" class="btn-check" name="btnradio" id="btnradio1">
-                    <label class="btn btn-outline-primary" for="btnradio1">게시판</label>
+                    <label class="btn btn-outline-primary" for="btnradio1" onclick="window.location.href='${pageContext.request.contextPath}/filebox/home?p_no=<%=p_no %>';" >파일 보관함</label>
 
                     <input type="radio" class="btn-check" name="btnradio" id="btnradio2" >
                     <label class="btn btn-outline-primary" for="btnradio2" onclick="window.location.href='${pageContext.request.contextPath}/todolist/receive?p_no=<%=p_no %>';">할일 리스트</label>

@@ -33,7 +33,7 @@ public class ProjectCalendarServicelmpl implements ProjectCalendarService {
 	public String getadminid(String id) {
 		
 		String ad = dao.getadminid(id);
-		System.out.println("추출전 id " + id + " admin 추출 " + ad);
+		
 		return ad;
 		
 	}
@@ -42,7 +42,7 @@ public class ProjectCalendarServicelmpl implements ProjectCalendarService {
 	public String gethostid(String p_no) {
 		
 		String host = dao.gethostid(p_no);
-		System.out.println("host 추출 값" + host);
+		
 		return host;
 		
 	}

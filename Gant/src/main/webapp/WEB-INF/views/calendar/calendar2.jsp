@@ -11,23 +11,7 @@
 
 <%
 	JSONArray list = (JSONArray)request.getAttribute("event");
-	/*
-	System.out.println("list" + list);
-	System.out.println("list[0]" + list.get(0));
-	System.out.println("list.size()" + list.size());
-	
 
-	for (int i = 0; i < list.size(); i++){
-		JSONObject c = (JSONObject)list.get(i);
-		
-				
-		
-		System.out.println("start : " + c.get("start"));
-			
-		System.out.println("OBJECT " + list.get(i));
-
-
-	}*/
 %>
 	
 	
@@ -775,16 +759,7 @@ border-color: #009CFF !important;
 
 	<jsp:include page="../home/header2.jsp" />
 	
-				<!--  <div class="btn-group" role="group">
-                  <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked="">
-                    <label class="btn btn-outline-primary" for="btnradio1">게시판</label>
 
-                    <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
-                    <label class="btn btn-outline-primary" for="btnradio2">할일 리스트</label>
-
-                    <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
-                    <label class="btn btn-outline-primary" for="btnradio3">캘린더</label>
-                 </div>-->
 		<sec:authorize access="isAuthenticated()">
 			<sec:authentication property="principal" var="pinfo"/>
 
