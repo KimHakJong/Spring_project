@@ -52,7 +52,7 @@ public class ProjectCalendarController {
        List<ProjectCalendar> list = calservice.getCalList(p_no);  
 	 	  
 	   
-	   System.out.println("todolist에서 받아온 p_no : " + p_no);
+	   
 	      
 	   for(ProjectCalendar c : list) {
 		   	   		   
@@ -69,7 +69,7 @@ public class ProjectCalendarController {
 		   jsonArr.add(jsonObj);
 
 	   }
-	   System.out.println(jsonArr);
+	   
 	   
 	   
 	   mv.addObject("event", jsonArr);
@@ -77,7 +77,7 @@ public class ProjectCalendarController {
 	   
 	   mv.setViewName("/todolist/calendar2");
 	   
-	   System.out.println(mv);  
+	     
 	   
 	   return mv;
 
@@ -106,7 +106,7 @@ public class ProjectCalendarController {
 	   
 	   calservice.add(c);
 	   
-	   System.out.println("일정 추가 메소드 호출함");
+	   
 	   
 	   return "redirect:cal";
 	   
@@ -127,7 +127,7 @@ public class ProjectCalendarController {
    @RequestMapping(value="/gethost")
    public String gethostid(@RequestParam("p_no") String p_no) {
 
-	   System.out.println(p_no);
+	   
 	   String host = calservice.gethostid(p_no);
 
 	   
@@ -141,7 +141,7 @@ public class ProjectCalendarController {
    					@RequestParam("id") String id,
    					@RequestParam("title") String title) {
 	   
-	   System.out.println("수정 메소드 시작");
+	   
 
 	   ProjectCalendar c = new ProjectCalendar();
 	   	   
@@ -157,7 +157,7 @@ public class ProjectCalendarController {
 	   result = calservice.update(c);
 	   
 	   if(result != 0)
-		   System.out.println("수정 성공");
+		   logger.info("수정성공");
 	   
 	   return "redirect:cal?p_no=" + p_no;
 	   

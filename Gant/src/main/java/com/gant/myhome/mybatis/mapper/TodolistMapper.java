@@ -12,14 +12,32 @@ public interface TodolistMapper {
 	
 		
 	
-	public List<Todolist> getTodolist(HashMap<String, Integer> map);
+	public List<Todolist> getTodolist(HashMap<String, Object> map);
 
 
 	public String get_id(int p_no);
 
 	public String get_name(int p_no);
 	
-	public int getListCount();
+	public int getListCount(int p_no);
+	
+	public void insertBoard(Todolist todolist);
+	
+	public List<Todolist> getTodolist2(HashMap<String, Object> map);
+
+	public List<Todolist> getTodolist3(HashMap<String, Object> map);
+
+
+	public int getSendListCount(int p_no, String id);
+
+
+	public Todolist getDetail(int num);
+	
+	
+	
+
+
+	public int boardDelete(Todolist todolist);
 	
 	
 
@@ -34,14 +52,13 @@ public interface TodolistMapper {
 	public int boardReply(Board board);
 	
 	public int boardModify(Board modifyboard);
-	
-	public int boardDelete(Board board);
+
 	
 	public int setReadCountUpdate(int num);
 	
 	public Board isBoardWriter(HashMap<String, Object> map);
 	
-	public void insertBoard(Board board);
+	
 	
 	public int boardReplyUpdate(Board board);
 	

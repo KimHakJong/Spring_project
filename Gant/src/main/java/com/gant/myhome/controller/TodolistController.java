@@ -1,19 +1,30 @@
 package com.gant.myhome.controller;
 
+import java.security.Principal;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gant.myhome.domain.Todolist;
+import com.gant.myhome.service.BoardService;
+import com.gant.myhome.service.ProjectCalendarService;
 import com.gant.myhome.service.TodolistService;
 
 
@@ -26,12 +37,17 @@ public class TodolistController {
    private static final Logger logger = LoggerFactory.getLogger(TodolistController.class);
    
    private TodolistService todolistservice;
+   private BoardService boardservice;
+   private ProjectCalendarService calservice;
 
       
    @Autowired
-   public TodolistController(TodolistService todolistservice) {
+   public TodolistController(TodolistService todolistservice, 
+		   BoardService boardService, ProjectCalendarService calservice) {
+	   
+	   this.calservice = calservice;
 	   this.todolistservice = todolistservice;
-
+	   this.boardservice = boardService;
    }
    
 	public static void init(HttpServletResponse response) {
@@ -42,33 +58,146 @@ public class TodolistController {
    
    @RequestMapping(value="/receive", method=RequestMethod.GET)
    public ModelAndView Todolist(ModelAndView mv, 
-		   						@RequestParam("p_no") int p_no, 
+		   						@RequestParam("p_no") int p_no,  Principal principal,
 		   						@RequestParam(value="p_mids", required = false) String p_id,
 		   						@RequestParam(value="p_mnames", required = false) String p_name,
 		   						@RequestParam(value="page", defaultValue="1", required=false) int page)  
    {
 	   
-	   String p_ids[], p_names[];
+	   String p_ids[], p_names[], ids[];
 	   
-		int limit = 10; 
+		p_id = get_id(p_no);
+		p_name = get_name(p_no);
+		   
+		p_ids = p_id.split(",");
+		p_names = p_name.split(",");
+	   
+		int limit = 10;
+		int check = 0;
 		
-		int listcount = todolistservice.getListCount();
+		int listcount = todolistservice.getListCount(p_no);
 		
+		List<Todolist> todolist = new ArrayList<>();
+		List<HashMap<String, Object>> r_list = new ArrayList<>();
+		
+		todolist = todolistservice.getTodolist2(p_no);
+				
+		String loginid = principal.getName();
+		
+				
+		for (Todolist todo : todolist) {
+	    	HashMap<String, Object> numlist = new HashMap<>();
+	    	
+	    	
+	    	if(todo.getBoard_r_id() != null)
+	    	{
+	    		ids = todo.getBoard_r_id().split(",");
+	    		check = 0;
+		    		for(int j=0;j<ids.length;j++) 
+		    		{
+
+		    			if(loginid.equals(ids[j])) {
+		    				check = 1;
+		    		}
+		    	}
+		    	
+		    	if(check == 1) {
+			    	numlist.put("board_num", todo.getBoard_num());
+			    	r_list.add(numlist);
+		    	}
+	    	}
+	   
+	    	
+		}
+		
+		
+		List<Todolist> todolist_tmp = new ArrayList<>();
+		todolist = new ArrayList<>();
+		
+		
+		for (HashMap<String, Object> map : r_list) {
+			int value = 0;
+		    for (Map.Entry<String, Object> entry : map.entrySet()) {
+		    	value = (Integer)entry.getValue();
+		    	
+		    	if(value != 0) {
+		    		System.out.println(value);
+			        todolist_tmp = todolistservice.getTodolist3(page, limit, p_no, value);
+			        todolist.addAll(todolist_tmp);
+		    	}
+		    }
+		}
+		
+		
+		listcount = r_list.size();
+
 		int maxpage = (listcount + limit - 1) / limit;
 		
-		int startpage = ((page-1) /10) *10 +1;
-		int endpage = startpage +10 -1;
+		int startpage = ((page-1) / 10) * 10 +1;
+		int endpage = startpage + 10 -1;
 		
 		if(endpage>maxpage)
 			endpage=maxpage;
 		
-		List<Todolist> todolist = todolistservice.getTodolist(page, limit, p_no);
+		String status = "r";
+		
+	   
+	   mv.addObject("p_no", p_no);
+	   mv.addObject("p_id", p_ids);
+	   mv.addObject("p_name", p_names);
+		mv.addObject("page",page);
+		mv.addObject("maxpage",maxpage);
+		mv.addObject("startpage",startpage);
+		mv.addObject("endpage",endpage);
+		mv.addObject("listcount",listcount);
+		mv.addObject("todolist",todolist);
+		mv.addObject("limit",limit);
+		mv.addObject("status", status);
+	   
+
+		
+	   logger.info("receive mv 결과" + mv);
+	   
+
+	   mv.setViewName("/todolist/todolist");
 	   	   
-	   p_id = get_id(p_no);
-	   p_name = get_name(p_no);
+	   return mv;
+
+	}
+   
+   @RequestMapping(value="/send", method=RequestMethod.GET)
+   public ModelAndView Todolist(ModelAndView mv, Principal principal,
+		   						@RequestParam("p_no") int p_no, 
+		   						@RequestParam(value="page", defaultValue="1", required=false) int page)  
+   {
+	   
+	   String p_ids[], p_names[];
+	   String id = principal.getName();
+	   
+		int limit = 10; 
+		
+		int listcount = todolistservice.getSendListCount(p_no, id);
+		
+		int maxpage = (listcount + limit - 1) / limit;
+		
+		int startpage = ((page-1) /10) * 10 +1;
+		int endpage = startpage + 10 -1;
+		
+		if(endpage>maxpage)
+			endpage=maxpage;
+		
+		
+		
+		List<Todolist> todolist = todolistservice.getTodolist(page, limit, p_no, id);
+	
+	   
+	   String p_id = get_id(p_no);
+	   String p_name = get_name(p_no);
 	   
 	   p_ids = p_id.split(",");
 	   p_names = p_name.split(",");
+	   
+	   String status = "s";
 	   
 	   
 	   mv.addObject("p_no", p_no);
@@ -81,9 +210,10 @@ public class TodolistController {
 		mv.addObject("listcount",listcount);
 		mv.addObject("todolist",todolist);
 		mv.addObject("limit",limit);
+		mv.addObject("status",status);
 	   
 	   
-	   System.out.println("mv 결과" + mv);
+	   logger.info("send mv 결과" + mv);
 	   
 
 	   mv.setViewName("/todolist/todolist");
@@ -92,20 +222,224 @@ public class TodolistController {
 
 	}
    
+	@GetMapping(value = "/write") 
+		public ModelAndView write(Principal principal, ModelAndView mv, 
+								@RequestParam("p_no") int p_no ) {			
    
-   
-private String get_name(int p_no) {
-	String name = todolistservice.get_name(p_no);
-	
-	return name;
-}
+		String id = principal.getName();
+		
+	    	    
+		String p_id = get_id(p_no);
+		String p_name = get_name(p_no);
+		   
+		String[] p_ids = p_id.split(",");
+		String[] p_names = p_name.split(",");
+	    
+	    mv.setViewName("todolist/write");
+	    
+	    mv.addObject("p_id", p_ids);
+	    mv.addObject("p_name", p_names);
+		
+		mv.addObject("id", id);
+		mv.addObject("p_no", p_no);
+		
+		
+		logger.info(id);
 
-private String get_id(int p_no) {
-	String id = todolistservice.get_id(p_no);
+		
+		return mv;
+	 
+	}
+	
+	@PostMapping("/add")
+	public String add(Todolist todolist,
+				@RequestParam("r_name") String r_id,
+				@RequestParam("p_no") int p_no){
+		
+
+		todolist.setBoard_r_id(r_id);
+		todolist.setState("true");
+		
+		todolistservice.insertBoard(todolist);
+
+		return "redirect:receive?p_no=" + p_no;
+
+	}
+	
+	@GetMapping("/search-member")
+	public void search(){
+		return;
+	}
+   
+   
+   
+	private String get_name(int p_no) {
+		String name = todolistservice.get_name(p_no);
+		
+		return name;
+	}
+	
+	private String get_id(int p_no) {
+		String id = todolistservice.get_id(p_no);
+		
+		
+		return id;
+	}
+	
+	@GetMapping("/detail")
+	
+	   public ModelAndView Detail (
+			   Principal principal,
+			   @RequestParam("p_no") int p_no,
+			   @RequestParam("num") int num, 
+			   @RequestParam("s") int s,
+			   ModelAndView mv){
+
+		String id = principal.getName();
+		String admin = boardservice.getadmindate(id);
+		
+		String p_no2 = String.valueOf(p_no);
+		
+		String hostid = calservice.gethostid(p_no2);
+		
+		Todolist todolist = todolistservice.getDetail(num);
+
+		System.out.println("status : " + s);
+		System.out.println("hostid : " + hostid);
+		System.out.println("admin : " + admin);
+	
+		mv.setViewName("todolist/detail");
+			
+		mv.addObject("todolist", todolist);
+		mv.addObject("admin", admin);
+		mv.addObject("hostid", hostid);
+		mv.addObject("s", s);
+		
+		return mv;
+	}
+	
+	@PostMapping("/delete")
+	   public void todolistDeleteAction (
+			   @RequestParam("num") int num,
+			   @RequestParam("s") int s,
+			   @RequestParam("p_no") int p_no   )
+	{
+		
+			
+		todolistservice.boardDelete(num);
+		
+
+		
+
+		return;
+
+	}
+
+	
+	/*
+	@GetMapping("/modifyView")
+	
+	   public ModelAndView BoardModifyView (
+	            int num,ModelAndView mv, HttpServletRequest request){
+
+				
+		Board boarddata = boardService.getDetail(num);
+		
+		if(boarddata == null) {
+			logger.info("수정보기 실패");
+			mv.setViewName("error/error");
+			mv.addObject("url", request.getRequestURL());
+			mv.addObject("message","수정보기 실패입니다.");
+			return mv;
+		}
+		logger.info("수정 상세보기 성공");
+		
+		mv.addObject("boarddata", boarddata);
+		mv.setViewName("board/board_modify");
+			
+		
+		return mv;
+	}
+	
+	@PostMapping("/modifyAction")
+	   public String BoardModifyAction (
+	            Board boarddata, String check, Model mv, HttpServletRequest request, RedirectAttributes rattr)
+	throws Exception{
+		
+		boolean usercheck = boardService.isBoardWriter(boarddata.getBOARD_NUM(), boarddata.getBOARD_PASS());
+		
+		String url="";
+		
+		if(usercheck == false) {
+			rattr.addFlashAttribute("result","passFail");
+			rattr.addAttribute("num", boarddata.getBOARD_NUM());
+			return "redirect:modifyView";
+			 
+		}
+
+		
+
+		int result = boardService.boardModify(boarddata);
+		
+		if(result ==0) {
+			logger.info("게시판 수정 실패");
+			
+			mv.addAttribute("url", request.getRequestURL());
+			mv.addAttribute("message","게시판 수정실패입니다.");
+			url="error/error";
+		} else {
+			logger.info("게시판 수정 완료");
+		
+			url="redirect:detail";
+			
+			rattr.addAttribute("num", boarddata.getBOARD_NUM());
+			
+		}
+		return url; 
+				
+		
+	}
+	
+	@PostMapping("/delete")
+	   public String BoardDeleteAction (
+	            String BOARD_PASS, int num, Model mv, HttpServletRequest request, RedirectAttributes rattr)
+	{
+		
+		boolean usercheck = boardService.isBoardWriter(num, BOARD_PASS);
+		
+		String url="";
+		
+
+		
+		if(usercheck == false) {
+			rattr.addFlashAttribute("result","passFail");
+			rattr.addAttribute("num", num);
+			return "redirect:detail";
+			
+		}
+		
+		int result = boardService.boardDelete(num);
+		
+		if(result == 0) {
+			logger.info("게시판 삭제 실패");
+			mv.addAttribute("url", request.getRequestURL());
+			mv.addAttribute("message","삭제 실패");
+			return "error/error";
+			
+		}
+		
+		logger.info("게시판 삭제 성공");
+		
+		
+		rattr.addFlashAttribute("result", "deleteSuccess");
+		
+		return "redirect:list";
+	}
 	
 	
-	return id;
-}
+	
+	
+	
    
    /*
    	private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
@@ -151,42 +485,9 @@ private String get_id(int p_no) {
 	}
 	
 	
-	@GetMapping(value="/write")
-	//RequestMapping(value="/write",method=RequestMethod.GET)
-	public String board_write() {
-		return "board/board_write";
-	}
-	
-	@PostMapping("/add")
-	public String add(Board board, HttpServletRequest request) throws Exception{
-		
-		MultipartFile uploadfile = board.getUploadfile();
-		
-		if(!uploadfile.isEmpty()) 
-		{
-			String fileName = uploadfile.getOriginalFilename();
-			board.setBOARD_ORIGINAL(fileName);
-			
-			//<input type="hidden" name="board_file value="${boarddata.board_file}">
-			
-			//String saveFolder = request.getSession().getServletContext().getRealPath("resources")+"/upload";
-			String saveFolder = mysavefolder.getSavefolder();
-			String fileDBName = fileDBName(fileName, saveFolder);
-			logger.info("fileDBName : "+ fileDBName);
-			
-			
-			uploadfile.transferTo(new File(saveFolder + fileDBName));
-			logger.info("transferTo path = " + saveFolder + fileDBName);
-				
-			//�ٲ� ���ϸ����� ����
-			board.setBOARD_FILE(fileDBName);
-		}
-		
-		boardService.insertBoard(board);
-		logger.info(board.toString());
-		return"redirect:list";
 
-	}
+	
+
 	
 	private String fileDBName(String fileName, String saveFolder) {
 		
@@ -454,41 +755,7 @@ private String get_id(int p_no) {
 	
 
 	
-	@PostMapping("/delete")
-	   public String BoardDeleteAction (
-	            String BOARD_PASS, int num, Model mv, HttpServletRequest request, RedirectAttributes rattr)
-	{
-		
-		boolean usercheck = boardService.isBoardWriter(num, BOARD_PASS);
-		
-		String url="";
-		
 
-		
-		if(usercheck == false) {
-			rattr.addFlashAttribute("result","passFail");
-			rattr.addAttribute("num", num);
-			return "redirect:detail";
-			
-		}
-		
-		int result = boardService.boardDelete(num);
-		
-		if(result == 0) {
-			logger.info("게시판 삭제 실패");
-			mv.addAttribute("url", request.getRequestURL());
-			mv.addAttribute("message","삭제 실패");
-			return "error/error";
-			
-		}
-		
-		logger.info("게시판 삭제 성공");
-		
-		
-		rattr.addFlashAttribute("result", "deleteSuccess");
-		
-		return "redirect:list";
-	}
 	
 	@ResponseBody
 	@PostMapping("/down")

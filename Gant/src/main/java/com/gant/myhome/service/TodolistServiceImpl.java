@@ -26,14 +26,19 @@ public class TodolistServiceImpl implements TodolistService {
 
 	
 	@Override
-	public int getListCount() {
-		return dao.getListCount();
+	public int getListCount(int p_no) {
+		return dao.getListCount(p_no);
+	}
+	
+	@Override
+	public int getSendListCount(int p_no, String id) {
+		return dao.getSendListCount(p_no, id);
 	}
 
 	@Override
-	public List<Todolist> getTodolist(int page, int limit, int p_no) {
+	public List<Todolist> getTodolist(int page, int limit, int p_no, String id) {
 		
-		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		HashMap<String, Object> map = new HashMap<String, Object>();
 		
 		int startrow = (page-1) * limit + 1;
 		int endrow = startrow + limit - 1;
@@ -41,9 +46,40 @@ public class TodolistServiceImpl implements TodolistService {
 		map.put("start", startrow);
 		map.put("end", endrow);
 		map.put("p_no", p_no);
-		
+		map.put("id", id);
 		
 		return dao.getTodolist(map);
+	}
+	
+	@Override
+	public List<Todolist> getTodolist2(int p_no) {
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+	
+		map.put("p_no", p_no);
+
+		return dao.getTodolist2(map);
+	}
+	
+	public List<Todolist> getTodolist3(int page, int limit, int p_no, int board_num) {
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		
+		int startrow = (page-1) * limit + 1;
+		int endrow = startrow + limit - 1;
+	
+		map.put("start", startrow);
+		map.put("end", endrow);
+		map.put("p_no", p_no);
+		map.put("board_num", board_num);
+
+		return dao.getTodolist3(map);
+	}
+	
+	@Override
+	public void insertBoard(Todolist todolist) {
+		dao.insertBoard(todolist);
+		
 	}
 	
 	public String get_id(int p_no) {
@@ -60,15 +96,30 @@ public class TodolistServiceImpl implements TodolistService {
 		
 		return name;
 	}
+
+
+	@Override
+	public Todolist getDetail(int num) {
+		return dao.getDetail(num);
+	}
+	
+	@Override
+	public int boardDelete(int num) {
+		int result = 0;
+		Todolist todolist = dao.getDetail(num);
+		
+		if(todolist != null) {
+			result = dao.boardDelete(todolist);
+		}
+		return result;
+	}
+
 	
 	/*
 	 * 
 
 
-	@Override
-	public Board getDetail(int num) {
-		return dao.getDetail(num);
-	}
+
 	
 	@Override
 	public int boardReplyUpdate(Board board) {
@@ -89,16 +140,7 @@ public class TodolistServiceImpl implements TodolistService {
 		return dao.boardModify(modifyboard);
 	}
 
-	@Override
-	public int boardDelete(int num) {
-		int result = 0;
-		Board board = dao.getDetail(num);
-		
-		if(board != null) {
-			result = dao.boardDelete(board);
-		}
-		return result;
-	}
+
 
 	@Override
 	public int setReadCountUpdate(int num) {
@@ -121,11 +163,7 @@ public class TodolistServiceImpl implements TodolistService {
 			return true;
 	}
 
-	@Override
-	public void insertBoard(Board board) {
-		dao.insertBoard(board);
-		
-	}
+
 
 	@Override
 	public List<String> getDeleteFileList(){

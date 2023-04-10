@@ -9,14 +9,29 @@ import com.gant.myhome.domain.Todolist;
 
 public interface TodolistService {
 	
-	//public int add(Todolist tdl);
+	//
 		
 	public String get_id(int p_no);
 	public String get_name(int p_no);
 	
-	 public int getListCount();
+	public int getListCount(int p_no);
+	public int getSendListCount(int p_no, String id);
 	   
-	 public List<Todolist> getTodolist(int page, int limit, int p_no);
+	public List<Todolist> getTodolist(int page, int limi, int p_no, String id);
+	
+	
+	 
+	public void insertBoard(Todolist todolist);
+	
+	public List<Todolist> getTodolist2(int p_no);
+	
+	public List<Todolist> getTodolist3(int page, int limi, int p_no, int board_num);
+	
+	
+	public Todolist getDetail(int num);
+	
+	public int boardDelete(int num);
+		 
 	/*
 
 	   
@@ -26,7 +41,7 @@ public interface TodolistService {
 	   
 	   public int boardModify(Board modifyboard);
 	   
-	   public int boardDelete(int num);
+	   
 	   
 	   public int setReadCountUpdate(int num);
 	   

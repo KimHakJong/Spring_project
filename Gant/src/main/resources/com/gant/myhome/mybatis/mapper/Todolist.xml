@@ -8,7 +8,11 @@
  	 
 	 
 	<select id="getListCount" resultType="int">
-		select count(*) from todolist
+		select count(*) from todolist where p_no = #{p_no}
+	</select>	
+	
+	<select id="getSendListCount" resultType="int">
+		select count(*) from todolist where p_no = #{p_no} and board_id = #{id}
 	</select>	
 	
 	<select id="get_name" resultType="String">
@@ -20,64 +24,37 @@
 	</select>	
 	
 
-	<!--  문법오류
-			rnum >= #{start}
-			=> 해결법
-			 1. where rnum &gt;= #{start}
-			 2. where rnum <![CDATA[ >= ]]> #{start}
-			 
-			=> 설명
-				1. HTML 문서 '<', '>'와 같은 마크업 문자들을 파싱해서 읽어들이는 구조입니다.
-				그래서 마크업 문자( < 작다, > 크다)로 사용하기 위해서
-				'&lt' '&gt'등의 escape 문자열(escape character)을 이용해야합니다.
-				
-					< &lt
-					> &gt
-				
-				2. CDATA(character data) - XML파서가 분석하지 않는 문자 데이터를 의미합니다.
-											사용법은 <![CDATA[ 와 ]] 사이에 문자들을 넣으면 됩니다.
-											
-											
-				
-			  -->
-
 	<select id="getTodolist" resultType="Todolist">
-	select * from todolist 
-	where rownum &gt;= #{start} and rownum &lt;= #{end} and p_no = #{p_no}
+	select c.* from (select rownum rnum2, b.* from (select board_num, p_no, board_id, board_r_id, board_subject, board_content, deadline, state, rownum rnum from todolist order by state desc) b) c
+	where c.rnum2 &gt;= #{start} and c.rnum2 &lt;= #{end} and c.p_no = #{p_no} and c.board_id = #{id} 
 	</select>
-	<!-- jdbcType=VARCHAR: 첨부파일을 추가 하지 않은 경우 에러 처리해줍니다.
-							해당 필드가 NULL 인경우 jdbcType=VARCHAR로 처리하면 null로 설정됩니다.
-							
-		insert전에 (order="before")
-		조회 (select nvl(max(BOARD_NUM), 0)+1 from board) 합니다.
-		
-		조회한 값을 keyProperty="BOARD_NUM"에서 설정한대로 BOARD_NUM 프로퍼티에 저장합니다.
-		(public void setBOARD_NUM(int BOARD_NUM))
-		insert 문의 #{BOARD_NUM}는 지금 구한 값을 BoardBean에서 가져옵니다.
-		(public void getBOARD_NUM() {return BOARD_NUM;})
-		  
-		-->	
+	
+	<select id="getTodolist2" resultType="Todolist">
+	select c.board_r_id, c.board_num, c.p_no from (select b.p_no, b.board_r_id, b.board_num from (select * from todolist order by state desc) b) c where c.p_no = #{p_no} 
+	</select>
+	
+	<select id="getTodolist3" resultType="Todolist">
+	select c.* from (select rownum rnum2, b.* from (select board_num, p_no, board_id, board_r_id, board_subject, board_content, deadline, state, rownum rnum from todolist order by state desc) b) c
+	 where c.rnum2 &gt;= #{start} and c.rnum2 &lt;= #{end} and c.p_no = #{p_no} and c.board_num = #{board_num} 
+	</select>
+	
 	
 	<insert id = "insertBoard">
-		<selectKey resultType="int" order="BEFORE" keyProperty="BOARD_NUM">
-			select nvl(max(BOARD_NUM), 0)+1 from board3	
+		<selectKey resultType="int" order="BEFORE" keyProperty="board_num">
+			select nvl(max(board_num), 0)+1 from todolist	
 		</selectKey>
-		insert into board3(BOARD_NUM, BOARD_NAME, BOARD_PASS, BOARD_SUBJECT, BOARD_CONTENT, BOARD_FILE, BOARD_ORIGINAL, BOARD_RE_REF, BOARD_RE_LEV, BOARD_RE_SEQ, BOARD_READCOUNT, BOARD_DATE)
-		values(#{BOARD_NUM}, #{BOARD_NAME}, #{BOARD_PASS}, #{BOARD_SUBJECT}, #{BOARD_CONTENT}, #{BOARD_FILE, jdbcType=VARCHAR}, #{BOARD_ORIGINAL, jdbcType=VARCHAR}, #{BOARD_NUM}, #{BOARD_RE_LEV}, #{BOARD_RE_SEQ}, #{BOARD_READCOUNT}, sysdate)
+		insert into todolist(board_num, p_no, board_id, board_r_id, board_subject, board_content, deadline, state)
+		values(#{board_num}, #{p_no}, #{board_id}, #{board_r_id}, #{board_subject}, #{board_content}, #{deadline}, #{state})	
 	</insert>
-	
-	<update id="setReadCountUpdate">
-		update board3 set BOARD_READCOUNT=BOARD_READCOUNT+1 where BOARD_NUM=#{number}
-	</update>
-	
-	<select id="getDetail" resultType="board">
-		select * from board3 where BOARD_NUM = #{number}
+		
+	<select id="getDetail" resultType="Todolist">
+		select * from todolist where board_num = #{num}
 	</select>
 	
 	<!--  map은 java.util.Map의 별칭 -->
 	
-	<select id="isBoardWriter" resultType="board">
-		select * from board3 where BOARD_NUM = #{num} and BOARD_PASS=#{pass}
+	<select id="isBoardWriter" resultType="String">
+		select board_id from todolist where board_num= #{board_num}
 	</select>
 	
 	<update id="boardModify">
@@ -90,39 +67,13 @@
       where BOARD_NUM=#{BOARD_NUM}
    </update>
    
-   <update id="boardReplyUpdate">
-   	update board3 set BOARD_RE_SEQ=BOARD_RE_SEQ+1 WHERE BOARD_RE_REF=#{BOARD_RE_REF} and BOARD_RE_SEQ<![CDATA[>]]> #{BOARD_RE_SEQ}
-   </update>
-   
-	<insert id = "boardReply">
-		<selectKey resultType="int" order="BEFORE" keyProperty="BOARD_NUM">
-			select nvl(max(BOARD_NUM), 0)+1 from board3	
-		</selectKey>
-		insert into board3(BOARD_NUM, BOARD_NAME, BOARD_PASS, BOARD_SUBJECT, BOARD_CONTENT, BOARD_RE_REF, BOARD_RE_LEV, BOARD_RE_SEQ, BOARD_READCOUNT, BOARD_DATE)
-		values(#{BOARD_NUM}, #{BOARD_NAME}, #{BOARD_PASS}, #{BOARD_SUBJECT}, #{BOARD_CONTENT}, #{BOARD_RE_REF}, #{BOARD_RE_LEV}, #{BOARD_RE_SEQ}, #{BOARD_READCOUNT}, sysdate)
-	</insert>
+
 	
 	<delete id="boardDelete">
 	<![CDATA[
-		delete from board3
-			where BOARD_RE_REF=#{BOARD_RE_REF}
-			and BOARD_RE_LEV>=#{BOARD_RE_LEV}
-			and BOARD_RE_SEQ>=#{BOARD_RE_SEQ}
-			and BOARD_RE_SEQ <= ( nvl((SELECT min(board_re_seq)-1 FROM BOARD3 
-											where BOARD_RE_REF=#{BOARD_RE_REF}
-											and BOARD_RE_LEV=#{BOARD_RE_LEV}
-											and BOARD_RE_SEQ>#{BOARD_RE_SEQ}),
-											(SELECT max(board_re_seq) FROM BOARD3 WHERE BOARD_RE_REF = #{BOARD_RE_REF})))
-	
+		delete from todolist where board_num = #{board_num}
 	]]>
 	</delete>
 	
-	<select id="getDeleteFileList" resultType="String">
-		select board_file from delete_file
-	</select>
-	
-	<delete id="deleteFileList">
-		delete delete_file where board_file=#{file_name}
-	</delete>
-       
+
 </mapper>

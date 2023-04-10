@@ -1,5 +1,5 @@
 function go(page) {
-	const limit = $("#viewcount").val();
+	const limit = 10;
 	const data = `limit=${limit}&state=ajax&page=${page}`; //el이 아닌 백틱 (js에서만 사용추천)
 	ajax(data);
 }
@@ -154,8 +154,5 @@ $(function(){
       location.href="write";
    });
    
-   $('#viewcount').change(function(){
-      go(1); //보여줄 페이지를 1페이지로 설정
-   });
 });
 
