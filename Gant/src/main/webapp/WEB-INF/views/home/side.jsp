@@ -51,23 +51,27 @@
     </style>
    <script>
 
-	/*
+	$(document).ready(function(){
+		
 	//현재 프로젝트명 뒤 경로
 	let page = window.location.pathname.substring(6);
+	console.log(page);
 	//메뉴 클릭하면 해당 메뉴에 active 클래스를 생성하여 다른 색으로 칠해지기 위한 코드입니다.
-	const pagename = ["Main.att", "Main.bo", "main.calendar","list.net"];
+	let pagename = ["pmain/view", "att/main", "board/main","calendar/list", "reserve/main","member/list","note/getMian","request/getMian"];
 	for(var i=0; i<pagename.length; i++){
-		$('.sidemenu a').each(function(){
+		$('.sidemenu>a').each(function(){
+				console.log($(this).attr('href'));
 		if(page==pagename[i]){
-				if($(this).attr('href')==pagename[i]){
+				if($(this).attr('href').substring(6)==pagename[i]){
 					$(this).addClass('active');
 				}else{
 					$(this).removeClass('active');
 				}				
-			});
 		}
+		})
 	}
-	*/
+	});
+	
    
    </script>    
 </head>

@@ -14,7 +14,7 @@ public interface MemberService {
 	
 	public String findIdCheck(String name, String email);
 	
-	public String findPassCheck(String id, String name, String email);
+	public String findPassCheck(Members members);
 
 	public int getMembersCount(String searchfield, String searchword);
 
@@ -35,8 +35,6 @@ public interface MemberService {
 	public List<Members> getSearchMembersList_ajax(String name);
 
 	public Members getMemberInfo2(String name);
-
-	
 
 	
 }

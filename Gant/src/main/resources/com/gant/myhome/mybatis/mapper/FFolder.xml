@@ -28,7 +28,7 @@
 		(p_no, folder_num, folder_name, folder_path) 
 		values (#{p_no}, #{folder_num},
 		<if test='folder_name==null and folder_path==null'>
-			'HOME', '/' 
+			'HOME', #{p_no}||'/' 
 		</if>
 		<if test='folder_name!=null and folder_path!=null'>
 			#{folder_name}, #{folder_path} 

@@ -50,14 +50,18 @@ public class MemberServicelmpl implements MemberService {
 	}
 	
 	@Override
-	public String findPassCheck(String id, String name, String email) {
-		Members m = dao.findPassCheck(id);
-		if(m.getName().equals(name) && m.getEmail().equals(email)) {
-			return m.getPassword();
-		}else if (m.getName().equals(name) && !m.getEmail().equals(email)) {
-			return "noemail";
+	public String findPassCheck(Members members) {
+		Members m = dao.findPassCheck(members.getId());
+		if(m==null) {
+			return "noid";
 		}else {
-			return "noname";
+			if(m.getName().equals(members.getName()) && m.getEmail().equals(members.getEmail())) {
+				return m.getPassword();
+			}else if (m.getName().equals(members.getName()) && !m.getEmail().equals(members.getEmail())) {
+				return "noemail";
+			}else {
+				return "noname";
+			}
 		}
 	}
 

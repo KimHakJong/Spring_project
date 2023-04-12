@@ -9,9 +9,10 @@
 <title>Insert title here</title>
 <style>
 .content{
-height:820px !important
+height:800px !important
 }
 /* 폴더모달 시작*/
+
 /* The Modal (background) */
 .modal {
   font-family: Arial, Helvetica, sans-serif !important;
@@ -109,23 +110,34 @@ label.btn.btn-outline-primary:hover {
     color: white;
 }
 .btn-group{
-	left:5%;
+	left:5.5%;
+	margin-top:1.5rem
 }
 /* 이동하기 div */
 #move {
     background: white;
-    border: 1px solid black;
+    border: none;
     position: absolute;
     z-index: 3;
     margin-top: -35px;
-    padding: 15px 15px 15px 20px;
-    width: 250px;
+    padding: 15px 20px;
+    width: 300px;
     font-size: 14px;
     color: black;
     display: none;
     border-radius: 4px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
+#move h5 {
+font-size:1.15rem;
+margin-bottom:12px;
 
+}
+div#move_content {
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    padding: 10px;
+}
 #move ul {
 	padding-left:5px;
 	cursor:default;
@@ -138,6 +150,9 @@ label.btn.btn-outline-primary:hover {
     width: 21px;
     height: 21px;
     margin-right:4px;
+}
+.subicon{
+	margin-right:0px !important;
 }
 #move_content > ul > li > ul{/* 첫번째 ul은 간격이 너무 넓음 */
 	padding-left:7px !important;
@@ -157,8 +172,10 @@ label.btn.btn-outline-primary:hover {
     position: relative;
     top: 1.8px;
 }
+
 #move_button{
 	float:right;
+	margin-top:10px;
 }
 #move_button button{
 	height:35px;
@@ -178,12 +195,15 @@ label.btn.btn-outline-primary:hover {
 }
 /* 이동하기 div 끝 */
 .home{
-	width:90%;
+	width:89%;
 	position:relative;
 	height:80%;
 	transform: translate(-50%, 0%);
 	left:50%;
 	margin-top:2%
+}
+.nowpath:first-child{
+	padding-left:0px;
 }
 #file_menu {
     width: 100%;
@@ -237,15 +257,19 @@ label.btn.btn-outline-primary:hover {
 #file_content {
     width: 100%;
     border: 1px solid #ced4da;
-    height: 530px;
+    height: 510px;
     margin-top: 10px;
     position:relative;
     padding:25.8px;
     overflow-y : scroll;
    -ms-overflow-style: none; /* 인터넷 익스플로러 */
     scrollbar-width: none; /* 파이어폭스 */
+    cursor:default;
+    border-radius:4px;
 }
-
+.menuicon:hover{
+	cursor:pointer !important;
+}
 #file_content::-webkit-scrollbar {
     display: none; /* 크롬, 사파리, 오페라, 엣지 */
 }
@@ -290,14 +314,14 @@ img.foldericon, .fileicon {
 #menudiv {
     text-align: left;
     display: inline-block;
-    position: fixed;
+    position: absolute;
     box-shadow: rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px;
     border-radius: 4px;
     background: white;
     font-size: 14px;
     margin-left: -25px;
     margin-top:15px;
-    width:100px;
+    width:130px;
     color:black;
 }
 #menudiv ul {
@@ -320,6 +344,11 @@ img.foldericon, .fileicon {
 	display:inline-block;
 	width:100%;
 	padding: 0px 15px;
+}
+#menudiv img {
+    width: 18px;
+    height: 18px;
+    margin-right: 10px;
 }
 .file_name {
     width: 150px;
@@ -505,6 +534,7 @@ $(document).ready(function(){
 
 		let id = $(".side_userid").text();
 		let included_folder_num = $("#path").children().last().data('num');
+		let folder_path = $("#path").children().last().data('url');
 		let fake_file_name = $(this).val().split("\\");
 		let real_file_name = fake_file_name[fake_file_name.length-1];
 		let split_file_name = real_file_name.split(".");
@@ -529,12 +559,23 @@ $(document).ready(function(){
 			}
 		});
 		
+		//파일크기 초과 : 알림창, 값초기화
+		var maxSize = 20 * 1024 * 1024; // 20MB
+	
+		var fileSize = $("#upfile")[0].files[0].size;
+		console.log("파일크기는?:"+fileSize);
+		if(fileSize > maxSize){
+			alert("첨부파일 사이즈는 20MB 이내로 등록 가능합니다.");
+			$("#upfile").val("");
+		}else{
+			
 		if(noname==0){
 		
 		console.log("파일업로드할 때");
 		console.log("프로젝트번호:"+p_no); //프로젝트번호
 		console.log("파일작성자:"+$('.side_userid').text()); //아이디(파일 작성자)
 		console.log("파일이 포함될 폴더번호:"+$("#path").children().last().data('num')); //포함될 폴더번호
+		console.log("파일이 포함될 폴더번호:"+$("#path").children().last().data('url')); //포함될 폴더경로
 		console.log("파일이름(확장자 앞):"+file_name); //파일이름(확장자 앞)
 		console.log("확장자:"+extension); //확장자
 		
@@ -547,7 +588,8 @@ $(document).ready(function(){
 				id : id,
 				included_folder_num : included_folder_num,
 				file_name : file_name,
-				extension : extension
+				extension : extension,
+				folder_path : folder_path
 		}
 		formData.append("value_store",new Blob([JSON.stringify(data)], {type:"application/json"}));
 		
@@ -577,7 +619,8 @@ $(document).ready(function(){
 			
 		});//ajax
 		loadAll();
-		}
+		}//이름중복 if 끝
+		}//파일용량 if끝
 	});
 	
 	//폴더클릭
@@ -604,13 +647,17 @@ $(document).ready(function(){
 	
 	$("body").on('click','.menuicon',function(event){
 		event.stopPropagation();
-		if($(this).parent().parent().next().attr('id')=='menudiv'){ //감싸는div 옆에 menudiv 있으면 삭제
+		if($("#menudiv").attr('id')=='menudiv'){ //감싸는div 옆에 menudiv 있으면 삭제
 			$("#menudiv").remove();
 		}else{ //없으면 생성
-			let menudiv ='<div id="menudiv"><ul><li><a>이름바꾸기</a></li><li><a>다운로드</a></li><li><a>이동</a></li><li><a>삭제</a></li></ul></div>';
+			let menudiv ='<div id="menudiv"><ul><li><a><img src="../resources/image/filebox/edit.png">이름바꾸기</a></li>'
+						+						'<li><a><img src="../resources/image/filebox/down.png">다운로드</a></li>'
+						+						'<li><a><img src="../resources/image/filebox/move.png">이동</a></li>'
+						+						'<li><a><img src="../resources/image/filebox/delete.png">삭제</a></li></ul></div>';
 			$(this).parent().parent().after(menudiv);
 		}
 	});
+	
 	//해당 메뉴제외한 곳 클릭하면 사라지게
 	$(document).click(function(e){ 
 	    if (!$(e.target).is('#menudiv')) { 
@@ -738,7 +785,7 @@ $(document).ready(function(){
     				$(rdata).each(function(){
     					output += '<li data-folder_path="'+this.folder_path+'"><a>';
     					if(disting != 'first'){ //처음폴더가 아닌 경우 꺽은선이미지 넣음
-    						output += '<img src="../resources/image/filebox/line.png">';
+    						output += '<img class="subicon" src="../resources/image/filebox/line.png">';
     					}
     					output +='<img src="../resources/image/filebox/foldericon.png"><span>'+this.folder_name+'</span></a></li>';
     				});

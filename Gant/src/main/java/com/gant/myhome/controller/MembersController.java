@@ -157,32 +157,21 @@ public class MembersController {
 	}
 	
 	@PostMapping(value="/findidok")
-	public ModelAndView findIdOk(String name, String email, ModelAndView mv, HttpServletResponse response) throws IOException {
+	public ModelAndView findIdOk(String name, String email, RedirectAttributes rattr, ModelAndView mv) {
 		String id = memberservice.findIdCheck(name,email);
 		
 		if(id.equals("")) {
-			response.setContentType("text/html;charset=utf-8");
-			PrintWriter out = response.getWriter();
-			out.println("<script>");
-			out.println("alert('등록된 이름이 없습니다.');");
-			out.println("</script>");
-			out.close();
-			return null;
+			rattr.addFlashAttribute("noname","noname");
+			mv.setViewName("redirect:/member/findid");
 		}else if(id.equals("noemail")) {
-			response.setContentType("text/html;charset=utf-8");
-			PrintWriter out = response.getWriter();
-			out.println("<script>");
-			out.println("alert('등록된 이메일이 존재하지 않습니다.');");
-			out.println("history.back();"); //다시 아이디찾기 창으로
-			out.println("</script>");
-			out.close();
-			return null;
+			rattr.addFlashAttribute("noemail","noemail");
+			mv.setViewName("redirect:/member/findid");
 		}else { //정보 잘 찾은 경우
 			mv.addObject("name",name);
 			mv.addObject("id", id);
 			mv.setViewName("member/findidok");
-			return mv;
 		}
+		return mv;
 	}
 
 	@GetMapping(value ="/findpass")
@@ -191,31 +180,24 @@ public class MembersController {
 	}
 	
 	@PostMapping(value ="/findpassok")
-	public ModelAndView findPassOk(String id, String name, String email, ModelAndView mv, HttpServletResponse response) throws Exception {
+	public ModelAndView findPassOk(Members members, RedirectAttributes rattr, ModelAndView mv) {
 		
-		String pass = memberservice.findPassCheck(id, name, email);
-		
-		if(pass.equals("")) { //아이디 존재X
-			response.setContentType("text/html;charset=utf-8");
-			PrintWriter out = response.getWriter();
-			samecode(out, "아이디가");
-			return null;
+		String pass = memberservice.findPassCheck(members);
+		if(pass.equals("noid")) { //아이디 존재X
+			rattr.addFlashAttribute("noid","noid");
+			mv.setViewName("redirect:/member/findpass");
 		}else if (pass.equals("noname")) { //이름 존재X
-			response.setContentType("text/html;charset=utf-8");
-			PrintWriter out = response.getWriter();
-			samecode(out, "이름이");
-			return null;
+			rattr.addFlashAttribute("noname","noname");
+			mv.setViewName("redirect:/member/findpass");
 		}else if (pass.equals("noemail")){ //이메일 존재X
-			response.setContentType("text/html;charset=utf-8");
-			PrintWriter out = response.getWriter();
-			samecode(out, "이메일이");
-			return null;
+			rattr.addFlashAttribute("noemail","noemail");
+			mv.setViewName("redirect:/member/findpass");
 		}else { //정보 잘 찾은 경우
-			mv.addObject("id", id);
+			mv.addObject("id", members.getId());
 			mv.addObject("password", pass);
 			mv.setViewName("member/findpassok");
-			return mv;
 		}
+		return mv;
 	}
 	
 	@PostMapping(value="/findpassokProcess")
@@ -235,13 +217,8 @@ public class MembersController {
 			return "error/error";
 		}
 	}
-	public static void samecode(PrintWriter out, String message) {
-		out.println("<script>");
-		out.println("alert('입력한 " + message + " 존재하지 않습니다.');");
-		out.println("history.back();"); //다시 비밀번호찾기 창으로
-		out.println("</script>");
-		out.close();
-	}
+	
+
 	
 	@RequestMapping(value ="/list")
 	public ModelAndView membersList(Principal principal,
@@ -263,16 +240,8 @@ public class MembersController {
 		
 		// 로그인 풀린 상태면 로그인창으로 이동
 		String id = principal.getName();
-		if(id==null) {
-			response.setContentType("text/html;charset=utf-8");
-			PrintWriter out = response.getWriter();
-			out.println("<script>");
-			out.println("alert('로그인 후 이용해주세요');"); 
-			out.println("location.href='login';");
-			out.println("</script>");
-			out.close();
-			return null;
-		}
+		mv.addObject("id",id);
+
 		
 		//관리자와 인사부는 삭제버튼 보이기 위한 코드
 		String isadminhuman = memberservice.isAdminHuman(id);

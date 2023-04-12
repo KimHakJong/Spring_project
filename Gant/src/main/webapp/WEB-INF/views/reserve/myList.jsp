@@ -46,6 +46,7 @@ margin-right: 20px;
 	border:1px solid #ced4da;
 	border-radius:4px;
 }
+
 #mylist_head button{
 	height:40px;
 	background:#3abff7;
@@ -177,6 +178,16 @@ $(document).ready(function(){
 		    }
 		});
 	
+	//검색할 때 유효성 검사
+	$("#r_search").submit(function(){
+		let start_day = $("#start_day").val().replaceAll("-","");
+		let end_day = $("#end_day").val().replaceAll("-","");
+		if(start_day>end_day){
+			alert("조회 날짜형식이 올바르지 않습니다.");
+			return false;
+		}
+	});
+	
 	//현재행5개보다 보여줄 행이 적으면 안보이게
 	 if("${count}" <= 5){
 			$("#hidden_show").css('display','none');	
@@ -307,7 +318,7 @@ $(document).ready(function(){
 	<div class="mylist">
 	<h4>내 예약현황</h4>
 	<hr>
-	<form action="mylist" method="get">
+	<form action="mylist" method="get" id="r_search">
 	<div id="mylist_head">
 	<span>조회기간</span><input type="text" name="start_day" id="start_day"><span>~</span><input type="text" name="end_day" id="end_day">
 	<button type="submit">검색</button>

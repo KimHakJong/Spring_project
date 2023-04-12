@@ -36,6 +36,16 @@ input:focus ,button:focus{border:2px solid #009CFF; outline:none}
 button[type=submit]{margin-top:20px; width:100%; background:#009CFF; border:1px solid #009CFF; color:white; font-size:16px;}
 button[type=submit]:hover{background:#26abff;border:1px solid #26abff;cursor:pointer}
 </style>
+<script>
+$(document).ready(function(){
+	if('${noname}'=='noname'){
+		alert('등록된 이름이 없습니다.');
+	}
+	if('${noemail}'=='noemail'){
+		alert('등록된 이메일이 존재하지 않습니다.');
+	}
+});
+</script>
 </head>
 <body>
 <div>

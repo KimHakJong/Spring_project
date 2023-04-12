@@ -223,11 +223,16 @@ public class ReservationController {
 	
 	@ResponseBody
 	@PostMapping(value="/loadDetail_ajax")
-	public Reservation loadDetail_ajax(int num) {
+	public Map<String,Object> loadDetail_ajax(int num, String id) {
 		Reservation rs = reservationservice.selectInfo(num);
 		Members m = memberservice.getMemberInfo(rs.getId());
 		rs.setName(m.getName());
-		return rs;
+		
+		Members m2 = memberservice.getMemberInfo(id); //현재 아이디가 관리자인지 확인
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("obj", rs);
+		map.put("admin", m2.getAdmin());
+		return map;
 	}
 	
 	@PostMapping(value="/updateReservation")
