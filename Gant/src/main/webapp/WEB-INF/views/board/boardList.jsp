@@ -18,7 +18,8 @@ $(function(){
 		location.href="write"; 
 		 })
 	 
-});		 
+});	
+
 </script>
 <title>자유/공지 게시판</title>
 </head>
@@ -32,7 +33,46 @@ $(function(){
 <div class="container-fluid pt-4 px-4">
 <div class="container">
 
+<style>
+#th1{
+border-top-left-radius:10px !important;
+}
+#th6{
+border-top-right-radius:10px !important;
+}
+.table thead th {
+    vertical-align: bottom;
+    border-bottom: 0px ; 
+}
 
+tr{
+   height:45px !important;  
+}
+
+.table td, .table th {
+     border-top: 0px;
+}
+
+.center{
+text-align: center;}
+
+table{
+text-align:left;
+}
+.table>:not(caption)>*>* {
+ padding: 0; 
+}
+
+.table td, .table th {
+    padding: 0.75rem;
+}
+
+#like{
+width: 20px;
+vertical-align: middle;
+}
+
+</style>
 		        
 <%-- 게시글이 있는경우 --%>
 <c:if test="${listcount > 0 }">
@@ -53,12 +93,12 @@ $(function(){
      </th>
    </tr>
    <tr>
-     <th id="th1" class="th2"><div >번호</div></th>
-     <th id="th2" class="th2"><div>제목</div></th>    
+     <th id="th1" class="th2 " ><div>&nbsp;번호</div></th>
+     <th id="th2" class="th2"><div>&nbsp;&nbsp;제목</div></th>    
      <th id="th3" class="th2"><div>작성자</div></th>  
-     <th id="th4" class="th2"><div>작성일</div></th>  
-     <th id="th5" class="th2"><div>조회수</div></th>
-     <th id="th6" class="th2"><div>추천</div></th>  
+     <th id="th4" class="th2 center"><div>작성일</div></th>  
+     <th id="th5" class="th2 center"><div>조회수</div></th>
+     <th id="th6" class="th2 center"><div>좋아요</div></th>  
    </tr>
    </thead>
    <tbody>
@@ -70,13 +110,13 @@ $(function(){
 		      <tr>
 		       <td><%-- 번호 --%>
 		         <%-- 공지게시글은 번호가 아닌 [공지] 표시를 한다. --%>
-		         <c:if test="${b.board_notice == 'true'}">
-		            <c:out value="[공지]" /> 
+		         <c:if test="${b.board_notice == 'true'}">&nbsp;
+		            <img src="${pageContext.request.contextPath}/resources/image/board_image/megaphone.png"  width="23px">  
 		             <c:set var="num" value="${num-1}" /> <%-- num = num-1 의미 --%>
 		         </c:if>
 		         <%-- 일반게시물은 번호로 표시한다. --%>
 		          <c:if test="${b.board_notice == 'false'}">
-		            <c:out value="${num}" /> <%-- num 출력 --%>
+		            &nbsp;&nbsp;&nbsp;<c:out value="${num}" /> <%-- num 출력 --%>
 		            <c:set var="num" value="${num-1}" /> <%-- num = num-1 의미 --%>
 		         </c:if> 
 		       </td>
@@ -108,10 +148,10 @@ $(function(){
 			         <c:if test="${b.board_pass != '1'}">
 			         <a data-toggle="modal" data-target="#myModal${vs.index}"  style="cursor:pointer;">
 			          <c:if test="${b.board_subject.length()>= 18}">
-			            <c:out value="🔒︎${b.board_subject.substring(0,18)}..." />
+			            <c:out value="🔒${b.board_subject.substring(0,18)}..." />
 			          </c:if>
 			          <c:if test="${b.board_subject.length() < 18}">
-			            <c:out value="🔒︎${b.board_subject}" />
+			            <c:out value="🔒${b.board_subject}" />
 			          </c:if>
 			         </a>[${b.cnt}]		         
 			         	<%-- modal 시작 --%>
@@ -141,10 +181,10 @@ $(function(){
 			         </c:if>
 		        </div>  
 		       </td>
-		       <td><div>${b.board_name}</div></td>
-		       <td><div>${b.board_date}</div></td>
-		       <td><div>${b.board_readcount}</div></td>
-		       <td><div>${b.board_like}</div></td>
+		       <td>${b.board_name}</td>
+		       <td class="center">${b.board_date}</td>
+		       <td class="center">${b.board_readcount}</td>
+		       <td class="center img"><img src="${pageContext.request.contextPath}/resources/image/board_image/like.png" id="like">&nbsp;${b.board_like}</td>
 		      </tr>
     </c:forEach>
     <%-- 시물  끝--%>

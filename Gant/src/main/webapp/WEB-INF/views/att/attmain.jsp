@@ -159,7 +159,7 @@
 	    // 초과근무신청 버튼 이벤트 팝업창 생성
 	    $("#commute_record").click(function(){
 	          //overtime.jsp 팝업창으로 띄우기
-	    	  var overtime_popup = window.open('commute_record', '초과근무수당신청서', 'width=1100px,height=600px,scrollbars=yes');	    	  
+	    	  var overtime_popup = window.open('commute_record', '초과근무수당신청서', 'width=1000px,height=600px');	    	  
 	    });
 	      
 	      

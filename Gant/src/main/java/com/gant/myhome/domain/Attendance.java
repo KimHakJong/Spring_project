@@ -2,7 +2,7 @@ package com.gant.myhome.domain;
 
 public class Attendance{
 	private String id;
-	private String starTtime;
+	private String startTime;
 	private String endTime;
 	private String overTime;
 	private String work_today;
@@ -18,12 +18,7 @@ public class Attendance{
 	public void setId(String id) {
 		this.id = id;
 	}
-	public String getStarTtime() {
-		return starTtime;
-	}
-	public void setStarTtime(String starTtime) {
-		this.starTtime = starTtime;
-	}
+
 	public String getEndTime() {
 		return endTime;
 	}
@@ -67,6 +62,12 @@ public class Attendance{
 	}
 	public void setCheck_work_week(int check_work_week) {
 		this.check_work_week = check_work_week;
+	}
+	public String getStartTime() {
+		return startTime;
+	}
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
 	}
 	
 	

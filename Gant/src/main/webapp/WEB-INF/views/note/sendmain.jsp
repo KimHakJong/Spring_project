@@ -228,7 +228,7 @@ $(function(){
               <th scope="col" id="th2" class="left"></th>
               <th scope="col" id="th3" class="left">받은사람</th>          
               <th scope="col" id="th4" class="left" >제목</th>
-              <th scope="col" id="th5" >날짜</th>
+              <th scope="col" id="th5" ></th>
             </tr>
           </thead>
           <tbody>
@@ -261,6 +261,7 @@ $(function(){
 	              <c:url var="detail" value="sendDetail">
 				  <c:param name="note_num" value="${b.note_num}"/>
 				  <c:param name="type" value="normal"/>
+				  <c:param name="file_num" value="${b.file_num}"/>
 				  </c:url>
 	              <a href="${detail}" ><c:out value="${b.subject}"/></a>
 	              </td>

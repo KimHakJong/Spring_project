@@ -32,7 +32,7 @@ public interface AttMapper {
 
 	void attendance_insert(String id);
 
-	Attendance AttendanceGetselect(String id);
+	Attendance selectCommuteRecord(Map<String, Object> map);
 
 	int Resetwork_week();
 
@@ -51,6 +51,8 @@ public interface AttMapper {
 	int getSearchCount(Map<String, Object> map);
 
 	List<Attendance> getSearchList(Map<String, Object> map);
+
+	Attendance selectAttendance(String id);
 	
 	
 

@@ -58,6 +58,12 @@ public interface NoteMapper {
 
 	int Delete(int delete_num);
 
+	int selectFileNum();
+
+	List<Integer> selectDeleteDate(String formattedDate);
+
+	int restore(Map<String, Object> map);
+
 	
 		
 		

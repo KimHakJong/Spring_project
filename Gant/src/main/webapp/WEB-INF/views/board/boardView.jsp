@@ -15,6 +15,13 @@
 	<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
 	<script src="${pageContext.request.contextPath}/resources/js/board_js/view.js"></script>
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/board_css/view.css" type="text/css"> 
+<style>
+.form-control:disabled, .form-control:read-only {
+    background-color:  #e9ecef75 !important;
+}
+
+</style>
+
 </head>
 <body>
 
@@ -132,11 +139,11 @@
 		           <button class="btn btn-danger" id="bodelete">삭제</button>		            
 		          </c:if>
 		         <a href="main">
-		           <button class="btn btn-primary">목록</button>
+		           <button class="btn btn-outline-primary">목록</button>
 		         </a>
 		         <c:if test="${boarddata.board_notice == 'false'}">
 		         <a href="reply?num=${boarddata.board_num}">
-		           <button class="btn btn-primary">답글쓰기</button>
+		           <button class="btn btn-outline-primary">답글쓰기</button>
 		         </a>
 		         </c:if>
 		      </div>
@@ -179,6 +186,7 @@
 	</div> <%-- class main end --%>
 </div> <%-- class row end --%>
 
+ 
 
 	<footer>
 		<jsp:include page="../home/bottom.jsp" />

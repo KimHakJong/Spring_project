@@ -29,7 +29,7 @@ public interface AttService {
 	void attendance_insert(String id);
     
 	//id에 해당하는 DB에 저장되어있는 정보를 가져온다.
-	Attendance AttendanceGetselect(String id);
+	Attendance selectCommuteRecord(String id,String now_Day);
     
 	//월요일에는 모든 사원들의 주간 총 근무시간을 리셋한다.
 	int Resetwork_week();
@@ -57,6 +57,9 @@ public interface AttService {
     
 	//검색날짜에 포함되어있는 출퇴근 리스트
 	List<Attendance> getSearchList(int page, int limit, String date_Search, String id);
+    
+	// id에 해당하는 DB에 저장되어있는 정보를 가져온다.
+	Attendance selectAttendance(String id);
     
 
     

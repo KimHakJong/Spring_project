@@ -54,19 +54,19 @@
     	 }
     	 
     	 
-    	  $('.condition').each(function() {
-    		    
-    		  // 결재상태에따라 결재상태 글자색을 변경한다.
-    		  var condition = $(this).text();
+    	 $('.condition').each(function() {
+  		    
+      		  // 결재상태에따라 결재상태 글자색을 변경한다.
+      		  var condition = $(this).text();
 
-    		    if (condition == '대기') {
-    		      $(this).css('color', 'blue');
-    		    } else if (condition == '거절') {
-    		      $(this).css('color', 'red');
-    		    } else if (condition == '승인') {
-    		      $(this).css('color', 'green');
-    		    }
-    		  });
+      		    if (condition == '대기') {    		      
+      		      $(this).html('<span class="badge bg-info">대기</span>');
+      		    } else if (condition == '거절') {
+      		      $(this).html('<span class="badge bg-danger">거절</span>');
+      		    } else if (condition == '승인') {
+      		      $(this).html('<span class="badge bg-success">승인</span>');
+      		    }
+      		  });
     	  
       });
   </script>    
@@ -116,16 +116,104 @@
 						            <li><a class="dropdown-item" href="getMian?only=초과근무신청서">초과근무신청서</a></li>
 						         </ul>
 						      </div>
+
+<style>
+
+
+tr{
+   height:30px !important;  
+    line-height: 30px  !important;  ;
+}
+
+.table td, .table th {
+     border-top: 0px;
+}
+
+
+.table>:not(:last-child)>:last-child>* {
+    border-bottom-color: #00000021;
+}
+
+.left{
+text-align:left;
+}
+
+h5{
+margin: 0;
+}
+
+
+
+.bg-info {
+    background-color: #2196f3d4 !important;
+}
+
+.bg-success {
+    background-color: #34c23a !important;
+}
+
+.bg-danger {
+    background-color: #f44336cf !important;
+}
+
+#th1{width:7% }
+#th5{width:12% }
+
+
+.pagination {
+  display: inline-block;
+}
+
+.pagination a {
+  color: black;
+  float: left;
+  padding: 4px 10px;
+  text-decoration: none;
+}
+.pagination a.active {
+  background-color: #03a9f4b0;
+  color: white;
+  border-radius: 5px;   
+}
+
+.pagination a:hover:not(.active) {
+  background-color: #ddd;
+  border-radius: 5px;
+}
+.pagination{
+     justify-content : center; 
+     padding-top:15px;
+     display: flex;
+}
+
+
+th{
+color: #fff;
+background-color: #03a9f4d4 !important; 
+}
+#th1{
+border-radius: 10px 0px 0px 0px;
+} 
+#th5{
+border-radius: 0px 10px 0px 0px;
+} 
+
+.btn-primary{
+background-color: #03a9f4d4  !important; 
+border: none;
+}
+</style>
+
                              
                                 <!--테이블  시작 -->
-						   <table class="table">
-						      <thead>
+						   <table class="table ">
+						      <thead class="table-primary ">
 						         <tr>
-						            <th scope="col">번호</th>
-						            <th scope="col">작성자</th>
-						            <th scope="col">분류</th>
-						            <th scope="col">작성일</th>
-						            <th scope="col">결재상태</th>
+						            <th scope="col"  id="th1">번호</th>
+						            <th scope="col" id="th2">작성자</th>
+						            <th scope="col"  id="th3">분류</th>
+						            <th scope="col" id="th4">작성일</th>
+						            <th scope="col" id="th5">결재상태</th>
 						            
 						         </tr>
 						      </thead>
@@ -142,12 +230,12 @@
 								        <c:param name="paper_num" value="${b.PAPER_NUM}"/>
 								        <c:param name="classification" value="${b.CLASSIFICATION}"/>
 								       </c:url>							       
-								     <td>
+								     <td >
 								     <a href="${detail}" ><c:out value="${b.CLASSIFICATION}"/></a>
 								     </td>
 								     
 								     <td><c:out value="${b.WRITE_DATE}"/></td>
-								     <td class="condition"><c:out value="${b.CONDITION}"/></td>
+								     <td class="condition">${b.CONDITION}</td>
 								    </tr>    
 								    </c:forEach>
 							  </c:if>
@@ -161,49 +249,18 @@
 						      </tbody>
 						   </table>
 <!--  페이징 처리  시작-->
-<style>
-.pagination{font-family: 'Lato', sans-serif; margin-top:40px}
 
-.page-link {border:none; color:#777777; margin:0px 12px 0px 12px; padding:0px; 
-height:25px; font-size:16px}
-.page-link:focus{box-shadow: none;}
-.page-link:hover{background-color:white;color:#777777;}
-.page-item.active .page-link {
-    color: #000;
-    background-color: white;
-     border-bottom:2px solid #000;
-}
-.first {margin:0px 12px 0px 0px;}
-.back {margin:0px 22px 0px 0px;}
-.next {margin:0px 0px 0px 22px;}
-.last {margin:0px 0px 0px 12px;}
-</style>
- 
-			 <div>
-				<ul class="pagination justify-content-center">
-				  <%-- 1페이지이전: 작동X, 안보임 --%>
+       
+       <div class="pagination">
+		         <%-- 1페이지이전: 이동 x  --%>
 				  <c:if test="${page<=1}">
-				    <li class="paga-item" style="display:none">
-				      <a class="page-link">&lt;&lt;</a>
-				    </li>
-				    <li class="paga-item" style="display:none">
-				      <a class="page-link">&lt;</a>
-				    </li>
+				      <a>&laquo;</a>
 				  </c:if>
 				  
 				  <%-- 1페이지보다 크면: 이전버튼 누르면 page값 ,board/getMian으로 보냄 --%>
-				  <c:if test="${page>1}">
-				    <c:url var="first" value="getMian">
-				    	<c:param name="page" value="${1}"/>
-				    	<c:if test="${search_name != ''}">
-					      	<c:param name="search_name" value="${search_name}"/>
-					    </c:if>
-					    <c:if test="${only != ''}">
-					      	<c:param name="only" value="${only}"/>
-					    </c:if>
-				    </c:url>
+				  <c:if test="${page>1}">	
 				    
-				   	<c:url var="back" value="getMian">
+			 	   <c:url var="back" value="getMian">
 				        <c:param name="page" value="${page-1}"/>
 				        <c:if test="${search_name != ''}">
 					      	<c:param name="search_name" value="${search_name}"/>
@@ -211,28 +268,20 @@ height:25px; font-size:16px}
 					     <c:if test="${only != ''}">
 					      	<c:param name="only" value="${only}"/>
 					    </c:if>
-				    </c:url>
-				    <li class="paga-item">
-				    	 <a href="${first}" class="page-link first">&lt;&lt;</a>
-				    </li>
-				    
-				    <li class="paga-item">
-				         <a href="${back}" class="page-link back">&lt;</a>&nbsp;
-				    </li>
+				    </c:url>				  				    
+				    <a href="${back}">&laquo;</a>
 				  </c:if>
 				  
 				  <%-- 1번부터 끝번호까지 페이지번호 매김--%>
 				  <c:forEach var="i" begin="${startpage}" end="${endpage}" step="1">
 				    <%--현재 페이지는 색깔다르고, 이동없음 --%>
 				    <c:if test="${i == page}">
-				      <li class="page-item active">
-				        <a class="page-link">${i}</a>
-				      </li>
+				        <a class="active">${i}</a>
 				    </c:if>
 			       
-				    <%--다른 페이지는 누르면 검색필드,검색어,페이지들고 getMian.bo갔다온다 --%>
+				  
 				    <c:if test="${i != page}">
-				      <c:url var="move" value="getMian">
+				     <c:url var="move" value="getMian">
 				        <c:param name="page" value="${i}"/>
 				        <c:if test="${search_name != ''}">
 					      	<c:param name="search_name" value="${search_name}"/>
@@ -242,34 +291,19 @@ height:25px; font-size:16px}
 					    </c:if>
 				      </c:url>
 				      <li class="paga-item">
-				        <a href="${move}" class="page-link">${i}&nbsp;&nbsp;</a>
+				        <a href="${move}">${i}</a>
 				      </li> 
 				    </c:if>
 				  </c:forEach>
 				    
-				    <%--현재 페이지가 최대페이지거나 이상 : 작동X, 안보임 --%>  
-				    <c:if test="${page >= maxpage}">
-				      <li class="page-item" style="display:none">
-				      	<a class="page-link">&gt;</a>
-				      </li>
-				      <li class="page-item" style="display:none">
-				      	<a class="page-link">&gt;</a>
-				      </li>
+				    <%--현재 페이지가 최대페이지거나 이상 : 작동X, --%>  
+				    <c:if test="${page >= maxpage}">				    
+				      	<a>&raquo;</a>				    
 				    </c:if>
 				    
-					    <%--최대페이지미만: 다음 버튼누르면 page+1값, 검색필드, 검색어 들고 getMian.bo 갔다옴 --%>
 					    <c:if test="${page < maxpage}">
-					      <c:url var="last" value="getMian">
-					      	<c:param name="page" value="${maxpage}"/>
-					      	<c:if test="${search_name != ''}">
-					      	<c:param name="search_name" value="${search_name}"/>
-					      	</c:if>
-	                        <c:if test="${only != ''}">
-					      	<c:param name="only" value="${only}"/>
-					        </c:if>
-					     </c:url>
 					      
-					      <c:url var="next" value="getMian">
+					       <c:url var="next" value="getMian">
 					        <c:param name="page" value="${page+1}"/>
 					        <c:if test="${search_name != ''}">
 					      	<c:param name="search_name" value="${search_name}"/>
@@ -277,19 +311,12 @@ height:25px; font-size:16px}
 					      	<c:if test="${only != ''}">
 					      	<c:param name="only" value="${only}"/>
 					        </c:if>
-					      </c:url>
-					      <li class="page-item">
-					        <a href="${next}" class="page-link next">&gt;</a>
-					      </li>
-					      <li class="page-item">
-					        <a href="${last}" class="page-link last">&nbsp;&nbsp;&gt;&gt;</a>
-					      </li>
+					      </c:url>					      
+					        <a href="${next}">&raquo;</a>
 			         </c:if>
-			        </ul>
-			     </div>
+		</div>
 
-
-<!-- 페이징처리끝 -->                                   
+                              
  <!-- 테이블  끝  -->                                   
 
                     

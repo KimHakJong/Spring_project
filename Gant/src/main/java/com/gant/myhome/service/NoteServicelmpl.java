@@ -181,6 +181,28 @@ public class NoteServicelmpl implements NoteService {
 	public int Delete(int delete_num) {
 		return dao.Delete(delete_num);
 	}
+
+	//방금생성한 파일번호를 가져온다.
+	@Override
+	public int selectFileNum() {
+		return dao.selectFileNum();
+	}
+
+	//삭제일이 오늘인 delete_num 테이블의 delete_num을 가져온다.
+	@Override
+	public List<Integer> selectDeleteDate(String formattedDate) {
+		return dao.selectDeleteDate(formattedDate);
+	}
+
+	//휴지통 note_delete(테이블의) delete_table 컬럼을 'no'으로 변경
+	@Override
+	public int restore(int note_num, String id, String type) {
+		Map<String,Object> map = new HashMap<String, Object>();
+		map.put("id",id);
+		map.put("note_num",note_num);
+		map.put("type",type);
+		return dao.restore(map);
+	}
     
 	
 
