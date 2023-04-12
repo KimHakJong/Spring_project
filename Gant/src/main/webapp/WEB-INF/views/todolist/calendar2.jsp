@@ -67,14 +67,21 @@ var jq1 = jQuery.noConflict();
 <style>
 @import
 	url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
-
+.btn-check:checked+.btn-outline-primary, .btn-check:active+.btn-outline-primary, .btn-outline-primary:active, .btn-outline-primary.active, .btn-outline-primary.dropdown-toggle.show {
+    color: white !important;
+}
+label.btn.btn-outline-primary:hover {
+    color: white;
+}
 body {
 	font-size: 14px;
 	background-color: white;
 	
 }
-.btn-group{
-	margin-left: 10px;
+
+#file {
+  border-top-left-radius: 5px !important;
+  border-bottom-left-radius: 5px !important;
 }
 
 #loginid{
@@ -796,11 +803,12 @@ border-color: #009CFF !important;
 
 	<jsp:include page="../home/header2.jsp" />
 	
-
+	<div class="container-fluid pt-4 px-4">
+	<div class="container">	
 	    
     			<div class="btn-group" role="group">
                   <input type="radio" class="btn-check" name="btnradio" id="btnradio1">
-                    <label class="btn btn-outline-primary" for="btnradio1" onclick="window.location.href='${pageContext.request.contextPath}/filebox/home?p_no=<%=p_no %>';" >파일 보관함</label>
+                    <label class="btn btn-outline-primary" id="file" for="btnradio1" onclick="window.location.href='${pageContext.request.contextPath}/filebox/home?p_no=<%=p_no %>';" >파일 보관함</label>
 
                     <input type="radio" class="btn-check" name="btnradio" id="btnradio2" >
                     <label class="btn btn-outline-primary" for="btnradio2" onclick="window.location.href='${pageContext.request.contextPath}/todolist/receive?p_no=<%=p_no %>';">할일 리스트</label>
@@ -809,6 +817,8 @@ border-color: #009CFF !important;
                     <label class="btn btn-outline-primary" for="btnradio3" >캘린더</label>
                  </div>
     	<br><br>
+    	</div>
+    </div>
 	
 
 		<sec:authorize access="isAuthenticated()">

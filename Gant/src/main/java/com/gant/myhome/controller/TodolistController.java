@@ -61,7 +61,8 @@ public class TodolistController {
 		   						@RequestParam("p_no") int p_no,  Principal principal,
 		   						@RequestParam(value="p_mids", required = false) String p_id,
 		   						@RequestParam(value="p_mnames", required = false) String p_name,
-		   						@RequestParam(value="page", defaultValue="1", required=false) int page)  
+		   						@RequestParam(value="page", defaultValue="1", required=false) int page,
+		   						@RequestParam(value = "search_word", defaultValue = "", required = false) String search_word) 
    {
 	   
 	   String p_ids[], p_names[], ids[];
@@ -75,7 +76,10 @@ public class TodolistController {
 		int limit = 10;
 		int check = 0;
 		
-		int listcount = todolistservice.getListCount(p_no);
+		int listcount = 0;
+		
+
+		listcount = todolistservice.getListCount(p_no);
 		
 		List<Todolist> todolist = new ArrayList<>();
 		List<HashMap<String, Object>> r_list = new ArrayList<>();
@@ -113,6 +117,7 @@ public class TodolistController {
 		
 		List<Todolist> todolist_tmp = new ArrayList<>();
 		todolist = new ArrayList<>();
+		check = 0;
 		
 		
 		for (HashMap<String, Object> map : r_list) {
@@ -121,15 +126,20 @@ public class TodolistController {
 		    	value = (Integer)entry.getValue();
 		    	
 		    	if(value != 0) {
-		    		System.out.println(value);
-			        todolist_tmp = todolistservice.getTodolist3(page, limit, p_no, value);
+		    		check++;
+		    		if(search_word.equals("") || search_word == null) {
+		    			todolist_tmp = todolistservice.getTodolist3(page, limit, p_no, value);
+		    		}
+		    		else {
+		    			todolist_tmp = todolistservice.getSearchTodolist3(page, limit, p_no, value, search_word);
+		    		}
 			        todolist.addAll(todolist_tmp);
 		    	}
 		    }
 		}
 		
 		
-		listcount = r_list.size();
+		listcount = check;
 
 		int maxpage = (listcount + limit - 1) / limit;
 		
@@ -168,15 +178,28 @@ public class TodolistController {
    @RequestMapping(value="/send", method=RequestMethod.GET)
    public ModelAndView Todolist(ModelAndView mv, Principal principal,
 		   						@RequestParam("p_no") int p_no, 
-		   						@RequestParam(value="page", defaultValue="1", required=false) int page)  
+		   						@RequestParam(value="page", defaultValue="1", required=false) int page,
+		   						@RequestParam(value = "search_word", defaultValue = "", required = false) String search_word)
    {
 	   
 	   String p_ids[], p_names[];
 	   String id = principal.getName();
 	   
+	   List<Todolist> todolist = new ArrayList<>();
+	   
 		int limit = 10; 
 		
-		int listcount = todolistservice.getSendListCount(p_no, id);
+		int listcount = 0;
+		
+		
+		
+		if(search_word.equals("") || search_word == null) {	
+			listcount = todolistservice.getSendListCount(p_no, id);
+			todolist = todolistservice.getTodolist(page, limit, p_no, id);
+		} else {
+			listcount = todolistservice.getSendSearchListCount(p_no, id, search_word);
+			todolist = todolistservice.getSearchTodolist(page, limit, p_no, id, search_word);
+		}
 		
 		int maxpage = (listcount + limit - 1) / limit;
 		
@@ -187,8 +210,7 @@ public class TodolistController {
 			endpage=maxpage;
 		
 		
-		
-		List<Todolist> todolist = todolistservice.getTodolist(page, limit, p_no, id);
+
 	
 	   
 	   String p_id = get_id(p_no);
@@ -304,9 +326,6 @@ public class TodolistController {
 		
 		Todolist todolist = todolistservice.getDetail(num);
 
-		System.out.println("status : " + s);
-		System.out.println("hostid : " + hostid);
-		System.out.println("admin : " + admin);
 	
 		mv.setViewName("todolist/detail");
 			
@@ -322,40 +341,40 @@ public class TodolistController {
 	   public void todolistDeleteAction (
 			   @RequestParam("num") int num,
 			   @RequestParam("s") int s,
-			   @RequestParam("p_no") int p_no   )
-	{
+			   @RequestParam("p_no") int p_no)	{
 		
 			
 		todolistservice.boardDelete(num);
-		
 
-		
 
 		return;
 
 	}
-
 	
-	/*
 	@GetMapping("/modifyView")
 	
 	   public ModelAndView BoardModifyView (
-	            int num,ModelAndView mv, HttpServletRequest request){
+			   @RequestParam("p_no") int p_no,
+			   @RequestParam("num") int num, 
+			   @RequestParam("s") int s, ModelAndView mv, HttpServletRequest request){
 
 				
-		Board boarddata = boardService.getDetail(num);
+		Todolist todolist = todolistservice.getDetail(num);
 		
-		if(boarddata == null) {
+		if(todolist == null) {
 			logger.info("수정보기 실패");
 			mv.setViewName("error/error");
 			mv.addObject("url", request.getRequestURL());
 			mv.addObject("message","수정보기 실패입니다.");
 			return mv;
 		}
+		
 		logger.info("수정 상세보기 성공");
 		
-		mv.addObject("boarddata", boarddata);
-		mv.setViewName("board/board_modify");
+		mv.addObject("todolist", todolist);
+		mv.addObject("s", s);
+		mv.addObject("p_no", p_no);
+		mv.setViewName("todolist/modify");
 			
 		
 		return mv;
@@ -363,431 +382,33 @@ public class TodolistController {
 	
 	@PostMapping("/modifyAction")
 	   public String BoardModifyAction (
-	            Board boarddata, String check, Model mv, HttpServletRequest request, RedirectAttributes rattr)
+			   @RequestParam("p_no") int p_no,
+			   @RequestParam("s") int s,
+	            Todolist todolist, Model mv, HttpServletRequest request, RedirectAttributes rattr)
 	throws Exception{
 		
-		boolean usercheck = boardService.isBoardWriter(boarddata.getBOARD_NUM(), boarddata.getBOARD_PASS());
-		
-		String url="";
-		
-		if(usercheck == false) {
-			rattr.addFlashAttribute("result","passFail");
-			rattr.addAttribute("num", boarddata.getBOARD_NUM());
-			return "redirect:modifyView";
-			 
-		}
-
-		
-
-		int result = boardService.boardModify(boarddata);
+		int result = todolistservice.boardModify(todolist);
+		String url;
 		
 		if(result ==0) {
-			logger.info("게시판 수정 실패");
+			logger.info("수정 실패");
 			
 			mv.addAttribute("url", request.getRequestURL());
 			mv.addAttribute("message","게시판 수정실패입니다.");
 			url="error/error";
 		} else {
-			logger.info("게시판 수정 완료");
+			logger.info("수정 완료");
 		
 			url="redirect:detail";
 			
-			rattr.addAttribute("num", boarddata.getBOARD_NUM());
+			rattr.addAttribute("num", todolist.getBoard_num());
+			rattr.addAttribute("s", s);
+			rattr.addAttribute("p_no", p_no);
 			
 		}
 		return url; 
 				
 		
 	}
-	
-	@PostMapping("/delete")
-	   public String BoardDeleteAction (
-	            String BOARD_PASS, int num, Model mv, HttpServletRequest request, RedirectAttributes rattr)
-	{
-		
-		boolean usercheck = boardService.isBoardWriter(num, BOARD_PASS);
-		
-		String url="";
-		
 
-		
-		if(usercheck == false) {
-			rattr.addFlashAttribute("result","passFail");
-			rattr.addAttribute("num", num);
-			return "redirect:detail";
-			
-		}
-		
-		int result = boardService.boardDelete(num);
-		
-		if(result == 0) {
-			logger.info("게시판 삭제 실패");
-			mv.addAttribute("url", request.getRequestURL());
-			mv.addAttribute("message","삭제 실패");
-			return "error/error";
-			
-		}
-		
-		logger.info("게시판 삭제 성공");
-		
-		
-		rattr.addFlashAttribute("result", "deleteSuccess");
-		
-		return "redirect:list";
-	}
-	
-	
-	
-	
-	
-   
-   /*
-   	private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
-
-	private MySaveFolder mysavefolder;
-	private BoardService boardService;
-	private CommentService commentService;
-	
-	@Autowired
-	public BoardController(BoardService boardservice, CommentService commentService, MySaveFolder mysavefolder) {
-		this.mysavefolder = mysavefolder;
-		this.boardService = boardservice;
-		this.commentService = commentService;
-	}
-	
-	@RequestMapping(value="/list", method=RequestMethod.GET)
-	public ModelAndView boardList(
-									@RequestParam(value="page",defaultValue="1",required=false) int page,
-									ModelAndView mv	) {
-		int limit = 10; 
-				
-		int listcount = boardService.getListCount();
-		
-		int maxpage = (listcount + limit - 1) / limit;
-		
-		int startpage = ((page-1) /10) *10 +1;
-		int endpage = startpage +10 -1;
-		
-		if(endpage>maxpage)
-			endpage=maxpage;
-		
-		List<Board> boardlist = boardService.getBoardList(page,limit);
-		
-		mv.setViewName("board/board_list");
-		mv.addObject("page",page);
-		mv.addObject("maxpage",maxpage);
-		mv.addObject("startpage",startpage);
-		mv.addObject("endpage",endpage);
-		mv.addObject("listcount",listcount);
-		mv.addObject("boardlist",boardlist);
-		mv.addObject("limit",limit);
-		return mv;
-	}
-	
-	
-
-	
-
-	
-	private String fileDBName(String fileName, String saveFolder) {
-		
-		
-		Calendar c = Calendar.getInstance();
-		int year = c.get(Calendar.YEAR);
-		int month = c.get(Calendar.MONTH)+1;
-		int date = c.get(Calendar.DATE);
-		
-		String homedir = saveFolder + "/" + year + "-" + month + "-" + date;
-		
-		logger.info(homedir);
-		File path1 = new File(homedir);
-		
-		if(!(path1.exists())) {
-			path1.mkdir(); 
-		}
-		
-		
-		Random r = new Random();
-		int random = r.nextInt(100000000);
-		
-
-		int index = fileName.lastIndexOf(".");
-		
-		
-		logger.info("index = " + index);
-		
-		String fileExtension = fileName.substring(index+1);
-		logger.info("fileExtension = " + fileExtension);
-		
-
-		String refileName = "bbs" + year + month + date + random + "." + fileExtension;
-		
-		logger.info("refileName = " + refileName);
-		
-		
-		String fileDBName = File.separator + year + "-" + month + "-" + date + File.separator + refileName;
-		logger.info("fileDBName = " + fileDBName);
-		
-		return fileDBName;
-	}
-	
-
-	@ResponseBody
-	@RequestMapping(value="/list_ajax")
-	public Map<String, Object> boardListAjax(@RequestParam(value="page", defaultValue="1", required=false) int page, 
-			@RequestParam(value="limit", defaultValue="10", required=false) int limit){
-		
-		int listcount = boardService.getListCount();
-		
-		int maxpage = (listcount + limit - 1) / limit;
-		
-		
-		int startpage = ((page-1) /10) *10 +1;
-		
-		int endpage = startpage +10 -1;
-			
-		if(endpage > maxpage)
-			endpage = maxpage;
-		
-		List<Board> boardlist = boardService.getBoardList(page, limit);
-		
-		Map<String, Object> map = new HashMap<String, Object>();
-		
-		
-		map.put("page",page);
-		map.put("maxpage",maxpage);
-		map.put("startpage",startpage);
-		map.put("endpage",endpage); 
-		map.put("listcount",listcount);
-		map.put("boardlist",boardlist);
-		map.put("limit",limit);
-		
-		
-		return map;
-	}
-	
-	
-	
-	@GetMapping("/detail")
-	
-	   public ModelAndView Detail (
-	            int num,ModelAndView mv, HttpServletRequest request,
-	            @RequestHeader(value="referer", required=false) String beforeURL){
-
-		
-		
-		logger.info("referer: "+ beforeURL);
-		if(beforeURL!=null && beforeURL.endsWith("list")) {
-			boardService.setReadCountUpdate(num);
-		}
-		
-		Board board = boardService.getDetail(num);
-		
-		if(board==null) {
-			logger.info("상세보기 실패");
-			mv.setViewName("error/error");
-			mv.addObject("url", request.getRequestURL());
-			mv.addObject("message","상세보기 실패입니다.");
-		}
-		else {
-			logger.info("상세보기 성공");
-			int count = commentService.getListCount(num);
-			mv.setViewName("board/board_view");
-			mv.addObject("count", count);
-			mv.addObject("boarddata", board);
-		}
-		return mv;
-	}
-	
-	
-	@GetMapping("/modifyView")
-	
-	   public ModelAndView BoardModifyView (
-	            int num,ModelAndView mv, HttpServletRequest request){
-
-				
-		Board boarddata = boardService.getDetail(num);
-		
-		if(boarddata == null) {
-			logger.info("수정보기 실패");
-			mv.setViewName("error/error");
-			mv.addObject("url", request.getRequestURL());
-			mv.addObject("message","수정보기 실패입니다.");
-			return mv;
-		}
-		logger.info("수정 상세보기 성공");
-		
-		mv.addObject("boarddata", boarddata);
-		mv.setViewName("board/board_modify");
-			
-		
-		return mv;
-	}
-	
-	@PostMapping("/modifyAction")
-	   public String BoardModifyAction (
-	            Board boarddata, String check, Model mv, HttpServletRequest request, RedirectAttributes rattr)
-	throws Exception{
-		
-		boolean usercheck = boardService.isBoardWriter(boarddata.getBOARD_NUM(), boarddata.getBOARD_PASS());
-		
-		String url="";
-		
-		if(usercheck == false) {
-			rattr.addFlashAttribute("result","passFail");
-			rattr.addAttribute("num", boarddata.getBOARD_NUM());
-			return "redirect:modifyView";
-			 
-		}
-		MultipartFile uploadfile = boarddata.getUploadfile();
-		//String saveFolder = request.getSession().getServletContext().getRealPath("resources")+"/upload";
-		
-		if(check != null && !check.equals("")) {//����
-			logger.info("기존 파일 그대로 사용합니다");
-			boarddata.setBOARD_ORIGINAL(check);
-		
-		}else {
-
-			
-			if(uploadfile!=null && !uploadfile.isEmpty()) {
-				logger.info("���� �߰�/���� �Ǿ����ϴ�");
-
-				String fileName = uploadfile.getOriginalFilename();//�������ϸ�
-				boarddata.setBOARD_ORIGINAL(fileName);
-				
-				String saveFolder = mysavefolder.getSavefolder();
-				
-				
-				String fileDBName = fileDBName(fileName, saveFolder);
-				logger.info("fileDBName = " + fileDBName);
-				
-				uploadfile.transferTo(new File(saveFolder + fileDBName));
-				
-				logger.info("transferTo path = " + saveFolder + fileDBName);
-				boarddata.setBOARD_FILE(fileDBName);
-				
-			}else {
-				logger.info("선택한 파일이 없습니다");
-				
-				
-				boarddata.setBOARD_FILE("");
-				boarddata.setBOARD_ORIGINAL("");
-				
-			}//else end
-		}//else end
-		
-
-		int result = boardService.boardModify(boarddata);
-		
-		if(result ==0) {
-			logger.info("게시판 수정 실패");
-			
-			mv.addAttribute("url", request.getRequestURL());
-			mv.addAttribute("message","게시판 수정실패입니다.");
-			url="error/error";
-		} else {
-			logger.info("게시판 수정 완료");
-		
-			url="redirect:detail";
-			
-			rattr.addAttribute("num", boarddata.getBOARD_NUM());
-			
-		}
-		return url; 
-				
-		
-	}
-	
-	@GetMapping("/replyView")
-	
-	   public ModelAndView BoardReplyView (
-	            int num,ModelAndView mv, HttpServletRequest request){
-
-				
-		Board board = boardService.getDetail(num);
-		
-		
-		
-		if(board == null) {
-
-			mv.setViewName("error/error");
-			mv.addObject("url", request.getRequestURL());
-			mv.addObject("message","게시판 답글 가져오기 실패입니다.");
-			
-		}else {
-	
-			mv.addObject("message","답글 가져오기 성공.");
-			mv.addObject("boarddata", board);
-			mv.setViewName("board/board_reply");
-			
-		}
-
-			
-		
-		return mv;
-	}
-	
-	@PostMapping("/replyAction")
-	   public ModelAndView BoardReplyAction (
-	            Board board, ModelAndView mv, HttpServletRequest request, RedirectAttributes rattr)
-	{
-		
-	
-		int result = boardService.boardReply(board);
-		
-		if(result ==0) {
-			
-			mv.setViewName("error/error");
-			mv.addObject("url", request.getRequestURL());
-			mv.addObject("message","게시판 답변 처리 실패");
-		} else {
-			
-			//mv.setViewName("redirect:list");
-			//mv.setViewName("redirect:detail>num="+board.getBOARD_NUM());
-			mv.addObject("message","답글 생성 성공.");
-			rattr.addAttribute("num", board.getBOARD_NUM());
-			mv.setViewName("redirect:detail");
-
-		}
-		return mv; 
-
-	}
-	
-
-	
-
-	
-	@ResponseBody
-	@PostMapping("/down")
-	   public byte[] BoardFileDown(String filename, HttpServletRequest request, String original,
-			   HttpServletResponse response)
-	throws Exception{
-		
-
-		
-		String saveFolder = mysavefolder.getSavefolder();
-		
-		String sFilePath = saveFolder + filename;
-		
-		File file = new File(sFilePath);
-		
-		byte[] bytes = FileCopyUtils.copyToByteArray(file);
-		
-		String sEncoding = new String(original.getBytes("utf-8"), "ISO-8859-1");
-		
-		
-		
-		response.setHeader("Content-Disposition", "attachment;filename=" + sEncoding);
-		
-		response.setContentLength(bytes.length);
-		return bytes;
-		
-	}*/
-
-
-   
-   
-   
-
-   
 }

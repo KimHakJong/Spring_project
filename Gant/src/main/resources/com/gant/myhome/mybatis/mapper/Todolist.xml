@@ -15,6 +15,10 @@
 		select count(*) from todolist where p_no = #{p_no} and board_id = #{id}
 	</select>	
 	
+	<select id="getSendSearchListCount" resultType="int">
+		select count(*) from todolist where p_no = #{p_no} and board_id = #{id} and board_subject like '%'||#{search_word}||'%'
+	</select>	
+	
 	<select id="get_name" resultType="String">
 		select p_mnames from project where p_no = #{p_no}
 	</select>	
@@ -29,6 +33,11 @@
 	where c.rnum2 &gt;= #{start} and c.rnum2 &lt;= #{end} and c.p_no = #{p_no} and c.board_id = #{id} 
 	</select>
 	
+	<select id="getSearchTodolist" resultType="Todolist">
+	select c.* from (select rownum rnum2, b.* from (select board_num, p_no, board_id, board_r_id, board_subject, board_content, deadline, state, rownum rnum from todolist order by state desc) b) c
+	where c.rnum2 &gt;= #{start} and c.rnum2 &lt;= #{end} and c.p_no = #{p_no} and c.board_id = #{id} and c.board_subject like '%'||#{search}||'%'
+	</select>
+	
 	<select id="getTodolist2" resultType="Todolist">
 	select c.board_r_id, c.board_num, c.p_no from (select b.p_no, b.board_r_id, b.board_num from (select * from todolist order by state desc) b) c where c.p_no = #{p_no} 
 	</select>
@@ -36,6 +45,11 @@
 	<select id="getTodolist3" resultType="Todolist">
 	select c.* from (select rownum rnum2, b.* from (select board_num, p_no, board_id, board_r_id, board_subject, board_content, deadline, state, rownum rnum from todolist order by state desc) b) c
 	 where c.rnum2 &gt;= #{start} and c.rnum2 &lt;= #{end} and c.p_no = #{p_no} and c.board_num = #{board_num} 
+	</select>
+	
+	<select id="getSearchTodolist3" resultType="Todolist">
+	select c.* from (select rownum rnum2, b.* from (select board_num, p_no, board_id, board_r_id, board_subject, board_content, deadline, state, rownum rnum from todolist order by state desc) b) c
+	 where c.rnum2 &gt;= #{start} and c.rnum2 &lt;= #{end} and c.p_no = #{p_no} and c.board_num = #{board_num} and c.board_subject like '%'||#{search}||'%'
 	</select>
 	
 	
@@ -51,20 +65,15 @@
 		select * from todolist where board_num = #{num}
 	</select>
 	
-	<!--  map은 java.util.Map의 별칭 -->
-	
-	<select id="isBoardWriter" resultType="String">
-		select board_id from todolist where board_num= #{board_num}
-	</select>
+
 	
 	<update id="boardModify">
-      update board3
-      set BOARD_SUBJECT = #{BOARD_SUBJECT},
-         BOARD_CONTENT = #{BOARD_CONTENT},
-         BOARD_FILE = #{BOARD_FILE},
-         BOARD_ORIGINAL = #{BOARD_ORIGINAL}
-         
-      where BOARD_NUM=#{BOARD_NUM}
+      update todolist
+      set board_subject = #{board_subject},
+         board_content = #{board_content},
+         deadline = #{deadline},
+         state = #{state}
+      where board_num=#{board_num}
    </update>
    
 

@@ -40,8 +40,6 @@
 	
 	if(result == 'deleteSuccess'){
 		alert("삭제 성공입니다");
-	} else if(result =='updateSuccess'){
-		alert("회원 정보가 수정되었습니다.");
 	}
 </script>
 
@@ -50,22 +48,39 @@
 <meta name="_csrf_header" content="${_csrf.headerName}">
 
 <meta charset="utf-8">
-<style>
 
+<style>
+thead{
+		 background-color:#4da7ed;
+		 color: white;
+}
+.btn-check:checked+.btn-outline-primary, .btn-check:active+.btn-outline-primary, .btn-outline-primary:active, .btn-outline-primary.active, .btn-outline-primary.dropdown-toggle.show {
+    color: white !important;
+}
+.form-control me-2{
+margin-rigth: 0px;
+}
+label.btn.btn-outline-primary:hover {
+    color: white;
+}
 #loginid{
 	display: none;
 }
-.btn-link m-2{
-	
-}
+
 .btn-primary{
 float: right;}
 
 .col{
 	flex: 0.8 0 0 !important;
 }
-.row mb-3{
-	
+
+#search{
+	border-top-left-radius: 0px !important;
+	border-bottom-left-radius: 0px !important;
+}
+#search_word{
+	border-top-right-radius: 0px !important;
+	border-bottom-right-radius: 0px !important;
 }
 
 
@@ -135,12 +150,25 @@ $(document).ready(function(){
 		    </div>
 		  </div>
 		
+
             <div class="col-auto">
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit" style="width: 75px;">검색</button>
-                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-                </form>
+            	<% if(status.equals("s")) {%>
+	                <form class="d-flex" action="send" method="get">
+	                	<input type="hidden" name="p_no" value="${p_no}">
+	                	<input class="form-control" type="text" placeholder="검색 할 제목 입력" name="search_word" id="search_word" >
+	                    <button class="btn btn-outline-success" type="submit" style="width: 75px;" id="search">검색</button>     
+	                </form>
+	            
+	            
+	            <% } else {%>
+	            
+	            	<form class="d-flex" action="receive" method="get">
+	                	<input type="hidden" name="p_no" value="${p_no}">
+	                	<input class="form-control" type="text" placeholder="검색 할 제목 입력" name="search_word" id="search_word" >
+	                    <button class="btn btn-outline-success" type="submit" style="width: 75px;" id="search">검색</button>     
+	                </form>
+	            
+	            <%} %>
 
             </div>
             <div class="col-auto">
@@ -179,7 +207,7 @@ $(document).ready(function(){
       <td><%--제목 --%>
       <div>
 
-         &nbsp;<%-- 1이면 send, 0이면 receive --%>
+         <%-- 1이면 send, 0이면 receive --%>
          <% if(status.equals("s")) {%>
          <a href="detail?num=${b.board_num }&s=1&p_no=<%=p_no %>">
          <% } else {%>

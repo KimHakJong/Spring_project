@@ -175,14 +175,9 @@ public class ProjectCalendarController {
 	   c.setTitle(title);
 	   c.setP_no(p_no);
 	   
-	   System.out.println("delete의 p_no" + p_no);
-
-	   
 	   int result = 0;
 	   result = calservice.caldelete(id, p_no);
 	   
-	   if(result != 0)
-		   System.out.println("삭제 성공");
 	   
 	   return "redirect:cal?p_no=" + p_no;
 	   
