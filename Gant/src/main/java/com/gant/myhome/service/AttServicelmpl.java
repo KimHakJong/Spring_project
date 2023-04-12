@@ -71,8 +71,11 @@ public class AttServicelmpl implements AttService {
 
 	// id에 해당하는 DB에 저장되어있는 정보를 가져온다.
 	@Override
-	public Attendance AttendanceGetselect(String id) {		
-		return dao.AttendanceGetselect(id);
+	public Attendance selectCommuteRecord(String id,String now_Day) {	
+		Map<String,Object> map = new HashMap<String, Object>();
+		map.put("id",id);
+		map.put("now_Day",now_Day);				
+		return dao.selectCommuteRecord(map);
 	}
 
 	//월요일에는 모든 사원들의 주간 총 근무시간을 리셋한다.
@@ -153,6 +156,12 @@ public class AttServicelmpl implements AttService {
 		map.put("date_Search",date_Search);
 		
 		return dao.getSearchList(map);
+	}
+
+	// id에 해당하는 DB에 저장되어있는 정보를 가져온다.
+	@Override
+	public Attendance selectAttendance(String id) {
+		return dao.selectAttendance(id);
 	}
     
 	

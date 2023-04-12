@@ -9,6 +9,17 @@
 		1. 태크에 id 속성은 Mapper 인터페이스에 추가한 메서드명과 동일하게 작성됩니다.
 		2. resultType속성은 연동시킬 메서드에 명시된 반환 타입을 작성해 줍니다.
 		-->
+	<insert id="insertNoteFile">
+	 insert into notefile
+     (file_num, original_filename, extension, save_folder) 
+     values
+	 (notefile_seq.NEXTVAL,#{original_filename},#{extension},#{save_folder})  
+	</insert>	
+	
+	<select id="selectFileNum" resultType="int">
+	select max(file_num)
+	from notefile	
+	</select>
 		
   	<insert id="insertNoteDelete">
 	 insert into note_delete
@@ -24,9 +35,9 @@
    
     <insert id="insertNote">
 	 insert into note
-     (note_num, delete_num, id, to_id, subject, content ) 
+     (note_num, delete_num, id, to_id, subject, content ,file_num ) 
      values
-	 (note_seq.NEXTVAL,#{delete_num},#{id},#{to_id},#{subject},#{content})  
+	 (note_seq.NEXTVAL,#{delete_num},#{id},#{to_id},#{subject},#{content},#{file_num})  
 	</insert>
     
     <select id="selectNoteNum" resultType="int">
@@ -37,17 +48,12 @@
 	
 	<insert id="insertNoteTo">
 	 insert into note_to
-     (note_num, delete_num, id, to_id, subject, content,read_check ) 
+     (note_num, delete_num, id, to_id, subject, content,read_check,file_num ) 
      values
-	 (#{note_num},#{delete_num},#{id},#{to_id},#{subject},#{content},'false')  
+	 (#{note_num},#{delete_num},#{id},#{to_id},#{subject},#{content},'false',#{file_num})  
 	</insert>
 	
-	<insert id="insertNoteFile">
-	 insert into notefile
-     (note_num, file_num, original_filename, extension, save_folder) 
-     values
-	 (#{note_num},notefile_seq.NEXTVAL,#{original_filename},#{extension},#{save_folder})  
-	</insert>  
+	  
 	
 	<select id="getNoteNum" resultType="int">
 	select count(*)
@@ -124,7 +130,7 @@
 	<select id="selectNotefile" resultType="int">
 	select count(*)
 	from notefile
-	where note_num = #{note_num}
+	where file_num = #{file_num}
 	</select>
 	
 	<select id="selectNoteTo" resultType="java.util.Map">
@@ -141,7 +147,7 @@
 																					        WHERE to_id = #{id} AND note_num = #{note_num}
 															   <if test="notefile != 0 ">					        
 																					        ) a
-																ON f.note_num = a.note_num
+																ON f.file_num = a.file_num
 															   </if>
 																) t
 								    ON m.id = t.id) s
@@ -186,7 +192,7 @@
 								WHERE note_num = #{note_num}
 	<if test="notefile != 0 ">					        
 								) a
-	ON f.note_num = a.note_num
+	ON f.file_num = a.file_num
 	</if>
 																
 	</select>
@@ -218,5 +224,32 @@
      delete from note_delete
      where delete_num = #{delete_num}    
 	</delete>
+	
+	
+	<select id="selectDeleteDate" resultType="int">
+	select delete_num
+	from note_delete
+	where delete_date = #{delete_date}
+	</select>
+	
+	<update id="restore">
+	    <selectKey resultType="int" order="BEFORE" keyProperty="delete_num">
+           select delete_num
+           from
+           <if test="type == 'get' ">
+            note_to
+           </if>
+           <if test="type == 'send' ">
+           note
+           </if>  
+           where note_num = #{note_num}
+           <if test="type == 'get' ">
+            and to_id = #{id} 
+           </if>                       
+        </selectKey>
+	  update note_delete
+	  set delete_table = 'no', delete_date = ''
+	  where delete_num = #{delete_num}
+	</update>
 	
 </mapper>

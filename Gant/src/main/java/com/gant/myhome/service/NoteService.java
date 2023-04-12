@@ -65,6 +65,15 @@ public interface NoteService {
 	//휴지통 note_delete(테이블) 삭제 
 	int Delete(int delete_num);
     
+	//방금생성한 파일번호를 가져온다.
+	int selectFileNum();
+	
+	//삭제일이 오늘인 delete_num 테이블의 delete_num을 가져온다.
+	List<Integer> selectDeleteDate(String formattedDate);
+    
+	//휴지통 note_delete(테이블의) delete_table 컬럼을 'no'으로 변경
+	int restore(int note_num, String id, String type);
+    
 	
     
 	

@@ -10,7 +10,7 @@
 		2. resultType속성은 연동시킬 메서드에 명시된 반환 타입을 작성해 줍니다.
 		-->
     
-    
+   
     <select id="Vacationselect" resultType="int">
     select count(*)
     from vacation_num
@@ -47,11 +47,17 @@
     </select> 
     
     <insert id="attendance_insert">
-     INSERT INTO attendance (id,work_week,checkbutton,work_date)
-     VALUES (#{id},'00:00:00','false',to_char(SYSDATE, 'YYYYMMDD'))
+     INSERT INTO attendance (id,work_week,checkbutton)
+     VALUES (#{id},'00:00:00','false')
     </insert>
     
-    <select id="AttendanceGetselect" resultType="attendance">
+    <select id="selectCommuteRecord" resultType="attendance">
+    select * 
+    from commute_record 
+    where id = #{id} and work_date = #{now_Day} and endTime = '0'
+    </select>
+    
+    <select id="selectAttendance" resultType="attendance">
     select * 
     from attendance 
     where id = #{id}
@@ -64,18 +70,18 @@
     
     <update id="startTimeUpdate">
      update attendance
-     set starTtime= #{starTtime} , checkbutton='true' , work_date=to_char(SYSDATE, 'YYYYMMDD')
+     set checkbutton='true'
      where id= #{id}
     </update>
     
     <insert id="insert_commute_record">
-     insert into commute_record (id,startTime,work_date)
-     VALUES (#{id},#{starTtime},to_char(SYSDATE, 'YYYYMMDD'))
+     insert into commute_record (id,startTime,work_date,endTime,work_today)
+     VALUES (#{id},#{startTime},to_char(SYSDATE, 'YYYYMMDD'),'0','0')
     </insert>
     
     <update id="endTimeUpdate">
     update attendance
-    set endTime=#{endTime} , work_today=#{work_today}, work_week=#{work_week} , overTime=#{overTime} , checkbutton='false'
+    set work_today=#{work_today}, work_week=#{work_week} , overTime=#{overTime} , checkbutton='false'
     where id=#{id}
     </update>
 
@@ -101,7 +107,7 @@
 	            SELECT *
 	            FROM commute_record
                 where id = #{id}
-	            order by work_date DESC ,  STARTTIME DESC
+	            order by work_date DESC ,  startTime DESC
 		         ) j
 	      WHERE ROWNUM <= #{end} 
 	       )
@@ -124,7 +130,7 @@
 		            SELECT *
 		            FROM commute_record
 	                where id = #{id} and work_date = #{date_Search}
-		            order by work_date DESC ,  STARTTIME DESC
+		            order by work_date DESC ,  startTime DESC
 			         ) j
 		      WHERE ROWNUM <= #{end} 
 		       )

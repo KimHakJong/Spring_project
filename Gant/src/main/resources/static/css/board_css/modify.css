@@ -104,12 +104,12 @@ margin-left:-3px;
 }
 
 #container{
-margin-top: 20px
+margin-top: 5%
 }
 
 .container-fluid.pt-4.px-4{
   margin-bottom : 40px;
-  height : 100%px;
+   height: 100%;
   width : 55%;	
 }
 
@@ -118,3 +118,30 @@ margin-top: 20px
  display: flex;
  justify-content: flex-end;
 }
+
+.board_style {
+ height: 4%;
+}
+
+#fontColor{
+ position: relative;
+ top: 3px;
+}
+
+
+.container{     
+     padding-top:30px;
+    border: 1px solid #d1d1d1ba;
+    border-radius: 15px;
+   
+}
+
+
+
+.form-control:disabled, .form-control:read-only {
+    background-color: #e9ecef85 !important;
+    
+}
+.fileName:disabled, .fileName[readonly] {
+    background-color: #e9ecef85 !important;
+    

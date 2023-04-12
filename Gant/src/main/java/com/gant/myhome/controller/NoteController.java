@@ -200,10 +200,55 @@ public class NoteController {
 		String id = principal.getName();
 		note.setId(id);
 		
+		int result = 0;
+		int file_num = 0; //파일번호
+		/* 파일 테이블 insert과정 
+	     * MultipartFile 클래스는 웹 애플리케이션에서 파일 업로드를 처리하는 방법을 제공하는 Spring Framework 웹 모듈의 일부입니다.
+	     *  HTTP 요청의 일부로 서버에 전송된 업로드된 파일을 나타냅니다.
+	     */
+		 MultipartFile uploadfile = note.getUploadfile();	
+		
+	    if(!uploadfile.isEmpty()) {
+	    	String originalfileName = uploadfile.getOriginalFilename();//원래 파일명
+	    	
+            
+	    	//업로드 파일 저장 경로
+	    	String saveFolder = noteSavefolder.getSavefolder();
+	    	
+	    	//중복방지를 위한 파일명과 경로를 만들어준다.
+	    	note = fileDBName(originalfileName , saveFolder , note);
+	    	
+	    	String fileDBName = note.getSave_folder();
+	    	
+	    	// transferTo(Flie path) : 업로드한 파일을 매개변수의 경로에 저장합니다.
+	    	//import java.io.File;
+	    	uploadfile.transferTo(new File(saveFolder + fileDBName));
+	    	logger.info("transferTo path = " + saveFolder + fileDBName);
+            
+	    	//파일 테이블에(notefile)insert 한다. 
+	    	result = noteService.insertNoteFile(note); 
+	    	
+	    	//insert 처리 실패한 경우
+			 if(result == 0) {
+				 logger.info("쪽지파일 테이블 생성 실패");
+				 mv.setViewName("error/error");
+				 mv.addObject("message" , "쪽지파일 테이블 생성 실패");		
+			 }
+			
+			 logger.info("쪽지파일 테이블 생성 성공");
+			 
+			 //방금생성한 파일번호를 가져온다.
+			 file_num = noteService.selectFileNum();
+	    }
+		
+	  	//파일이 없다면 0    
+	    note.setFile_num(file_num);
+	    
+		
 		//쪽지휴지통(삭제전 임시보관함) 테이블을 생성
 		//보낸쪽지함의 휴지통 테이블 생성
 		String table_kind = "from";
-		int result =  noteService.insertNoteDelete(table_kind);
+		 result =  noteService.insertNoteDelete(table_kind);
 		
 		 //insert 처리 실패한 경우
 		 if(result == 0) {
@@ -281,45 +326,8 @@ public class NoteController {
 			 
 		 }
 
-		
-		/* 파일 테이블 insert과정 
-	     * MultipartFile 클래스는 웹 애플리케이션에서 파일 업로드를 처리하는 방법을 제공하는 Spring Framework 웹 모듈의 일부입니다.
-	     *  HTTP 요청의 일부로 서버에 전송된 업로드된 파일을 나타냅니다.
-	     */
-		 MultipartFile uploadfile = note.getUploadfile();	
-		
-	    if(!uploadfile.isEmpty()) {
-	    	String originalfileName = uploadfile.getOriginalFilename();//원래 파일명
-	    	
-            
-	    	//업로드 파일 저장 경로
-	    	String saveFolder = noteSavefolder.getSavefolder();
-	    	
-	    	//중복방지를 위한 파일명과 경로를 만들어준다.
-	    	note = fileDBName(originalfileName , saveFolder , note);
-	    	
-	    	String fileDBName = note.getSave_folder();
-	    	
-	    	// transferTo(Flie path) : 업로드한 파일을 매개변수의 경로에 저장합니다.
-	    	//import java.io.File;
-	    	uploadfile.transferTo(new File(saveFolder + fileDBName));
-	    	logger.info("transferTo path = " + saveFolder + fileDBName);
-            
-	    	//파일 테이블에(notefile)insert 한다. 
-	    	result = noteService.insertNoteFile(note); 
-	    	
-	    	//insert 처리 실패한 경우
-			 if(result == 0) {
-				 logger.info("쪽지파일 테이블 생성 실패");
-				 mv.setViewName("error/error");
-				 mv.addObject("message" , "쪽지파일 테이블 생성 실패");		
-			 }
-			
-			 logger.info("쪽지파일 테이블 생성 성공");	 
-	    }
-		
-			
-		mv.setViewName("note/getmain");	
+	
+		mv.setViewName("redirect:/note/getMian");	
 					
 		return mv;
 	}
@@ -390,6 +398,7 @@ public class NoteController {
 			@RequestParam(value = "note_num", defaultValue = "0", required = false) int note_num,
 			@RequestParam(value = "read_check", required = false) String read_check,
 			@RequestParam(value = "type", required = false) String type, //normal 이면 받은쪽지함 상세보기 , basket이면 휴지통의 받은쪽지함 상세보기
+			@RequestParam(value = "file_num",defaultValue = "0", required = false) int file_num,
 			Principal principal,
 			ModelAndView mv)  {
 		String id = principal.getName();
@@ -401,7 +410,7 @@ public class NoteController {
 		
 		
 		//note_num에 파일이테이블이 있는지 없는지 확인 없으면 0 , 있으면 1
-		int notefile = noteService.selectNotefile(note_num);
+		int notefile = noteService.selectNotefile(file_num);
 		
 		//note_num 과 id에 해당하는 받은 쪽지테이블(note_to)의 데이터를 가져온다.
 		Map<String,Object> note= noteService.selectNoteTo(note_num,id,notefile);
@@ -429,11 +438,12 @@ public class NoteController {
 		public ModelAndView sendDetail(
 				@RequestParam(value = "note_num", defaultValue = "0", required = false) int note_num,
 				@RequestParam(value = "type", required = false) String type, //normal 이면 받은쪽지함 상세보기 , basket이면 휴지통의 받은쪽지함 상세보기
+				@RequestParam(value = "file_num",defaultValue = "0", required = false) int file_num,
 				Principal principal,
 				ModelAndView mv)  {
 					
 			//note_num에 파일이테이블이 있는지 없는지 확인 없으면 0 , 있으면 1
-			int notefile = noteService.selectNotefile(note_num);
+			int notefile = noteService.selectNotefile(file_num);
 			
 			//note_num에 해당하는 보낸 쪽지테이블(note)의 데이터를 가져온다.
 			Map<String,Object> note= noteService.selectNote(note_num,notefile);
@@ -501,7 +511,7 @@ public class NoteController {
 			return bytes;
 			}
 			
-	//받은쪽지함 휴지통으로 이동
+	//받은쪽지함 보낸쪽지함의 쪽지를 휴지통으로 이동
 	@RequestMapping(value = "/getBasket" , method = RequestMethod.GET)
 	public ModelAndView getDetail(
 			@RequestParam(value = "note_num", defaultValue = "0", required = false) int note_num,
@@ -718,6 +728,49 @@ public class NoteController {
 			out.println("</script>");
 			out.flush();
           
+			return mv;
+		}
+		
+		
+		
+		//휴지통의 쪽지를 받은쪽지함 보낸쪽지함으로 이동 (복구)
+		@RequestMapping(value = "/restore" , method = RequestMethod.GET)
+		public ModelAndView restore(
+				@RequestParam(value = "note_num", defaultValue = "0", required = false) int note_num,
+				@RequestParam(value = "type", defaultValue = "", required = false) String type,
+				Principal principal,
+				HttpServletResponse response,
+				ModelAndView mv) throws IOException  {
+			
+			String id = principal.getName();
+			
+			int result = 0;
+			
+			
+			//휴지통 note_delete(테이블의) delete_table 컬럼을 'no'으로 변경
+			result = noteService.restore(note_num,id,type);
+			
+			
+					
+			if(result == 0) {
+				 logger.info("복구 실패");
+				 mv.setViewName("error/error");
+				 mv.addObject("message" , "복구 실패");		
+			 }
+			
+			init(response);
+			PrintWriter out = response.getWriter();
+			out.println("<script>");
+			out.println("alert('복구되었습니다.')");
+			if(type.equals("get")) {
+			out.println("location.href='getBasketMian'");
+			}else if(type.equals("send")) {
+			out.println("location.href='sendBasketMian'");	
+			}
+			out.println("</script>");
+			out.flush();
+			
+			
 			return mv;
 		}
 	

@@ -425,7 +425,15 @@ width: 20px
 <div class="content">
 <jsp:include page="../home/header2.jsp" />
 
-
+<style>
+.bg-primary {
+    background-color: #03a9f4b0 !important;
+}
+.form-control:disabled, .form-control:read-only {
+    background-color: #e9ecef69;
+    opacity: 1;
+}
+</style>
 
 			  <div class="container mt-5">
 			  
@@ -524,7 +532,7 @@ width: 20px
 			         <div class="input-group mb-3">
 			        <input type="text" class="form-control" id="reference_person" readonly>
 			        <input type="hidden" class="form-control" id="reference_person_id" name="reference_person">
-					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+					<button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#myModal">
 					  명단 검색
 					</button>
 			        </div>
@@ -533,8 +541,8 @@ width: 20px
 			   
 			    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">  
 			    <div class="form-group">
-			    <button type="submit" class="btn btn-primary m-2 float-right" id="submit">신청</button>
-			     <button type="button" class="btn btn-danger m-2 float-right" onclick="location.href='getMian'">취소</button>
+			    <button type="submit" class="btn btn-outline-primary m-2 float-right" id="submit">신청</button>
+			     <button type="button" class="btn btn-outline-danger m-2 float-right" onclick="location.href='getMian'">취소</button>
 			    </div>
 			  </form>
 			  

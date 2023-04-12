@@ -120,7 +120,7 @@ public class AttController {
 						mv.addObject("checkbutton","false");
 						mv.addObject("work_week_hours","00");
 					}else if(select == 1) {
-						att = attService.AttendanceGetselect(id); // id에 해당하는 DB에 저장되어있는 정보를 가져온다.
+						att = attService.selectAttendance(id); // id에 해당하는 DB에 저장되어있는 정보를 가져온다.
 						mv.addObject("work_week",att.getWork_week()); // 월요일이 아니라면 기존의 주간 총 근무시간을 가져온다.
 					    mv.addObject("work_week_hours",att.getWork_week().split(":")[0]);
 						mv.addObject("checkbutton",att.getCheckbutton()); // 출/퇴근 버튼 활성화 비활성화를 위한 값 
@@ -150,7 +150,7 @@ public class AttController {
 		
 		 	 att = new Attendance();
 			 att.setId(id);
-			 att.setStarTtime(startTime);
+			 att.setStartTime(startTime);
 			 
 			 int result = attService.startTimeUpdate(att); // 데이터를 넣는다. // checkbutton 을 false로 변경 // 출근버튼 비활성화
 			 int result2 = attService.insert_commute_record(att); //출퇴근을 기록한다. attendance테이블의 경우 출퇴근시간을 매번 리셋하기 때문에 출퇴근 시간을 기록하는용도로 생성
@@ -173,9 +173,26 @@ public class AttController {
 		}else if(checkbutton.equals("endbutton")) { // 퇴근버튼
 			logger.info("퇴근시간:"+endTime);
 			logger.info("업데이트 전 주간 총 근무시간:"+work_week);
+			
+			//오늘 날짜 구하기
+			Date now = new Date();
+	        // 포맷팅 정의
+			SimpleDateFormat Day = new SimpleDateFormat("yyyyMMdd");
+			 // 포맷팅 적용
+			
+			// 현재 년월일.
+			String now_Day = Day.format(now); 
+			
+			
 			att = new Attendance(); // DAO에서 가져온 데이터 저장 
-			att = attService.AttendanceGetselect(id);  // select을 이용하여 출근시간을 가져온다.->= 하루 총 근무시간 = 퇴근시간 - 출근시간 
-			String startTime1 = att.getStarTtime(); // 출근시간 
+			att = attService.selectCommuteRecord(id,now_Day);  // select을 이용하여 출근시간을 가져온다.->= 하루 총 근무시간 = 퇴근시간 - 출근시간 
+			String startTime1 = att.getStartTime(); // 출근시간 
+			
+			//만약 현재날짜에 출근시간이 없다면 출근시간은 00:00:00으로 설정해준다.
+			if(startTime1.equals("") || startTime1 == null) {
+				startTime1 = "00:00:00";
+			}
+			
 			logger.info("출근시간:"+startTime1);
 			
 			try {
@@ -194,17 +211,13 @@ public class AttController {
 			//출근을 클릭했을때 년 월일
 			String last_Work_date = att.getWork_date();
 			
-		    //오늘 날짜 구하기
-			Date now = new Date();
-	        // 포맷팅 정의
-			SimpleDateFormat Day = new SimpleDateFormat("yyyyMMdd");
-			 // 포맷팅 적용
-			
-			// 현재 년월일.
-			String now_Day = Day.format(now); 
-			
-			// 하루근무시간(ms)가 음수로 나오거나 출근을 클릭했을때와 퇴근을 클릭했을때 날짜가 다르다면 하루 근무시간은 0으로 한다.
-			if( 0 > todaywork || !last_Work_date.equals(now_Day)) {
+			//만약 현재날짜에 출근날짜가 없다면 출근날짜는은 00000000으로 설정해준다.
+			if(last_Work_date.equals("") || last_Work_date == null) {
+				startTime1 = "00000000";
+			}
+						
+			// 퇴근을 클릭했을때 날짜가 다르다면 하루 근무시간은 0으로 한다.
+			if(!last_Work_date.equals(now_Day)) {
 				todaywork = 0;
 			}
 			
@@ -356,7 +369,7 @@ public class AttController {
 					return null;  
 			 }
 
-			 att = attService.AttendanceGetselect(id);  // select을 이용하여 주간 총 근무시간 , 초과근무시간, 하루 총 근무시간을 가져온다.
+			 att = attService.selectAttendance(id);  // select을 이용하여 주간 총 근무시간 , 초과근무시간, 하루 총 근무시간을 가져온다.
 			 
 			 map.put("overTime",att.getOverTime());
 			 map.put("work_today",att.getWork_today());
@@ -377,7 +390,7 @@ public class AttController {
 		return map;
 	}
 	
-	
+	//근태기록 클릭 시
 	@RequestMapping(value = "/commute_record" , method = RequestMethod.GET)
 	public ModelAndView boardlist(
 			@RequestParam(value = "page", defaultValue = "1", required = false) int page,

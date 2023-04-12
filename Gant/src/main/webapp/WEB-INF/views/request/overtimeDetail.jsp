@@ -10,7 +10,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
 <style>
 #subject{
-  background-color: #009CFF;
+  background-color: #03a9f4eb;
   color: white;
   opacity: 0.8;
 }
@@ -82,23 +82,34 @@ font-weight: bold;
   background: #b8d3e4;
 }
 
+.close{
+color: #fff;
+opacity: 1;
+}
+
+.table thead th {
+    vertical-align: bottom;
+    border-bottom: 1px solid #dee2e6;
+}
+
+
 </style>
 <script>
 $(document).ready(function () {   
  
-  $('.condition').each(function() {
-	    
-	  // 결재상태에따라 결재상태 글자색을 변경한다.
-	  var condition = $(this).text();
+	 $('.condition').each(function() {
+		    
+  		  // 결재상태에따라 결재상태 글자색을 변경한다.
+  		  var condition = $(this).text();
 
-	    if (condition == '대기') {
-	      $(this).css('color', 'blue');
-	    } else if (condition == '거절') {
-	      $(this).css('color', 'red');
-	    } else if (condition == '승인') {
-	      $(this).css('color', 'green');
-	    }
-	  });
+  		    if (condition == '대기') {    		      
+  		      $(this).html('<span class="badge bg-info">대기</span>');
+  		    } else if (condition == '거절') {
+  		      $(this).html('<span class="badge bg-danger">거절</span>');
+  		    } else if (condition == '승인') {
+  		      $(this).html('<span class="badge bg-success">승인</span>');
+  		    }
+  		  });
 	
 	  //모달 스크롤을 위한 코드
 	  var $tableRows = $('#modal_table tbody tr');
@@ -141,6 +152,7 @@ $(document).ready(function () {
       
  }); 
 </script>
+
 </head>
 <body>
 
@@ -151,13 +163,65 @@ $(document).ready(function () {
 <jsp:include page="../home/header2.jsp" />
 <div class="container-fluid pt-4 px-4">
 
+
+<style>
+.bg-info {
+    background-color: #2196f3d4 !important;
+}
+
+.bg-success {
+    background-color: #34c23a !important;
+}
+
+.bg-danger {
+    background-color: #f44336cf !important;
+}
+
+.modal-footer {
+   border-top: 0;
+}
+
+
+
+.table thead th {
+ border-bottom: 0; 
+}
+
+.close {
+    color: #fff;
+    opacity: 1;
+}
+
+.form-control:disabled, .form-control:read-only {
+    background-color: #e9ecef52;
+    opacity: 1;
+}
+
+#subject{
+border-radius : 10px 10px 0px 0px;
+}
+
+.border-top{
+border-top: 0 !important; 
+}
+
+.btn-primary{
+background-color: #03a9f4d4 !important; 
+border: none;
+}
+.modal-header {
+    background-color: #03a9f4d4;
+    color: white;
+    opacity: 0.8;
+}
+</style>
 	     
 	<div class="container">
   <button type="button" class="btn btn-primary float-right " data-toggle="modal" data-target="#memberListModal">참조자</button>
   <table class="table" id="maintable">
     <thead>
       <tr>
-        <th colspan="2" id="subject">품의서</th>
+        <th colspan="2" id="subject" class="border-top">품의서</th>
       </tr>
     </thead>
     <tbody>

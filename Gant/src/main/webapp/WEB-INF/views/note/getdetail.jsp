@@ -112,10 +112,16 @@
     	
     	$('#DeletePermanently').click(function(){
     		
-        	if(confirm("영구삭제시 복구가 불가능합니다. 그래도 삭제 하시겠습니까?"))
+        	if(confirm("영구삭제 시 복구가 불가능합니다. 그래도 삭제하시겠습니까?"))
         		location.href='delete?note_num=${note.NOTE_NUM}&type=get'
         	});
     	
+    	
+    	$('#restore').click(function(){
+    		
+        	if(confirm("복구하시겠습니까?"))
+        		location.href='restore?note_num=${note.NOTE_NUM}&type=get'
+        	});
     	
 	});
     </script>
@@ -155,7 +161,8 @@
 		        <th class="border-bottom">		        
 		        <button type="button" class="btn" id="list"  onClick="location.href='getBasketMian'" >〈 목록</button>
 		        <div class="float-right">
-		        <button type="button" class="btn btn-outline-danger btn-sm" id="DeletePermanently">영구삭제</button>		        		       
+		        <button type="button" class="btn btn-outline-danger btn-sm" id="DeletePermanently">영구삭제</button>
+		        <button type="button" class="btn btn-outline-primary btn-sm" id="restore">복구</button>		        		       
 		        </div>
 		        </th>
 		     </tr>

@@ -138,7 +138,7 @@ text-align: center;
 		        <fmt:parseDate value="${b.work_date}" var="date" pattern="yyyyMMdd" scope="page"/>
 		        <fmt:formatDate value="${date}" pattern="yyyy-MM-dd"/>
 		        </div></td>
-		        <td><div>${b.starTtime}</div></td>
+		        <td><div>${b.startTime}</div></td>
 		        <td><div>${b.endTime}</div></td>
 		        <td><div>${b.work_today}</div></td>
 		    </tr>

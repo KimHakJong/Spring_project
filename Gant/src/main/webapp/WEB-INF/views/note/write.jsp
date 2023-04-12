@@ -26,43 +26,19 @@
             //submit click 이벤트 
             $("#submit").click(function(){
 		    	//공백 검사
-            	if($("#overtime_date").val() == ""){
-		    		alert('근무일자를 선택하세요.');
-		    		$("#overtime_date").focus();
-					return false;
-		    	}
 		    	
-            	if($("#start_time").val() == ""){
-		    		alert('초과근무 시작시간을 선택하세요.');
-		    		$("#start_time").focus();
-					return false;
-		    	}
-            	
-            	if($("#end_time").val() == ""){
-		    		alert('초과근무 끝난시간을 선택하세요.');
-		    		$("#end_time").focus();
-					return false;
-		    	}
-		    	
-            	if($("#overtime_content").val() == ""){
-		    		alert('작업내용을 입력하세요.');
-		    		$("#overtime_content").focus();
-					return false;
-		    	}
-            	
-            	if($("#overtime_reason").val() == ""){
-		    		alert('사유를 입력하세요.');
-		    		$("#overtime_reason").focus();
-					return false;
-		    	}
-            	
             	if($("#reference_person").val() == ""){
     	    		alert('받는사람을 선택하세요');
     				return false;
     	    	}
             	
-            	
-            	
+            	if($("#subject").val() == ""){
+		    		alert('제목을 입력하세요.');
+		    		$("#subject").focus();
+					return false;
+		    	}
+            			    	
+          
             	//스마트 에디터 값을 텍스트컨텐츠로 전달
             	oEditors.getById["txtContent"].exec("UPDATE_CONTENTS_FIELD", []);
   		  });
