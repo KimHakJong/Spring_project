@@ -19,6 +19,9 @@ public interface TodolistService {
 	   
 	public List<Todolist> getTodolist(int page, int limi, int p_no, String id);
 	
+	public List<Todolist> getSearchTodolist(int page, int limi, int p_no, String id, String search_word);
+	public int getSendSearchListCount(int p_no, String id, String search_word);
+	
 	
 	 
 	public void insertBoard(Todolist todolist);
@@ -26,36 +29,20 @@ public interface TodolistService {
 	public List<Todolist> getTodolist2(int p_no);
 	
 	public List<Todolist> getTodolist3(int page, int limi, int p_no, int board_num);
+	public List<Todolist> getSearchTodolist3(int page, int limit, int p_no, int board_num, String search_word);
+	
+	
+	
+	public int boardDelete(int num);
+	
 	
 	
 	public Todolist getDetail(int num);
 	
-	public int boardDelete(int num);
-		 
-	/*
-
-	   
-	   public Board getDetail(int num);
-	   
-	   public int boardReply(Board board);
-	   
-	   public int boardModify(Board modifyboard);
-	   
-	   
-	   
-	   public int setReadCountUpdate(int num);
-	   
-	   public boolean isBoardWriter(int num,String pass);
-	   
-	   public void insertBoard(Board board);
-
-	   public int boardReplyUpdate(Board board);
-
 	
-	public void deleteFileList(String filename);
+	public int boardModify(Todolist todolist);
 	
-	public List<String> getDeleteFileList();
-	 */
+
 
 	
 }

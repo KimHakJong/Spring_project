@@ -63,7 +63,7 @@ public class CalendarController {
 		   jsonArr.add(jsonObj);
 
 	   }
-	   System.out.println(jsonArr);
+	   
 	   
 	   
 	   mv.addObject("event", jsonArr);
@@ -95,7 +95,7 @@ public class CalendarController {
 	   
 	   calservice.add(c);
 	   
-	   System.out.println("일정 추가 메소드 호출함");
+	   
 	   
 	   return "redirect:list";
 	   
@@ -118,8 +118,7 @@ public class CalendarController {
    					@RequestParam("id") String id,
    					@RequestParam("title") String title) {
 	   
-	   System.out.println("수정 메소드 시작");
-
+	  
 	   Calendar c = new Calendar();
 	   	   
 	   c.setId(id);
@@ -131,10 +130,7 @@ public class CalendarController {
 	   
 	   int result = 0;
 	   result = calservice.update(c);
-	   
-	   if(result != 0)
-		   System.out.println("수정 성공");
-	   
+	
 	   return "redirect:list";
 	   
    }
@@ -152,10 +148,7 @@ public class CalendarController {
 	   
 	   int result = 0;
 	   result = calservice.caldelete(id);
-	   
-	   if(result != 0)
-		   System.out.println("삭제 성공");
-	   
+
 	   return "redirect:list";
 	   
    }

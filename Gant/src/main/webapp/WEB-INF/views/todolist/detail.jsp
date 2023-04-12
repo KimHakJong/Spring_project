@@ -181,9 +181,13 @@ function deletelist(num, s, p_no) {
 					</c:if>
 				</c:if>
 				</sec:authorize>
-
-
-				<button class="btn btn-primary" onclick="history.back(-1);">목록</button>
+				
+				<c:if test="${s == 1 }">	<%-- s가 1이면 send, 0이면 receive --%>
+					<button class="btn btn-primary" onclick="window.location.href='${pageContext.request.contextPath}/todolist/send?p_no=${todolist.p_no}'">목록</button>
+				</c:if>
+				<c:if test="${s == 0 }">	<%-- s가 1이면 send, 0이면 receive --%>
+					<button class="btn btn-primary" onclick="window.location.href='${pageContext.request.contextPath}/todolist/send?p_no=${todolist.p_no}'">목록</button>
+				</c:if>
 
 		</table>
 

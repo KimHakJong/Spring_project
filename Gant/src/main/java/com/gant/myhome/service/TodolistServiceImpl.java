@@ -34,6 +34,11 @@ public class TodolistServiceImpl implements TodolistService {
 	public int getSendListCount(int p_no, String id) {
 		return dao.getSendListCount(p_no, id);
 	}
+	
+	@Override
+	public int getSendSearchListCount(int p_no, String id, String search_word) {
+		return dao.getSendSearchListCount(p_no, id, search_word);
+	}
 
 	@Override
 	public List<Todolist> getTodolist(int page, int limit, int p_no, String id) {
@@ -49,6 +54,24 @@ public class TodolistServiceImpl implements TodolistService {
 		map.put("id", id);
 		
 		return dao.getTodolist(map);
+	}
+	
+	@Override
+	public List<Todolist> getSearchTodolist(int page, int limit, int p_no, String id, String search_word) {
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		
+		int startrow = (page-1) * limit + 1;
+		int endrow = startrow + limit - 1;
+		
+		map.put("start", startrow);
+		map.put("end", endrow);
+		map.put("p_no", p_no);
+		map.put("id", id);
+		map.put("search", search_word);
+		
+		
+		return dao.getSearchTodolist(map);
 	}
 	
 	@Override
@@ -74,6 +97,22 @@ public class TodolistServiceImpl implements TodolistService {
 		map.put("board_num", board_num);
 
 		return dao.getTodolist3(map);
+	}
+	
+	public List<Todolist> getSearchTodolist3(int page, int limit, int p_no, int board_num, String search_word) {
+		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		
+		int startrow = (page-1) * limit + 1;
+		int endrow = startrow + limit - 1;
+	
+		map.put("start", startrow);
+		map.put("end", endrow);
+		map.put("p_no", p_no);
+		map.put("board_num", board_num);
+		map.put("search", search_word);
+
+		return dao.getSearchTodolist3(map);
 	}
 	
 	@Override
@@ -102,6 +141,12 @@ public class TodolistServiceImpl implements TodolistService {
 	public Todolist getDetail(int num) {
 		return dao.getDetail(num);
 	}
+	
+	@Override
+	public int boardModify(Todolist todolist) {
+		return dao.boardModify(todolist);
+	}
+
 	
 	@Override
 	public int boardDelete(int num) {
@@ -135,10 +180,6 @@ public class TodolistServiceImpl implements TodolistService {
 		return dao.boardReply(board);
 	}
 
-	@Override
-	public int boardModify(Board modifyboard) {
-		return dao.boardModify(modifyboard);
-	}
 
 
 

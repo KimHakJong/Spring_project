@@ -32,7 +32,7 @@ public class CalendarServiceImpl implements CalendarService {
 	public String getadminid(String id) {
 		
 		String ad = dao.getadminid(id);
-		System.out.println("추출전 id " + id + " admin 추출 " + ad);
+		
 		return ad;
 		
 	}
