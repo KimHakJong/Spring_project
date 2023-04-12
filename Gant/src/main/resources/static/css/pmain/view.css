@@ -318,7 +318,7 @@ font-weight:bold;
 #update_submit{
 	margin-top:9px !important;
 }
-#create_submit:hover, #update_submit:hover{background:#26ABFF; border:1px solid #26ABFF}
+#create_submit:hover, #update_submit:hover{background:#26ABFF; border:1px solid #26ABFF; color:white}
 
 #create_close,#update_close{
     border: none;

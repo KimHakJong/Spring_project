@@ -95,6 +95,11 @@ $(document).ready(function(){
 	let token = $("meta[name='_csrf']").attr("content");
 	let header = $("meta[name='_csrf_header']").attr("content");
 	
+	if(!'${id}'){
+		alert('로그인 후 이용해주세요'); 
+		location.href='login';
+		
+	}
 	let selval = '${searchfield}';
 	if(selval != ""){
 		$("#searchfield").val(selval);
@@ -436,7 +441,6 @@ height:25px; font-size:16px}
     </c:if>  
 	</div><%--list end --%>
 </div>
-        <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 </div> <!-- class content -->
 
 <footer>

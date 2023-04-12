@@ -37,6 +37,19 @@ button[type=submit]{margin-top:20px; width:100%; background:#009CFF; border:1px 
 button[type=submit]:hover{background:#26abff; border:1px solid #26abff;cursor:pointer}
 #formargin{margin-bottom:150px;}
 </style>
+<script>
+$(document).ready(function(){
+	if('${noid}'=='noid'){
+		alert("아이디가 존재하지 않습니다.");
+	}
+	if('${noname}'=='noname'){
+		alert("이름이 존재하지 않습니다.");
+	}
+	if('${noemail}'=='noemail'){
+		alert("이메일이 존재하지 않습니다.");
+	}
+});
+</script>
 </head>
 <body>
 <div>

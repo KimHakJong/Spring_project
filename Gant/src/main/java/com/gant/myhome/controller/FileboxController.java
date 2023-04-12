@@ -3,15 +3,11 @@ package com.gant.myhome.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,10 +16,8 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.zeroturnaround.zip.ZipUtil;
 
 import com.gant.myhome.domain.FFileinfo;
 import com.gant.myhome.domain.FFolder;
@@ -79,6 +74,11 @@ private static final Logger logger = LoggerFactory.getLogger(MembersController.c
 		ffolder.setP_no(p_no);
 		if(select_result==0) { //조회 결과없으면 첫 폴더 생성
 			insert_result = ffolderservice.insert(ffolder); //폴더 생성 ( 폴더 번호 1번)
+			File path1 = new File(fileboxsavefolder.getSavefolder() + p_no + File.separator);
+			logger.info("무슨값?"+fileboxsavefolder.getSavefolder()+ p_no + File.separator);
+			if (!(path1.exists())) {
+				path1.mkdirs(); //새로운 폴더를 생성
+			}
 			if(insert_result==0) {
 				mv.addObject("message","파일보관함 이용 불가");
 				mv.setViewName("error/error");
@@ -98,20 +98,23 @@ private static final Logger logger = LoggerFactory.getLogger(MembersController.c
 	public int fileUpload(@RequestPart("file") MultipartFile file,
 	        			  @RequestPart("value_store") FFileinfo ffileinfo, 
 	        			  @RequestPart("value_store") Filebox filebox,
+	        			  @RequestPart("value_store") FFolder ffolder,
 	        			  ModelAndView mv,
 	        			  HttpServletRequest request) throws Exception {
+		
 		MultipartFile uploadfile = file;
 		logger.info(filebox.getId()+filebox.getP_no());
 		logger.info(ffileinfo.getFile_name()+ffileinfo.getExtension());
 		if (!uploadfile.isEmpty()) {
 			String fileName = uploadfile.getOriginalFilename();//원래 파일명
 			logger.info("원래 파일명:"+fileName);
-			//String saveFolder = request.getSession().getServletContext().getRealPath("resources") + "/upload";
-			String fileDBName = fileDBName(fileName, fileboxsavefolder.getSavefolder());
+			logger.info("뭐가나올까?:"+filebox.getP_no()+ffolder.getFolder_path());
+			//업로드 경로: getsavefolder + 프로젝트 번호 + 폴더 경로 
+			String fileDBName = fileDBName(fileName, fileboxsavefolder.getSavefolder(), ffolder.getFolder_path());
 			logger.info("파일 저장될 경로와 이름 = " + fileDBName);
 			
 			//transferTo(File path) : 업로드한 파일을 매개변수의 경로에 저장합니다.
-			uploadfile.transferTo(new File(fileboxsavefolder.getSavefolder() + fileDBName));
+			uploadfile.transferTo(new File(fileboxsavefolder.getSavefolder() +fileDBName));
 			logger.info("transferTo path = " + fileboxsavefolder.getSavefolder() + fileDBName);
 			//바뀐 파일명으로 저장
 			ffileinfo.setFile_save_path(fileDBName);
@@ -131,7 +134,7 @@ private static final Logger logger = LoggerFactory.getLogger(MembersController.c
 		return result2;
 	}
 	
-	private String fileDBName(String fileName, String saveFolder) {
+	private String fileDBName(String fileName, String saveFolder, String nextPath) {
 		
 		//새로운 폴더 이름 : 오늘 년+월+일
 		Calendar c = Calendar.getInstance();
@@ -139,11 +142,10 @@ private static final Logger logger = LoggerFactory.getLogger(MembersController.c
 		int month = c.get(Calendar.MONTH) + 1; //오늘 월 구합니다.
 		int date = c.get(Calendar.DATE); //오늘 일 구합니다.
 		
-		String homedir = saveFolder + "/" + year + "-" + month + "-" + date;
-		logger.info(homedir);
+		String homedir = saveFolder+nextPath;
 		File path1 = new File(homedir);
 		if (!(path1.exists())) {
-			path1.mkdir(); //새로운 폴더를 생성
+			path1.mkdirs(); //새로운 폴더를 생성
 		}
 		
 		// 난수를 구합니다.
@@ -167,8 +169,8 @@ private static final Logger logger = LoggerFactory.getLogger(MembersController.c
 		logger.info("refileName = " + refileName);
 		
 		//오라클 디비에 저장될 파일 명
-		//String fileDBName = year + "-" + month + "-" + date + "/" + refileName;
-		String fileDBName = year + "-" + month + "-" + date + File.separator + refileName;
+		//String fileDBName =  + "/" + refileName;
+		String fileDBName = nextPath + refileName;
 		logger.info("fileDBName = " + fileDBName);
 		return fileDBName;
 	}
@@ -177,6 +179,10 @@ private static final Logger logger = LoggerFactory.getLogger(MembersController.c
 	@PostMapping(value="/addFolder")
 	public int addFolder(FFolder ffolder) {
 		int result = ffolderservice.insert(ffolder);
+		File path1 = new File(fileboxsavefolder.getSavefolder()+ffolder.getFolder_path());
+		if (!(path1.exists())) {
+			path1.mkdirs(); //새로운 폴더를 생성
+		}
 		logger.info("폴더추가성공이면 1 : "+result);
 		return result;
 	}
@@ -271,11 +277,8 @@ private static final Logger logger = LoggerFactory.getLogger(MembersController.c
 	
 	@ResponseBody
 	@PostMapping(value="/folderDown")
-	public void folderDownload(FFolder ffolder, HttpServletResponse response) throws Exception {
-		response.setContentType("application/zip");
-		String sEncoding = new String((ffolder.getFolder_name()+".zip").getBytes("utf-8"), "ISO-8859-1");
-        response.setHeader("Content-Disposition", "attachment;filename="+ sEncoding);
-        response.setStatus(HttpServletResponse.SC_OK);
+	public byte[] folderDownload(FFolder ffolder, HttpServletResponse response) throws Exception {
+
 		
 		List<FFileinfo> list = ffileinfoservice.selectAllFileInFolder(ffolder);//폴더 하위에있는 모든 파일의 이름,확장자,파일경로를 가져오는 동작 수행
 			
@@ -285,49 +288,51 @@ private static final Logger logger = LoggerFactory.getLogger(MembersController.c
 			if (!(path1.exists())) {
 				path1.mkdir(); //새로운 폴더를 생성
 			}
-			List<String> file_names = new ArrayList<String>();
+			//List<String> file_names = new ArrayList<String>();
 			
 			for(FFileinfo ffileinfo : list) {
-				file_names.add( rename(ffileinfo,zipdir) ); //임시폴더에 저장한 파일경로를 list에 담는다.
+				//다운로드 선택한 폴더끝 부분부터의 경로
+				String new_folder_path = zipdir + File.separator + 
+								ffileinfo.getFile_save_path().substring(ffolder.getFolder_path().lastIndexOf("/")+1 , ffileinfo.getFile_save_path().lastIndexOf("/")+1);
+				rename(ffileinfo, new_folder_path); //압축할 임시폴더로 업로드경로와 동일한 폴더경로 생성과 파일명 재지정
 			}
-
-	        try (ZipOutputStream zippedOut = new ZipOutputStream(response.getOutputStream())) {
-	            for (String file : file_names) {
-	                FileSystemResource resource = new FileSystemResource(file);
-	                
-	                // 압축할 파일명
-	                ZipEntry e = new ZipEntry(resource.getFilename());
-	                
-	                e.setSize(resource.contentLength());
-	                e.setTime(System.currentTimeMillis());
-	                
-	                // 지정한 파일명에 압축해서 넣을 압축파일 지정
-	                zippedOut.putNextEntry(e);
-	                StreamUtils.copy(resource.getInputStream(), zippedOut);
-	                zippedOut.closeEntry();
-	            }
-	            zippedOut.finish();
-	        } catch (Exception e) {
-	            // Exception handling goes here
-	        }
+			
+			//다운로드할 폴더 압축 (임시폴더 -> zip 파일)
+			File zipfile = new File(fileboxsavefolder.getSavefolder()+ffolder.getFolder_name()+".zip");
+	        ZipUtil.pack(new File(zipdir+File.separator), zipfile);
 	        
-	        //임시폴더 안에 파일 삭제
-	        File directory = new File(zipdir);
-	        FileUtils.cleanDirectory(directory);
+	        //압축한 zip파일 다운로드
+			byte[] bytes = FileCopyUtils.copyToByteArray(zipfile);
+			response.setContentType("application/zip");
+			String sEncoding = new String((ffolder.getFolder_name()+".zip").getBytes("utf-8"), "ISO-8859-1");
+	        response.setHeader("Content-Disposition", "attachment;filename="+ sEncoding);
+	        response.setStatus(HttpServletResponse.SC_OK);
+			response.setContentLength(bytes.length);
+			
+	        //임시폴더와 zip파일 삭제
+	        FileUtils.cleanDirectory(path1); //임시폴더 내부 파일과 폴더
+	        zipfile.delete(); //임시폴더 압축한 zip파일
+			return bytes;
+
 	}
 	
-	//다운받을 기존 난수파일명 -> 원래파일명 바꿔서 카피한 후 임시폴더에 저장하는 메소드
-	public String rename(FFileinfo ffileinfo, String zipdir) {
+	//다운받을 기존 폴더명과 난수파일명 -> 원래파일명 바꿔서 임시폴더에 카피하는 메소드
+	public void rename(FFileinfo ffileinfo, String new_folder_path) {
 		
 		File origin_path = new File(fileboxsavefolder.getSavefolder()+ffileinfo.getFile_save_path());
-		String new_path = zipdir+"/"+ffileinfo.getFile_name()+"."+ffileinfo.getExtension();
+		
+		
+		String new_path = new_folder_path + ffileinfo.getFile_name()+"."+ffileinfo.getExtension();
+		File path1 = new File(new_folder_path);
+		if (!(path1.exists())) {
+			path1.mkdir(); //새로운 폴더를 생성
+		}
 		File rename_path = new File(new_path);
 	  try {
 	    FileUtils.copyFile(origin_path, rename_path);
 	  } catch (IOException e) {
 	    e.printStackTrace();
 	  }
-	  return new_path;
 	}
 	
 	@ResponseBody

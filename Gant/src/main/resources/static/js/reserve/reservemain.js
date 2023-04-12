@@ -167,7 +167,8 @@
 			 }//loadTime_ajax function
 			 
 	   }//loadTime funciton
-	   
+
+//예약확인모달 시작	   
 	    //테이블에 예약된 것 클릭 시 예약확인모달 띄우고 해당 예약번호에 대한 데이터 가져옴
 		$("body").on('click','.reserved',function(){
 			$("#detail_reservation").modal('show');
@@ -178,37 +179,47 @@
 			$.ajax({
 				url : "loadDetail_ajax",
 				type : "post",
-				data : { "num" : num},
+				data : { "num" : num, "id" : $(".side_userid").text() },
 				dataType : "json",
 				beforeSend : function(xhr)
 	  			 {   //데이터를 전송하기 전에 헤더에 csrf값을 설정합니다.
 	    			xhr.setRequestHeader(header, token);			
 	    		 },
 	    		success : function(rdata){
-					$(".detail_table tr").eq(0).find('td').text(rdata.name);
-	    			$(".detail_table tr").eq(1).find('td').text(rdata.resource_name);
-	    			$(".detail_table tr:nth-child(3) td").eq(0).text(rdata.day);
+	    		console.log(rdata.admin);
+	    			if(rdata.obj.id==$(".side_userid").text() || rdata.admin=='true'){ //관리자이거나 예약자인 경우
+						$('#detail_to_update').css('display','block');
+						$('#detail_to_delete').css('display','block');
+					}else{	
+						$('#detail_to_update').css('display','none');
+						$('#detail_to_delete').css('display','none');
+					}
+					
+					$(".detail_table tr").eq(0).find('td').text(rdata.obj.name);
+	    			$(".detail_table tr").eq(1).find('td').text(rdata.obj.resource_name);
+	    			$(".detail_table tr:nth-child(3) td").eq(0).text(rdata.obj.day);
 	    			let start = '';
 	    			let end = '';
-	    			if(rdata.start_time.substring(0,2)>=12){
-	    				start = "오후 " + rdata.start_time;
+	    			if(rdata.obj.start_time.substring(0,2)>=12){
+	    				start = "오후 " + rdata.obj.start_time;
 	    			}else{
-	    				start = "오전 " + rdata.start_time;
+	    				start = "오전 " + rdata.obj.start_time;
 	    			}
 	    			
-	    			if(rdata.end_time.substring(0,12)>=12){
-	    				end = "오후 " + rdata.end_time;
+	    			if(rdata.obj.end_time.substring(0,12)>=12){
+	    				end = "오후 " + rdata.obj.end_time;
 	    			}else{
-	    				end = "오후 " + rdata.end_time;
+	    				end = "오후 " + rdata.obj.end_time;
 	    			}
 	    			$(".detail_table tr:nth-child(3) td").eq(1).text(start + " ~ " + end);
-	    			$(".detail_table tr").eq(3).find('td').text(rdata.names);
-	    			$(".detail_table tr").eq(4).find('td').text(rdata.purpose);	    			
+	    			$(".detail_table tr").eq(3).find('td').text(rdata.obj.names);
+	    			$(".detail_table tr").eq(4).find('td').text(rdata.obj.purpose);	    			
 	    		 }//success
-			});//ajax				 
+			});//ajax
+
 		});
 		
-//예약확인모달 시작
+//예약확인모달 끝
 //예약수정모달 시작
 		$("#detail_to_update").click(function(){//수정: 예약번호보냄
 			goupdate = true;

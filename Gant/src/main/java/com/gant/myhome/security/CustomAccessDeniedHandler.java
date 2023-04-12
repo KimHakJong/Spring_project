@@ -27,6 +27,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 		RequestDispatcher dispatcher = request.getRequestDispatcher(url);
 		request.setAttribute("key","접근 권한이 없는 사용자 입니다.");
 		dispatcher.forward(request, response);		
+		
 	}
 
 }
