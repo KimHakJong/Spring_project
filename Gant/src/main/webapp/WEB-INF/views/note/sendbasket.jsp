@@ -161,7 +161,7 @@ $(function(){
 	  
 	  $('#delete').click(function() {
 		  
-		  if(confirm("휴지통으로 이동합니다. 일주일 뒤 자동으로 삭제됩니다.")){
+		  if(confirm("영구삭제 시 복구가 불가능합니다. 그래도 삭제하시겠습니까?")){
 			  $('#basketfrom').submit();
 		  }
 	  

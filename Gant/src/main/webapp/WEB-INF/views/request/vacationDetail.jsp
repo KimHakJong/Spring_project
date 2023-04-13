@@ -240,7 +240,7 @@ border: none;
         <td><c:out value="${vacation.write_date}"/></td>
       </tr>
       <tr>
-        <th>분류</th>
+        <th>휴가종류</th>
         <td><c:out value="${vacation.division}"/></td>
       </tr>
       <tr>
