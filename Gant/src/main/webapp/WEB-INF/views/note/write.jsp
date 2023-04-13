@@ -490,7 +490,7 @@ border-radius : 5px 0px 0px 5px;
 		</table>   
 			   
 			    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">  
-			    <button type="submit" class="btn btn-primary m-2 float-right" id="submit">신청</button>
+			    <button type="submit" class="btn btn-primary m-2 float-right" id="submit">보내기</button>
 			    <button type="button" class="btn btn-danger m-2 float-right" onclick="location.href='getMian'">취소</button>			 
 		</form>
       </div>
