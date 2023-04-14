@@ -134,7 +134,7 @@ background:transparent;
                             <span class="d-none d-lg-inline-flex">${name}</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                            <a href="${pageContext.request.contextPath}/member/update" class="dropdown-item text-center mypage">마이페이지</a>
+                           
                             <form action="${pageContext.request.contextPath}/member/logout" method="post"
 								style="margin-bottom:0px" name="logout">
                            	 	<a href="#" class="dropdown-item text-center logout">로그아웃</a>
