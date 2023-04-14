@@ -226,11 +226,9 @@ div#move_content {
     background: #ff9300;
     cursor:pointer;
 }
-
 #newbtn:hover{
 	opacity:0.8;
 }
-
 #uploadbtn {
     height: 38px;
     border-radius: 4px;
@@ -245,7 +243,6 @@ div#move_content {
     position:relative;
     bottom:1.3px;
 }
-
 #uploadbtn:hover{
 	opacity:0.8;
 }

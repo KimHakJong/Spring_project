@@ -51,7 +51,7 @@ width:90px;
 	border:1px solid #009CFF;
 }
 #projects {
-  border: 1px solid #d4d6d7;
+  border: none;
   clear: both;
   position: absolute;
   top: 18%;

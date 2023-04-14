@@ -4,8 +4,8 @@ create sequence paper_seq; --시퀀스생성
 drop table overtime cascade constraints purge;
 
 CREATE TABLE overtime(
-id                varchar2(15) references members(id) on delete cascade, --아이디
-paper_num	      number PRIMARY KEY, -- 문서번호
+id                 varchar2(15) references members(id) on delete cascade, --아이디
+paper_num 	      number PRIMARY KEY, -- 문서번호
 over_time	      varchar2(8), -- 초과근무시간
 overtime_content  varchar2(2000), -- 작업내용
 overtime_reason	  varchar2(2000), --사유

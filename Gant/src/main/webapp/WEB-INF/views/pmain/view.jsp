@@ -424,10 +424,11 @@ if('${create}'==1){
 	//처음엔 생성,수정모달에 id,name들 가져옴 -> 명단검색클릭: 가져온 값 체크되도록 -> 취소:값초기화, 확인:check_id에 저장된 아이디값넘김
 	//check_id = 명단검색눌렀을 때 id값들 받아옴 / 체크O,체크X 시 해당value를 check_id에 추가,제거 / 취소눌렀을 때 값초기화 / 인풋할 때마다 check_id에 있는 값 체크되도록 , 확인눌렀을 때 check_id에 있는 각각 value와 비교해서 값넘김
 	$("body").on('change','input[type="checkbox"]',function(){
+		console.log(check_id);
 		let change_id = $(this).val(); //체크된 아이디
 		if($(this).is(":checked")){//새로 체크되었을 때
 			if(!check_id.includes(change_id+",")){ //기존 체크 id에 방금 체크한 아이디가 없는 경우
-				if(check_id.substr(-1)==',' || check_id.length==0){ //맨마지막이 ,인 경우
+				if(check_id.substr(-1) == "," || check_id.length==0){ //맨마지막이 ,인 경우
 					check_id += change_id + ",";
 				}else{
 					check_id += "," + change_id + ",";
@@ -495,7 +496,7 @@ if('${create}'==1){
 			}
 			console.log("create"+check_id);
 		}else if (goupdate==true) {
-			if($("update_member").val()==""){
+			if($("#update_member").val()==""){
 				check_id = $("#update_member").val();
 			}else{
 				check_id = $("#update_member").val()+",";
@@ -539,10 +540,10 @@ if('${create}'==1){
 			$(this).attr('checked',false);
 		});
 		$("#msearch_input").val(""); //검색창
-		$("#create_member").val(""); //명단 아이디
 		$("#update_member").val(""); //명단 아이디
-		$("#create_membername").val("");//명단 이름
+		$("#create_member").val(""); //명단 아이디
 		$("#update_membername").val("");//명단 이름
+		$("#create_membername").val("");//명단 이름
 	});
 	
 	//명단검색에서 체크 후 확인 : 생성하기모달 명단에 자동입력
