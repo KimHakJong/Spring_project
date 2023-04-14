@@ -14,7 +14,7 @@
 </script>
 <style>
 *{box-sizing:border-box; font-family:"noto sans", sans-serif;}
-body>div{margin-top:6em; margin-bottom:4em}
+body>div{margin-top:4em; margin-bottom:4em}
 form>div {font-size:32px; font-weight:bold; text-align:center; margin:0px 0px 40px 0px}
 
 form{width:600px; margin:0 auto; border:1px solid #ced4da; border-radius:4px;

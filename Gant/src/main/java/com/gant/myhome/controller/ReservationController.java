@@ -223,15 +223,21 @@ public class ReservationController {
 	
 	@ResponseBody
 	@PostMapping(value="/loadDetail_ajax")
-	public Map<String,Object> loadDetail_ajax(int num, String id) {
+	public Map<String,Object> loadDetail_ajax(int num, 
+							@RequestParam(value="id", defaultValue="", required=false) String id) {
+							//예약확인 모달일 때만 id값 존재
 		Reservation rs = reservationservice.selectInfo(num);
 		Members m = memberservice.getMemberInfo(rs.getId());
 		rs.setName(m.getName());
 		
-		Members m2 = memberservice.getMemberInfo(id); //현재 아이디가 관리자인지 확인
 		Map<String,Object> map = new HashMap<String,Object>();
-		map.put("obj", rs);
+		if(!id.equals("")) {
+			
+		Members m2 = memberservice.getMemberInfo(id); //현재 아이디가 관리자인지 확인
 		map.put("admin", m2.getAdmin());
+		}
+		
+		map.put("obj", rs);
 		return map;
 	}
 	

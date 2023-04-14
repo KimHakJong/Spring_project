@@ -28,7 +28,7 @@
 			where p_name like #{p_name}
 			</if>
 		</if>
-		order by p_edate desc
+		order by p_edate asc
 
 	</select>
 	

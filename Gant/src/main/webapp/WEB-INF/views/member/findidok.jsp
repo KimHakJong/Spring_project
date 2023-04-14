@@ -11,7 +11,7 @@
 * {font-family:"noto sans", sans-serif;
    box-sizing: border-box}
    
-#frame{width:520px; margin:0 auto; margin-top:90px;
+#frame{width:520px; margin:0 auto; margin-top:150px;
 	  border-radius:4px; border:1px solid #C4C5C8; padding:20px 40px 40px 40px;
 	  height:310px}
 hr{color:#ced4da}

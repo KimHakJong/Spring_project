@@ -11,11 +11,11 @@
 * {font-family:"noto sans", sans-serif;
    box-sizing: border-box}
    
-#frame{width:520px; margin:0 auto; margin-top:90px;
+#frame{width:520px; margin:0 auto; margin-top:150px;
 	 border-radius:4px; border:1px solid #C4C5C8; padding:20px 40px 40px 40px}
 hr{color:#ced4da}
 #text{text-align:center;margin-top:-15px}
-span{font-weight:bold;}
+span{font-weight:bold;color:#009CFF}
 span:nth-child(2){color:red}
 #password, #re_password{padding:15px 12px}
 #password, #re_password{height:50px; width:80%; margin-top:10px; margin-bottom:10px; border:1px solid #ced4da; border-radius: 4px}

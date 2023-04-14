@@ -12,14 +12,15 @@
 }
 .reserve_head{
 	width:100%;
-	height:120px;
+	height:170px;
 	text-align:center;
 }
 
 #add_resource{
-	width:105px;
-	height:45px;
+	width:115px;
+	height:50px;
 	background:white;
+	font-size:18px;
 	color:#33C43C;
 	border-radius:10px;
 	border:2px solid #33C43C;
@@ -33,17 +34,16 @@
 }
 .show_date {
     display: inline-block;
-    width: 200px;
     font-weight: bold;
     color: black;
-    font-size: 20px;
-    margin-top:60px;
+    font-size: 25px;
+    margin-top:100px;
 }
 
 .show_date img {
-    width: 27px;
+    width: 32px;
     position: relative;
-    height: 27px;
+    height: 32px;
     margin-left: 10px;
     top: -2.5px;
 }
@@ -61,8 +61,9 @@
    
 }
 .head_button1, .head_button2{
- height: 45px;
-    width: 105px;
+ height: 50px;
+    width: 115px;
+    font-size:18px;
     border: none;
     color: white;
     background: #26abff;
@@ -147,7 +148,7 @@ button.head_button1 {
 
 div#explain {
     margin-bottom: 10px;
-    margin-top: 20px;
+    margin-top: 40px;
     margin-left:2.5px;
 }
 #explain div {
@@ -178,7 +179,7 @@ div#explain {
 
 #detail_reservation .modal-dialog{
 	max-width:530px;
-	top:11%;	
+	top:17%;	
 }
 
 #detail_subject{
@@ -255,7 +256,7 @@ div#explain {
 /*수정 모달*/
 #reserve_update .modal-dialog{
     max-width: 600px !important;
-    top:1%;
+    top:7%;
 }
 #update_title{
 	text-align:center ;
@@ -432,7 +433,7 @@ select option:disabled{
 /*생성 모달*/
 #reserve_insert .modal-dialog{
     max-width: 600px !important;
-    top:1%;
+    top:7%;
 }
 #insert_title{
 	text-align:center ;
@@ -629,7 +630,6 @@ select option:disabled{
 }
 
 #msearch .modal-dialog {
-	left:-1%;
 	top:15%;
 }
 #msearch .modal-content {
@@ -838,7 +838,7 @@ button#resource_cancel:hover{
 }
 .reserve_table td {
 	width:4.35%;
-	height:60px;
+	height:70px;
 	border-top:1px solid #ced4da;
 	border-bottom:1px solid #ced4da;
 }

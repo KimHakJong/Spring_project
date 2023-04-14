@@ -126,14 +126,14 @@
 			 //예약된 막대 테두리 둥글게
 	 		 $(".reserved").each(function(){
 	 		 	if($(this).find('.reserved_num').val()!=$(this).next().find('.reserved_num').val() && $(this).find('.reserved_num').val()!=$(this).prev().find('.reserved_num').val()){
-	 		 		$(this).css('border-radius','27px');
+	 		 		$(this).css('border-radius','30px');
 	 		 		$(this).css('padding','13px 4px');
 	 		 		$(this).prepend($(this).find('.reserved_name').val());
 	 		 	}else if($(this).find('.reserved_num').val()!=$(this).next().find('.reserved_num').val()){
-	 		 		$(this).css('border-radius','0px 27px 27px 0px');
+	 		 		$(this).css('border-radius','0px 30px 30px 0px');
 	 		 		$(this).css('padding','13px 4px 13px 0px');
 	 		 	}else if($(this).find('.reserved_num').val()!=$(this).prev().find('.reserved_num').val()){
-	 		 		$(this).css('border-radius','27px 0px 0px 27px');
+	 		 		$(this).css('border-radius','30px 0px 0px 30px');
 	 		 		$(this).css('padding','13px 0px 13px 4px');
 	 		 		$(this).prepend($(this).find('.reserved_name').val());
 	 		 	}
@@ -209,7 +209,7 @@
 	    			if(rdata.obj.end_time.substring(0,12)>=12){
 	    				end = "오후 " + rdata.obj.end_time;
 	    			}else{
-	    				end = "오후 " + rdata.obj.end_time;
+	    				end = "오전 " + rdata.obj.end_time;
 	    			}
 	    			$(".detail_table tr:nth-child(3) td").eq(1).text(start + " ~ " + end);
 	    			$(".detail_table tr").eq(3).find('td').text(rdata.obj.names);
@@ -237,16 +237,16 @@
 		    			xhr.setRequestHeader(header, token);			
 		    	},
 		    	success : function(rdata) {
-		    		$("#update_num").val(rdata.num);
-		    		$("#update_name").val(rdata.name);
-		    		$("#update_id").val(rdata.id);
-		    		$("#update_type").find('option').text(rdata.type);
-		    		$("#update_type").find('option').val(rdata.type);
-		    		$("#update_resource_name").find('option').text(rdata.resource_name);
-		    		$("#update_resource_name").find('option').val(rdata.resource_name);
+		    		$("#update_num").val(rdata.obj.num);
+		    		$("#update_name").val(rdata.obj.name);
+		    		$("#update_id").val(rdata.obj.id);
+		    		$("#update_type").find('option').text(rdata.obj.type);
+		    		$("#update_type").find('option').val(rdata.obj.type);
+		    		$("#update_resource_name").find('option').text(rdata.obj.resource_name);
+		    		$("#update_resource_name").find('option').val(rdata.obj.resource_name);
 		    		
-		    		$("#update_purpose").val(rdata.purpose);
-		    		$("#update_names").val(rdata.names);
+		    		$("#update_purpose").val(rdata.obj.purpose);
+		    		$("#update_names").val(rdata.obj.names);
 		    		//이름이 div로 표시되도록
 		    		let update_name = $("#update_names").val().split(",");
 					$("#update_namediv").empty();
@@ -269,7 +269,7 @@
 						}, 100);
 					}//if
 					
-		    		$("#update_day").val(rdata.day);
+		    		$("#update_day").val(rdata.obj.day);
 	  				//예약날짜 최소:오늘 , 최대:한달 (예약수정에서)
 	 				var after_day = new Date(now.setMonth(now.getMonth()+1));
 	  				$("#update_day").attr('min',nowyear+"-"+nowmonth+"-"+nowdate);
@@ -287,8 +287,8 @@
 	   				if(compare_now > dayval || day==""){
 	    				$(".update_time").css('display','none');
 	   				}else{
-	   					$("#start_time2").val( (rdata.start_time.substring(0,2)*2) + ( rdata.start_time.substring(3,5)/30) );
-		    			$("#end_time2").val( (rdata.end_time.substring(0,2)*2) + ( (rdata.end_time.substring(3,5)/30)-1) );
+	   					$("#start_time2").val( (rdata.obj.start_time.substring(0,2)*2) + ( rdata.obj.start_time.substring(3,5)/30) );
+		    			$("#end_time2").val( (rdata.obj.end_time.substring(0,2)*2) + ( (rdata.obj.end_time.substring(3,5)/30)-1) );
 		    			updatemodalon=false;
 	   					modal_loadTime(resource_name,day,dayval,compare_now);
 		    			$(".update_time").css('display','inline-block');

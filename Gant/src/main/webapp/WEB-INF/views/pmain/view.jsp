@@ -23,7 +23,7 @@
 <div class="pmain">
 		<div id="search_div">
 		<form id="search_form" action="view" method="post">
-			<input type="text" name="p_name" id="search_word" placeholder="프로젝트명을 검색하세요 . . ."><button type="submit" class="search_click">검색</button>
+			<input type="text" name="p_name" id="search_word" placeholder="프로젝트명을 검색하세요 . . ."><button type="submit" class="search_click">검&nbsp;색</button>
 			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 		</form>
 		</div>

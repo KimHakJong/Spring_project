@@ -116,7 +116,7 @@ background:transparent;
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                        		
-                            <a href="${pageContext.request.contextPath}/small/chat" onClick="window.open('${pageContext.request.contextPath}/small/chat', 'chat', 'width=500, height=450, top=170px, left=230px, resizable=no,menubar=no,status=no,titlebar=no,toolbar=no, scrollbars=no,directories=no,location=no'); return false;"
+                            <a href="${pageContext.request.contextPath}/small/chat" onClick="window.open('${pageContext.request.contextPath}/small/chat', 'chat', 'width=625, height=563, top=170px, left=230px, resizable=no,menubar=no,status=no,titlebar=no,toolbar=no, scrollbars=no,directories=no,location=no'); return false;"
                                class="dropdown-item chat"><i class="far fa-comment-dots me-2"></i>채팅</a>
                                
                             <a href="javascript:void(0)" class="dropdown-item openmemo"><i class="far fa-sticky-note me-2"></i>메모장</a>

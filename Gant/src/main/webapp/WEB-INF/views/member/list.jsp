@@ -17,7 +17,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
 *{box-sizing:border-box; font-family:"noto sans", sans-serif;}
 
-aside{width:30%; height: 50%; display:inline-block;position:absolute; left:5%; top:24.9%;}
+aside{width:30%; height: 44.5%; display:inline-block;position:absolute; left:5%; top:23%;}
 
 #searchdiv{ margin-bottom:80px; height:44px; position:relative; top:30px; float:right;
 			vertical-align:middle;  }
@@ -46,7 +46,7 @@ margin:0; padding:0; position:relative; top:1.5px; color:white; font-size:21px; 
 #searchicon{width:23px; height:23px}
 .list{width: 54.5%; position:absolute; right: 5%; top: 13%; display:inline-block}
 .explain img {width:17px; height:17px;margin-bottom:4px}
-.explain {position: absolute; top: 15.2%; padding: 10px 10px 0px 0px;}
+.explain {position: absolute; top: 14.2%; padding: 10px 10px 0px 0px;}
 .addbook{
     width: 100%; border-collapse: collapse; 
     text-align:left; 
@@ -72,7 +72,7 @@ margin:0; padding:0; position:relative; top:1.5px; color:white; font-size:21px; 
 .addbook>tbody>tr>td:nth-child(4){text-align:center;padding:5px 10px 5px 5px; border-left:none}
 .addbook>tbody>tr>td:nth-child(3){border-right:none}
 
-.addbook tr {height:50px}
+.addbook tr {height:55px}
 .addbook>tbody>tr>td:first-child>img{width:17px; height:17px; margin-right:3px; position:relative; bottom:2px;}
 .godetail{color:black}
 .godetail:hover{color:black; text-docoration:underline}
@@ -86,7 +86,7 @@ h1 {
   text-align:center;
   margin-top:150px;
 }
-.noresult{width:100%; height:350px; margin-top:125px; border:1px solid #ced4da}
+.noresult{width:100%; height:384px; margin-top:125px; border:1px solid #ced4da}
 .noresult > h2 {margin-top:19%; font-weight:normal; text-align:center}
 </style>
 <script>

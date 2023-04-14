@@ -57,12 +57,10 @@
 	let pagestart = window.location.pathname.substring(6);
 	let index = pagestart.indexOf('/');
 	let page = pagestart.substring(0,index);
-	console.log(page);
 	//메뉴 클릭하면 해당 메뉴에 active 클래스를 생성하여 다른 색으로 칠해지기 위한 코드입니다.
 	let pagename = ["pmain", "att", "board","calendar", "reserve","member","note","request"];
 	for(var i=0; i<pagename.length; i++){
 		$('.sidemenu>a').each(function(){
-				console.log($(this).attr('href'));
 		if(page==pagename[i]){
 				let thisstart = $(this).attr('href').substring(6);
 				let thisindex = $(this).attr('href').substring(6).indexOf('/');
