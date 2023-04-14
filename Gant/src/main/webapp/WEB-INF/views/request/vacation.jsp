@@ -247,6 +247,31 @@
             
       
             $('#modalSubmit').click(function(){
+            	$.ajax({
+        			url : "../request/searchMemberList",
+        			type : "get",
+        			data : { "name" : ''},
+        			dataType : "json",
+        			async: false,
+            		success : function(rdata){
+      				
+        				let output ='';
+        				if(rdata!=null){
+        					$(rdata).each(function(){
+        						if(check_id.includes(this.id)){ //check_id에 값이 있다면 자동으로 체크되도록!
+        						output += '<tr><td><input type="checkbox" name="memberlist" value="'+this.name+','+this.id+'" checked></td><td>'+this.name+'</td><td>'+this.department+'</td></tr>';
+        						}else{
+        						output += '<tr><td><input type="checkbox" name="memberlist" value="'+this.name+','+this.id+'"></td><td>'+this.name+'</td><td>'+this.department+'</td></tr>';
+        						}
+        					});
+        				}else{
+        					output += "<tr><td colspan='3'>검색된 명단이 없습니다.</td></tr>";
+        				}
+        				$("#tbody").empty();
+        				$("#tbody").append(output); 	
+            		}
+        		});
+            	
             	selectWorkers();
         	});  
             
