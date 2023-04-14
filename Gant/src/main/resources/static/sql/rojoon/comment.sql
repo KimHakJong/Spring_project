@@ -16,25 +16,8 @@ comment_re_ref    NUMBER -- 원문은 자신 댓글번호 , 답글이면 원문 
 
 
 drop sequence comm_seq; --시퀀스삭제
-
-
 create sequence comm_seq; --시퀀스생성
 
-
-select * from com;
-
-
---member에 있는 memberfile이 필요합니다.
---1. comment_re_ref asc , comment_re_seq asc (등록순)
---2. comment_re_ref desc , comment_re_seq asc (최신순)
-
-select com.* , member.memberfile
-from com inner join member
-on comment.id=member.id
-where comment_board_num = ?
-order by comment_re_ref desc , comment_re_seq asc;
-
-delete from com;
 
    
     

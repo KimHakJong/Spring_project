@@ -38,6 +38,7 @@
 		<input type="hidden" name="fontSize" value="${boarddata.fontSize}" id="fontSize">
 		<input type="hidden" name="fontColor" value="${boarddata.fontColor}" id="fontColor">
 		<input type="hidden" name="like_check" value="${like_check}" id="like_check">
+		<input type="hidden" name="admin" value="${admin}" id="admin">
 		<%-- view.js 에서 사용하기 위해 추가 끝--%>
 		<div class="container">
 		  <table class="table">

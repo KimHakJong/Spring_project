@@ -486,10 +486,13 @@ public class BoardController {
 				Board boarddata,
 				String check, Model mv,
 				@RequestParam(value = "noticebox",defaultValue = "false" ,required = false) String noticebox,
+				@RequestParam(value = "board_pass",defaultValue = "1" ,required = false) String board_pass, // 비밀글 설정을 안했다면 1을 넣어준다.   
 				HttpServletRequest request
 				) throws Exception {
 			 
 			 boarddata.setBoard_notice(noticebox);
+			 
+			 boarddata.setBoard_pass(board_pass);
 	         
 			 MultipartFile uploadfile = boarddata.getUploadfile();	
 	       
