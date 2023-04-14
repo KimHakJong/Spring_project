@@ -10,6 +10,5 @@ work_today          varchar2(8)       --총 근무시간
 
 drop table commute_record cascade constraints purge;
 
-delete from commute_record;
 
-select * from commute_record;
+

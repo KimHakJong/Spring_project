@@ -180,6 +180,7 @@
         update boards
         set
                BOARD_SUBJECT = #{board_subject},
+               BOARD_PASS = #{board_pass},
                BOARD_CONTENT = #{board_content},
                BOARD_FILE = #{board_file , jdbcType=VARCHAR},
                BOARD_ORIGINAL = #{board_original , jdbcType=VARCHAR},
