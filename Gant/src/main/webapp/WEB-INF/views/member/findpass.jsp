@@ -12,7 +12,7 @@
 <style>
 * {font-family:"noto sans", sans-serif;
    box-sizing: border-box}
-body > div {margin:0 auto; width:600px; position:relative; top:90px}
+body > div {margin:0 auto; width:600px; position:relative; top:150px}
 a { font-size:18px;
    display:inline-block; height:50px; width:50%; text-align:center;
    line-height:50px; border:1px solid #ced4da;

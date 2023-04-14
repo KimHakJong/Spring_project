@@ -84,7 +84,7 @@ height:800px !important
 #path > a {
 	color:black;
 	font-weight:bold;
-	font-size:17px;
+	font-size:19px;
 	padding:10px;
 }
 #path > a:hover{
@@ -110,7 +110,7 @@ label.btn.btn-outline-primary:hover {
     color: white;
 }
 .btn-group{
-	left:5.5%;
+	left:11.2%;
 	margin-top:1.5rem
 }
 /* 이동하기 div */
@@ -121,8 +121,8 @@ label.btn.btn-outline-primary:hover {
     z-index: 3;
     margin-top: -35px;
     padding: 15px 20px;
-    width: 300px;
-    font-size: 14px;
+    width: 320px;
+    font-size: 15px;
     color: black;
     display: none;
     border-radius: 4px;
@@ -147,8 +147,8 @@ div#move_content {
 	margin: 3px 0px;
 }
 #move img {
-    width: 21px;
-    height: 21px;
+    width: 22.5px;
+    height: 22.5px;
     margin-right:4px;
 }
 .subicon{
@@ -195,12 +195,13 @@ div#move_content {
 }
 /* 이동하기 div 끝 */
 .home{
-	width:89%;
+	/*width:89%;*/
+	width:78%;
 	position:relative;
 	height:80%;
 	transform: translate(-50%, 0%);
 	left:50%;
-	margin-top:2%
+	margin-top:3%
 }
 .nowpath:first-child{
 	padding-left:0px;
@@ -208,7 +209,7 @@ div#move_content {
 #file_menu {
     width: 100%;
     height: 40px;
-    margin-top: 1%;
+    margin-top: 2%;
 }
 #file_menu form{
 	width:170px;
@@ -216,7 +217,7 @@ div#move_content {
 }
 
 #newbtn {
-    height: 35px;
+    height: 38px;
     width: 70px;
     font-size: 14px;
     border-radius: 4px;
@@ -229,7 +230,7 @@ div#move_content {
 	opacity:0.8;
 }
 #uploadbtn {
-    height: 35px;
+    height: 38px;
     border-radius: 4px;
     background: #26abff;
     color: white;
@@ -239,6 +240,8 @@ div#move_content {
     text-align: center;
     font-size: 14px;
     cursor:pointer;
+    position:relative;
+    bottom:1.3px;
 }
 #uploadbtn:hover{
 	opacity:0.8;
@@ -257,10 +260,10 @@ div#move_content {
 #file_content {
     width: 100%;
     border: 1px solid #ced4da;
-    height: 510px;
-    margin-top: 10px;
+    height: 610px;
+    margin-top: 17px;
     position:relative;
-    padding:25.8px;
+    padding:25.8px 38px;
     overflow-y : scroll;
    -ms-overflow-style: none; /* 인터넷 익스플로러 */
     scrollbar-width: none; /* 파이어폭스 */
@@ -276,6 +279,7 @@ div#move_content {
 .wrap_file{
 	display:inline-block;
 	margin:15px 25.8px;
+	/* 27.6px*/
 }
 .file_show{
 	width:150px;
@@ -354,7 +358,7 @@ img.foldericon, .fileicon {
     width: 150px;
     height: 20px;
     border: none;
-    font-size: 13px;
+    font-size: 14px;
     line-height: 20px;
     text-align: center;
     margin-top: 8px;
@@ -433,10 +437,10 @@ $(document).ready(function(){
     							output += '<img class="fileicon img" src="../fileboxupload/'+ this.FILE_SAVE_PATH +'">';	
     						}else if (this.EXTENSION.toUpperCase()=='PDF'){
     							output += '<img class="fileicon" src="../resources/image/filebox/pdficon.png">';
-    						}else if (this.EXTENSION.toUpperCase()=='PPT'){
+    						}else if (this.EXTENSION.toUpperCase()=='PPTX'){
     							output += '<img class="fileicon" src="../resources/image/filebox/ppticon.png">';
-    						}else if (this.EXTENSION.toUpperCase()=='XLS'){
-    							output += '<img class="fileicon" src="../resources/image/filebox/xlsicon.png">';
+    						}else if (this.EXTENSION.toUpperCase()=='XLSX'){
+    							output += '<img class="fileicon" src="../resources/image/filebox/xlsxicon.png">';
     						}else if (this.EXTENSION.toUpperCase()=='DOCX'){
     							output += '<img class="fileicon" src="../resources/image/filebox/docxicon.png">';
     						}else if (this.EXTENSION.toUpperCase()=='TXT'){
@@ -910,6 +914,7 @@ $(document).ready(function(){
     		},
     		success : function(rdata){
     			console.log("삭제클릭 ajax");
+    			
     			if(rdata>0){
     				alert("삭제되었습니다.");
     			}else{

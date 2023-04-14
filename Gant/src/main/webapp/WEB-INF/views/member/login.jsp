@@ -10,6 +10,9 @@
 <style>
 * {font-family:"noto sans", sans-serif;
    box-sizing: border-box}
+   body > div{
+   	margin-top:6%;
+   }
     .logo{margin-top:60px; margin-bottom:30px; text-align:center}
     img{width:250px}
 	h1{font-family:"Lora"; text-align:center; margin-bottom:20px; font-weight:bold; font-size:40px; color:#006CFF}

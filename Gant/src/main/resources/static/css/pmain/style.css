@@ -2,6 +2,7 @@
 
 #detailmodal > .modal-dialog {
 	max-width: 600px !important;
+	top:7%;
 }
 
 #detailmodal .modal-content{

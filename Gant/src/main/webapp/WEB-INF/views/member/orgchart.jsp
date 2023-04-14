@@ -10,7 +10,7 @@
     .menu .hide{display:none;}
 .organization {border:1px solid #C4C5C8;
 display:inline-block;
- width:100%; height:100%; padding:10px;
+ width:100%; height:100%; padding:20px;
  overflow:auto;
  scrollbar-width: thin;
 scrollbar-color: #26abff transparent;	
@@ -34,11 +34,11 @@ color:black;
 .oragnization>ul>li{position:relative; left:0px;}
 ul{margin:0; padding:0}
 li{list-style-type:none}
-.menu{width:120px; font-size:15px}
+.menu{width:120px; font-size:16px}
 .organization>ul>li>ul>li>ul>li {position:relative; left:30px;}
-.organization>ul>li>ul>li>ul>li>ul>li>ul>li{position:relative; left:30px; font-size:15px}
+.organization>ul>li>ul>li>ul>li>ul>li>ul>li{position:relative; left:30px; font-size:16px}
 .organization a {color:black !important}
-.menu img{width:20px;height:20px; margin:0px 4px 4px 0px}
+.menu img{width:21px;height:21px; margin:0px 4px 4px 0px}
 .plan>li, .sales>li, .human>li, .it>li, .chong>li, .account>li
 {position:relative; left:60px; width:90px}
 </style>
