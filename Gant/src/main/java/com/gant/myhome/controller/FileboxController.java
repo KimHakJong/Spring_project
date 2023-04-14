@@ -279,22 +279,23 @@ private static final Logger logger = LoggerFactory.getLogger(MembersController.c
 	@PostMapping(value="/folderDown")
 	public byte[] folderDownload(FFolder ffolder, HttpServletResponse response) throws Exception {
 
-		
 		List<FFileinfo> list = ffileinfoservice.selectAllFileInFolder(ffolder);//폴더 하위에있는 모든 파일의 이름,확장자,파일경로를 가져오는 동작 수행
 			
-			//카피한 파일을 모아둘 임시폴더 (마지막에 파일삭제할 예정)
+			//카피한 파일을 모아둘 임시폴더 (다운로드 후 마지막에 폴더 비울 예정)
 			String zipdir = fileboxsavefolder.getSavefolder() + "fordownzip";
 			File path1 = new File(zipdir);
 			if (!(path1.exists())) {
 				path1.mkdir(); //새로운 폴더를 생성
 			}
-			//List<String> file_names = new ArrayList<String>();
 			
+			//다운로드 클릭한 폴더 경로안에 있는 파일을 다운받을 때, 똑같은 폴더 구조를 갖기 위해 해당 상위 경로를 지우는 작업 ex) '폴더1/폴더2/'를 다운받으면 그 하위에 있는 '폴더1/폴더2/폴더3/'폴더는 '폴더3/'으로 보여진다.
+			//임시폴더에 폴더구조를 수정하여 다운로드하므로 폴더1/폴더2/폴더3/'와 '폴더1/폴더2/폴더3/폴더4/' -> '폴더3/ , 폴더4/'로 변경작업
 			for(FFileinfo ffileinfo : list) {
-				//다운로드 선택한 폴더끝 부분부터의 경로
+			
+				//new_folder_path: C:/fileboxupload/fordownzip/(원래파일의 폴더경로 -> 새로운 폴더경로)
 				String new_folder_path = zipdir + File.separator + 
-								ffileinfo.getFile_save_path().substring(ffolder.getFolder_path().lastIndexOf("/")+1 , ffileinfo.getFile_save_path().lastIndexOf("/")+1);
-				rename(ffileinfo, new_folder_path); //압축할 임시폴더로 업로드경로와 동일한 폴더경로 생성과 파일명 재지정
+								ffileinfo.getFile_save_path().substring(ffolder.getFolder_path().lastIndexOf("/",2)+1 , ffileinfo.getFile_save_path().lastIndexOf("/")+1);
+				rename(ffileinfo, new_folder_path); //압축할 임시폴더로 업로드경로와 동일한 폴더경로 생성과 파일명 재지정(난수파일명->원래파일명)
 			}
 			
 			//다운로드할 폴더 압축 (임시폴더 -> zip 파일)
@@ -334,6 +335,7 @@ private static final Logger logger = LoggerFactory.getLogger(MembersController.c
 	    e.printStackTrace();
 	  }
 	}
+	
 	
 	@ResponseBody
 	@PostMapping(value="/loadFolderForMove")

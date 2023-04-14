@@ -17,7 +17,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
 *{box-sizing:border-box; font-family:"noto sans", sans-serif;}
 
-aside{width:30%; height: 44.5%; display:inline-block;position:absolute; left:5%; top:23%;}
+aside {
+    width: 30%;
+    height: 42.8%;
+    display: inline-block;
+    position: absolute;
+    left: 5%;
+    top: 22.8%;
+}
 
 #searchdiv{ margin-bottom:80px; height:44px; position:relative; top:30px; float:right;
 			vertical-align:middle;  }
