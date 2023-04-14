@@ -51,20 +51,21 @@ function deletelist(num, s, p_no) {
 	
 	if (confirm('일정을 삭제하시겠습니까?')) {
 		var data = {
-			"board_num" : num,	
+			"num" : num,	
 			"s" : s,
 			"p_no" : p_no
 		};
-
+		
+		console.log(data);
 		
 		//DB 삭제
 
 		$.ajax({
 			url : "${pageContext.request.contextPath}/todolist/delete?num="+num,
-			type : "POST",
-			data : data,
-			dataType : "text",
-			
+			type : "post",
+			//data : data,
+			//dataType : "text",
+			async: false,
 			beforeSend : function(xhr)
   			{   //데이터를 전송하기 전에 헤더에 csrf값을 설정합니다.
 				xhr.setRequestHeader(header, token);
@@ -74,6 +75,14 @@ function deletelist(num, s, p_no) {
 
 			success : function(data) {
 
+
+				
+			},
+			error : function(data) {
+				//alert(xhr.responseText);
+
+			},
+			complete: function(){
 				alert('할일 삭제 성공입니다.');
 				
 				if( s == 1 ){
@@ -83,21 +92,9 @@ function deletelist(num, s, p_no) {
 					var url = "${pageContext.request.contextPath}/todolist/receive?p_no="+p_no;
 				}
 				
-				
-				
 				location.replace(url);
-				
-				
-				
-				
-			},
-			error : function(data) {
-				//alert(xhr.responseText);
-									
-				alert('삭제 실패 새로고침 후 재시도 해주세요');
-				
-				//
 			}
+			
 		});
 		//
 	}
@@ -186,7 +183,7 @@ function deletelist(num, s, p_no) {
 					<button class="btn btn-primary" onclick="window.location.href='${pageContext.request.contextPath}/todolist/send?p_no=${todolist.p_no}'">목록</button>
 				</c:if>
 				<c:if test="${s == 0 }">	<%-- s가 1이면 send, 0이면 receive --%>
-					<button class="btn btn-primary" onclick="window.location.href='${pageContext.request.contextPath}/todolist/send?p_no=${todolist.p_no}'">목록</button>
+					<button class="btn btn-primary" onclick="window.location.href='${pageContext.request.contextPath}/todolist/receive?p_no=${todolist.p_no}'">목록</button>
 				</c:if>
 
 		</table>

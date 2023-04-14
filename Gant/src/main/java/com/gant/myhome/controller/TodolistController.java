@@ -339,12 +339,14 @@ public class TodolistController {
 	
 	@PostMapping("/delete")
 	   public void todolistDeleteAction (
-			   @RequestParam("num") int num,
-			   @RequestParam("s") int s,
-			   @RequestParam("p_no") int p_no)	{
+			   @RequestParam("num") int num)	{
 		
-			
+		
+		
+		
 		todolistservice.boardDelete(num);
+		
+		
 
 
 		return;
