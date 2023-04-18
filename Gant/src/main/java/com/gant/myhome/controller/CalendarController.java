@@ -47,10 +47,8 @@ public class CalendarController {
        Map<String, Object> obj = new HashMap<>();
               
 	   List<Calendar> list = calservice.getCalList();  
-	 	   
 	      
-	   for(Calendar c : list) {
-		   	   		   
+	   for(Calendar c : list) {   	   		   
 		   JSONObject jsonObj = new JSONObject();
 		   obj.put("title", c.getTitle());
 		   obj.put("id", c.getId());
@@ -61,11 +59,8 @@ public class CalendarController {
 		   
 		   jsonObj = new JSONObject(obj);
 		   jsonArr.add(jsonObj);
-
 	   }
-	   
-	   
-	   
+ 
 	   mv.addObject("event", jsonArr);
 	   mv.setViewName("/calendar/calendar2");
 	   	   
@@ -82,20 +77,15 @@ public class CalendarController {
    					@RequestParam("title") String title) {
 	   
 	   Calendar c = new Calendar();
-	   
-	   
-	   
+
 	   c.setName(name);
 	   c.setId(id);
 	   c.setStartday(startday);
 	   c.setEndday(endday);
 	   c.setTitle(title);
-	   
-
-	   
+  
 	   calservice.add(c);
-	   
-	   
+
 	   
 	   return "redirect:list";
 	   
