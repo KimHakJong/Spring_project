@@ -33,4 +33,11 @@
 								   and folder_path = #{folder_path} )
 		where file_num = #{file_num}
 	</update>
+	
+	<update id="updatePathFromEdit">
+		update f_fileinfo 
+		set file_save_path = substr(file_save_path, 0, instr(#{old_path},'/',-1,2)) || #{name} ||substr(file_save_path, instr(#{old_path},'/',-1,1))
+		where file_save_path like #{old_path} || '%'
+	</update>
+	
 </mapper>

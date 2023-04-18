@@ -19,5 +19,7 @@ public interface FFileinfoMapper {
 	public List<FFileinfo> selectAllFileInFolder(FFolder ffolder);
 
 	public int updateLocation(Map<String, Object> map);
+
+	public int updatePathFromEdit(Map<String, Object> map);
 	
 }

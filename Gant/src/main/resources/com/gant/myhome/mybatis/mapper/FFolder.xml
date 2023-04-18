@@ -51,6 +51,12 @@
 		where folder_num = #{num} 
 	</update>
 	
+	<update id="updatePathFromEdit">
+		update f_folder
+		set folder_path =  substr(folder_path, 0, instr(#{old_path},'/',-1,2)) || #{name} ||substr(folder_path, instr(#{old_path},'/',-1,1))
+		where folder_path like #{old_path} || '%'
+	</update>	
+	
 	<delete id="delete">
 		delete 
 		from f_folder 
@@ -66,4 +72,5 @@
 							 where p_no = #{p_no} 
 							 and folder_path like #{folder_to_move}||'%' )
 	</update>
+	
 </mapper>

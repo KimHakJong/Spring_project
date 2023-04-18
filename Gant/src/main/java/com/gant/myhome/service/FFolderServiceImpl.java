@@ -13,7 +13,7 @@ import com.gant.myhome.mybatis.mapper.FFolderMapper;
 public class FFolderServiceImpl implements FFolderService {
 	
 	private FFolderMapper dao;
-
+	
 	@Autowired
 	public FFolderServiceImpl(FFolderMapper dao) {
 		this.dao = dao;
@@ -55,6 +55,9 @@ public class FFolderServiceImpl implements FFolderService {
 		return dao.updateLocation(map);
 	}
 
-
+	@Override
+	public int updatePathFromEdit(Map<String, Object> map) {
+		return dao.updatePathFromEdit(map);
+	}
 
 }

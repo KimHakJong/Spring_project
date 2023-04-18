@@ -41,4 +41,9 @@ public class FFileinfoServiceImpl implements FFileinfoService {
 		return dao.updateLocation(map);
 	}
 
+	@Override
+	public int updatePathFromEdit(Map<String, Object> map) {
+		return dao.updatePathFromEdit(map);
+	}
+
 }

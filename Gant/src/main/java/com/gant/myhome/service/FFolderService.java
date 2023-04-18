@@ -21,4 +21,6 @@ public interface FFolderService {
 
 	public int updateLocation(Map<String, Object> map); //폴더위치 변경(하위 폴더도 같이)
 
+	public int updatePathFromEdit(Map<String, Object> map); //폴더명 변경에따른 경로에서 폴더명 변경(하위 폴더도 같이)
+	
 }

@@ -36,13 +36,13 @@ public class MemberServicelmpl implements MemberService {
 	}
 
 	@Override
-	public String findIdCheck(String name, String email) {
-		Members m = dao.findIdCheck(name);
-		if(m==null) { // 이름에 대한 정보가 없음
+	public String findIdCheck(Members m) {
+		Members member = dao.findIdCheck(m);
+		if(member==null) { // 이름에 대한 정보가 없음
 			return "";
 		}else {
-			if (m.getEmail().equals(email)) {
-				return m.getId();
+			if (member.getEmail().equals(m.getEmail())) {
+				return member.getId();
 			}else {
 				return "noemail";
 			}

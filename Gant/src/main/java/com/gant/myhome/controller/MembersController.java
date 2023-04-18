@@ -157,8 +157,8 @@ public class MembersController {
 	}
 	
 	@PostMapping(value="/findidok")
-	public ModelAndView findIdOk(String name, String email, RedirectAttributes rattr, ModelAndView mv) {
-		String id = memberservice.findIdCheck(name,email);
+	public ModelAndView findIdOk(Members m, RedirectAttributes rattr, ModelAndView mv) {
+		String id = memberservice.findIdCheck(m);
 		
 		if(id.equals("")) {
 			rattr.addFlashAttribute("noname","noname");
@@ -167,7 +167,7 @@ public class MembersController {
 			rattr.addFlashAttribute("noemail","noemail");
 			mv.setViewName("redirect:/member/findid");
 		}else { //정보 잘 찾은 경우
-			mv.addObject("name",name);
+			mv.addObject("name",m.getName());
 			mv.addObject("id", id);
 			mv.setViewName("member/findidok");
 		}

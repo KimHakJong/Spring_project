@@ -26,5 +26,7 @@ public interface FFolderMapper {
 	public int delete(FFolder ffolder);
 
 	public int updateLocation(Map<String, Object> map);
+
+	public int updatePathFromEdit(Map<String, Object> map);
 	
 }
