@@ -19,7 +19,8 @@
   <select id="findIdCheck" resultType="members">
   	select id, name, email 
   	from members 
-  	where name = #{name}
+  	where name = #{name} 
+  	and email = #{email}
   </select>
   
   <select id="findPassCheck" resultType="members">

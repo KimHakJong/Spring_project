@@ -136,6 +136,9 @@
 	 		 		$(this).css('border-radius','30px 0px 0px 30px');
 	 		 		$(this).css('padding','13px 0px 13px 4px');
 	 		 		$(this).prepend($(this).find('.reserved_name').val());
+	 		 	}else{
+	 		 		$(this).css('border-radius','0px');
+	 		 		$(this).css('padding','13px 0px');
 	 		 	}
 	 		 });			   
 		   function loadTime_ajax(resource_name, day, selector){

@@ -16,4 +16,6 @@ public interface FFileinfoService {
 
 	public int updateLocation(Map<String, Object> map); //파일이 포함된 폴더경로 변경
 
+	public int updatePathFromEdit(Map<String, Object> map); //폴더명 변경에 따른 하위파일 경로에 있는 폴더명 변경
+
 }

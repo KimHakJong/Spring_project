@@ -207,7 +207,7 @@ private static final Logger logger = LoggerFactory.getLogger(MembersController.c
 	
 	@ResponseBody
 	@PostMapping(value="/editName")
-	public int editName(int num, String type, String name) {
+	public int editName(int num, String type, String name, String old_path) {
 		
 		int result = 0;
 		Map<String,Object> map = new HashMap<String,Object>();
@@ -216,7 +216,25 @@ private static final Logger logger = LoggerFactory.getLogger(MembersController.c
 		if(type.equals("파일")) {
 			result = ffileinfoservice.update(map);
 		}else if(type.equals("폴더")) {
-			result = ffolderservice.update(map);
+			//로컬에서도 똑같은 폴더명 수정
+		    File local_old_path = new File(fileboxsavefolder.getSavefolder()+old_path);
+		    int last = old_path.indexOf("/",2);
+		    String new_path = old_path.substring(0,last+1) + name;
+		    File local_new_path = new File(fileboxsavefolder.getSavefolder()+new_path);
+		    boolean updateok = local_old_path.renameTo(local_new_path);
+		    
+		    //로컬에서 폴더명 수정된 경우
+		    if(updateok) {
+			result = ffolderservice.update(map); //해당 폴더명 변경
+			map.put("old_path", old_path);
+			if(result==1) {
+				result = ffolderservice.updatePathFromEdit(map); //해당 폴더의 경로와 하위경로에서도 폴더명 변경
+				if(result>=1) {
+					result = ffileinfoservice.updatePathFromEdit(map); //해당 폴더의 하위파일 경로 변경
+				}
+			}
+			
+		    }
 		}
 		
 		return result;
@@ -224,7 +242,7 @@ private static final Logger logger = LoggerFactory.getLogger(MembersController.c
 	
 	@ResponseBody
 	@PostMapping(value="/delete")
-	public int delete(String id, int num, String type, int p_no, String folder_path) {
+	public int delete(String id, int num, String type, int p_no, String file_or_folder_path) throws IOException {
 		
 		int result = 0;
 		Members m = memberservice.getMemberInfo(id); //관리자인지확인
@@ -235,6 +253,12 @@ private static final Logger logger = LoggerFactory.getLogger(MembersController.c
 		logger.info("관리자인가?"+admin);
 		logger.info("프로젝트생성자?"+host_id);
 		if(type.equals("파일")) {
+			
+			//로컬에서 파일 삭제
+			logger.info("어떤경로삭제?:"+fileboxsavefolder.getSavefolder()+file_or_folder_path);
+			File del_file = new File(fileboxsavefolder.getSavefolder()+file_or_folder_path);
+	        del_file.delete();
+	        
 			String uploader = fileboxservice.selectUploader(num); //파일생성자인지 확인
 			logger.info("업로더?:"+uploader);
 			if(admin.equals("true") || id.equals(host_id) || id.equals(uploader)) { //삭제클릭한 ID가 관리자,프로젝트생성자,파일생성자이면 삭제O
@@ -242,11 +266,16 @@ private static final Logger logger = LoggerFactory.getLogger(MembersController.c
 			}
 		}else if(type.equals("폴더")) {
 			
+			//로컬에서 폴더 삭제
+			File del_folder = new File(fileboxsavefolder.getSavefolder()+file_or_folder_path);
+			FileUtils.cleanDirectory(del_folder); //삭제할 폴더의 내부를 비움
+	        del_folder.delete(); //비우고 폴더도 삭제
+	        
 			if(admin.equals("true") || id.equals(host_id)) { //삭제클릭한 ID가 관리자,프로젝트생성자이면 삭제O
 				
 				FFolder ffolder = new FFolder();
 				ffolder.setP_no(p_no);
-				ffolder.setFolder_path(folder_path);
+				ffolder.setFolder_path(file_or_folder_path);
 				
 				result  = fileboxservice.deleteFileinFolder(ffolder); //해당폴더 하위 경로에 있는 파일을 삭제
 				result += ffolderservice.delete(ffolder); //하위폴더도 삭제
@@ -294,7 +323,7 @@ private static final Logger logger = LoggerFactory.getLogger(MembersController.c
 			
 				//new_folder_path: C:/fileboxupload/fordownzip/(원래파일의 폴더경로 -> 새로운 폴더경로)
 				String new_folder_path = zipdir + File.separator + 
-								ffileinfo.getFile_save_path().substring(ffolder.getFolder_path().lastIndexOf("/",2)+1 , ffileinfo.getFile_save_path().lastIndexOf("/")+1);
+								ffileinfo.getFile_save_path().substring(ffolder.getFolder_path().lastIndexOf("/")+1 , ffileinfo.getFile_save_path().lastIndexOf("/")+1);
 				rename(ffileinfo, new_folder_path); //압축할 임시폴더로 업로드경로와 동일한 폴더경로 생성과 파일명 재지정(난수파일명->원래파일명)
 			}
 			
@@ -349,22 +378,48 @@ private static final Logger logger = LoggerFactory.getLogger(MembersController.c
 	@PostMapping(value="/updateForMove")
 	public int updateForMove(String folder_path, int p_no,
 			@RequestParam(value="folder_to_move", defaultValue="", required=false) String folder_to_move,
-			@RequestParam(value="file_to_move", defaultValue="0", required=false) int file_to_move) {
+			@RequestParam(value="file_to_move", defaultValue="0", required=false) int file_to_move,
+			@RequestParam(value="file_to_move_save_path", defaultValue="", required=false) String file_save_path) {
 			int result = 0;
 			Map<String,Object> map = new HashMap<String,Object>();
 			if(!folder_to_move.equals("")) { //폴더를 이동(file_to_move값은 비어있음)
-				map.put("p_no", p_no);
-				map.put("destination_folder_path", folder_path); //변경될 위치의 폴더 경로
-				map.put("folder_to_move", folder_to_move); //옮길 폴더 경로
-				result = ffolderservice.updateLocation(map); //옮길 폴더와 하위폴더도 경로 변경
-				if(result>0) result=2;
+				
+				//로컬에서 폴더경로 이동
+				int index = folder_to_move.substring(0,folder_to_move.length()-1).lastIndexOf("/")+1; //폴더명 추출하기위함
+				
+				String folder_name = folder_to_move.substring(index); //폴더명 추출하기 위함
+				File local_old_path = new File(fileboxsavefolder.getSavefolder()+folder_to_move);
+				File local_new_path = new File(fileboxsavefolder.getSavefolder()+folder_path+folder_name);
+		        boolean moveok = local_old_path.renameTo(local_new_path);
+
+				//DB폴더경로 이동
+				if(moveok) {
+					map.put("p_no", p_no);
+					map.put("destination_folder_path", folder_path); //변경될 위치의 폴더 경로
+					map.put("folder_to_move", folder_to_move); //옮길 폴더 경로
+					result = ffolderservice.updateLocation(map); //옮길 폴더와 하위폴더도 경로 변경
+					if(result>0) result=2;
+				}
 					
 			}else { //파일을 이동(file_to_move값이 들어있음)
-				map.put("p_no", p_no); //프로젝트 번호
-				map.put("file_num", file_to_move); //이동할 파일의 파일번호
-				map.put("folder_path", folder_path); //변경될 위치의 폴더경로
-				result = ffileinfoservice.updateLocation(map); //파일이 포함된 폴더경로 변경
-				if(result>0) result=1;
+
+				//로컬에서 파일경로 이동
+				File old_path = new File(fileboxsavefolder.getSavefolder()+file_save_path);
+				
+				String file_new_path = folder_path + file_save_path.substring(file_save_path.lastIndexOf("/")+1);
+				
+				File new_path = new File(fileboxsavefolder.getSavefolder()+file_new_path);
+
+				boolean moveok = old_path.renameTo(new_path);
+				
+				//DB에서 파일경로 이동
+				if(moveok) {
+					map.put("p_no", p_no); //프로젝트 번호
+					map.put("file_num", file_to_move); //이동할 파일의 파일번호
+					map.put("folder_path", folder_path); //변경될 위치의 폴더경로
+					result = ffileinfoservice.updateLocation(map); //파일이 포함된 폴더경로 변경
+					if(result>0) result=1;
+				}
 			}
 			return result;
 	}
