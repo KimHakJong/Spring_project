@@ -16,4 +16,6 @@ public interface ReservationCheckService {
 
 	public int delete(int num); //예약수정할 때 기존에있던 시간 제거
 
+	public List<ReservationCheck> getTimeAndMaxperson(Map<String, String> map);
+
 }

@@ -18,4 +18,6 @@ public interface ReservationCheckMapper {
 
 	public int delete(int num);
 
+	public List<ReservationCheck> getTimeAndMaxperson(Map<String, String> map);
+
 }

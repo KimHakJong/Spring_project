@@ -18,14 +18,14 @@
 		select * 
 		from project 
 		<if test="admin == null and position == null">
-			where p_mids like #{id}
+			where p_mids like '%' || #{id} || '%'
 			<if test='p_name != null'>
-				and p_name like #{p_name} 
+				and p_name like '%' || #{p_name} || '%'
 			</if>
 		</if>
 		<if test="admin!=null or position!=null">
 			<if test='p_name != null'>
-			where p_name like #{p_name}
+			where p_name like '%' || #{p_name} || '%'
 			</if>
 		</if>
 		order by p_edate asc

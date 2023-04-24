@@ -44,5 +44,11 @@ public class ReservationCheckServiceImpl implements ReservationCheckService {
 	public int delete(int num) {
 		return dao.delete(num);
 	}
+
+
+	@Override
+	public List<ReservationCheck> getTimeAndMaxperson(Map<String, String> map) {
+		return dao.getTimeAndMaxperson(map);
+	}
 	
 }

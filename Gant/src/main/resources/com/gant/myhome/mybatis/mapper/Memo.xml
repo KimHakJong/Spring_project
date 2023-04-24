@@ -21,13 +21,6 @@
 		values (#{num}, #{id} , #{subject}, #{content}, #{background}, #{color})
 	</insert>
 	
-	<select id="getMemoNum" resultType="int">
-		select num 
-		from memo 
-		where id = #{id}
-		and num = (select max(num) from memo where id = #{id})
-	</select>
-	
 	<select id="getMemoOne" resultType="memo">
 		select * 
 		from memo 
