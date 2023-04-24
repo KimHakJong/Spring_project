@@ -49,7 +49,7 @@
 		   <when test='searchfield=="department"'>department</when> 
 		   <when test='searchfield=="phone_num"'>phone_num</when> 
 		</choose>
-		 like #{searchword} 
+		 like '%' || #{searchword} || '%' 
    </if> 
   </sql>
   
@@ -105,7 +105,7 @@
     <select id="getSearchMembersList_ajax" resultType="members">
        select * 
 	   from members 
-	   where name like #{name} 
+	   where name like '%' || #{name} || '%' 
 	   order by name
   </select>
   

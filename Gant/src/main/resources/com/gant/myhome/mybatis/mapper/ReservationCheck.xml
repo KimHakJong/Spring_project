@@ -5,11 +5,18 @@
 <mapper namespace="com.gant.myhome.mybatis.mapper.ReservationCheckMapper">
 	
 	<select id="getTime" resultType="ReservationCheck">
-		select num, resource_name, day, reserved_time 
-		from ReservationItem natural join ReservationCheck 
+		select id, num, resource_name, day, reserved_time 
+		from ReservationCheck natural join Reservation
 		where resource_name= #{resource_name} 
 		and day = #{day}
 	</select>
+
+	<select id="getTimeAndMaxperson" resultType="ReservationCheck">
+		select max_person, num, resource_name, day, reserved_time 
+		from ReservationCheck natural join ReservationItem
+		where resource_name= #{resource_name} 
+		and day = #{day}
+	</select>	
 	
 	<insert id="insert">
 		insert into ReservationCheck 

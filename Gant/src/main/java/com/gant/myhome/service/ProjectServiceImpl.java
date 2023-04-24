@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.gant.myhome.domain.Project;
@@ -15,12 +14,10 @@ import com.gant.myhome.mybatis.mapper.ProjectMapper;
 public class ProjectServiceImpl implements ProjectService {
 
 	private ProjectMapper dao;
-	private PasswordEncoder passwordEncoder;
 	
 	@Autowired
-	public ProjectServiceImpl(ProjectMapper dao, PasswordEncoder passwordEncoder) {
+	public ProjectServiceImpl(ProjectMapper dao) {
 		this.dao = dao;
-		this.passwordEncoder = passwordEncoder;
 	}
 
 	@Override
@@ -32,18 +29,16 @@ public class ProjectServiceImpl implements ProjectService {
 
 	@Override
 	public List<Project> getProjectList(String id, String p_name, String admin, String position) {
-		id = "%" + id + "%";
-		p_name = "%" + p_name + "%";
 		
 		Map<String,String> map = new HashMap<String,String>();
 		map.put("id", id);
-		if(!p_name.equals("")) {
+		if(!p_name.equals("")) { //프로젝트명 검색어를 입력한 경우
 			map.put("p_name", p_name);
 		}
-		if(admin.equals("true")) {
+		if(admin.equals("true")) { //관리자가 맞는 경우
 			map.put("admin", admin);
 		}
-		if(position.equals("부장")) {
+		if(position.equals("부장")) { //직급이 부장인 경우
 			map.put("position", position);
 		}
 		

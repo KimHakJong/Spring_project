@@ -37,7 +37,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 			response.addCookie(cookie);//클라이언트로 쿠키값 전송
 			logger.info("ID저장 쿠키생성");
 		}else if(IDStore == null || IDStore.equals("")){
-			cookie.setMaxAge(0); //쿠키 유효시간 24시간
+			cookie.setMaxAge(0); //쿠키 유효시간 0
 			response.addCookie(cookie);//클라이언트로 쿠키값 전송
 		}
 		

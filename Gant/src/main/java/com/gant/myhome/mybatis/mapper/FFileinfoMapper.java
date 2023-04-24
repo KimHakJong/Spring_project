@@ -21,5 +21,7 @@ public interface FFileinfoMapper {
 	public int updateLocation(Map<String, Object> map);
 
 	public int updatePathFromEdit(Map<String, Object> map);
+
+	public int updateLocationByFolder(Map<String, Object> map);
 	
 }

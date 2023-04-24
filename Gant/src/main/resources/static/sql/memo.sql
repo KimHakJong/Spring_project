@@ -1,11 +1,12 @@
-create table memo (
-num 	number primary key,
-id      	varchar2(15) references members(id) on delete cascade,
-subject 	varchar2(30),
-content 	varchar2(3000),
-background varchar2(100),
-color 		varchar2(20),
-update_date 	varchar2(14) default to_char(SYSDATE, 'YYYYMMDDHH24MISS')
+CREATE TABLE memo (
+  num NUMBER PRIMARY KEY,
+  id VARCHAR2(15) REFERENCES members(id) ON DELETE CASCADE,
+  subject VARCHAR2(30),
+  content VARCHAR2(3000),
+  background VARCHAR2(100),
+  color VARCHAR2(20),
+  update_date VARCHAR2(14) DEFAULT TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS'),
 );
 select * from memo;
 drop table memo;
+

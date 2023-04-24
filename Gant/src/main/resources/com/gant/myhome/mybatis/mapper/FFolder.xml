@@ -52,7 +52,7 @@
 	</update>
 	
 	<update id="updatePathFromEdit">
-		update f_folder
+		update f_folder		<!--기존 폴더명:old, 새로운 폴더명:new가정하면  a/b/old/d/e/ : a/b/ + new + /d/e/ 로 수정하는 작업 -->
 		set folder_path =  substr(folder_path, 0, instr(#{old_path},'/',-1,2)) || #{name} ||substr(folder_path, instr(#{old_path},'/',-1,1))
 		where folder_path like #{old_path} || '%'
 	</update>	
@@ -65,7 +65,7 @@
 	</delete>
 	
 	<update id="updateLocation">
-		update f_folder 	<!--도착할 폴더 경로 + 옮길 폴더의 앞부분 제거한 경로(겹쳐지는 '/'하나 빼기위해 +1)  -->
+		update f_folder 	<!--도착할 폴더 경로 + 옮길 폴더의 앞부분 제거한 경로(a/b/c/d/에서 c폴더를 옮기면 그 앞 부분 필요X),겹쳐지는 '/'하나 빼기위해 +1  -->
 		set folder_path = #{destination_folder_path} || substr(folder_path, instr(#{folder_to_move},'/',-1,2)+1)
 		where folder_num in( select folder_num <!-- 옮길 폴더와 그 하위 폴더들의 번호 -->
 							 from f_folder

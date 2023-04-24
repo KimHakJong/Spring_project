@@ -17,8 +17,6 @@ public interface MemoMapper {
 
 	public int update(Memo memo);
 
-	public int getMemoNum(String id);
-
 	public int delete(int num);
 
 }

@@ -20,7 +20,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gant.myhome.domain.Members;
-import com.gant.myhome.domain.Project;
 import com.gant.myhome.domain.Reservation;
 import com.gant.myhome.domain.ReservationCheck;
 import com.gant.myhome.domain.ReservationCount;
@@ -54,6 +53,7 @@ public class ReservationController {
 		this.reservationcountservice = reservationcountservice;
 	}
 	
+	
 	@GetMapping(value="/main")
 	public ModelAndView reserveMain(Principal userPrincipal, ModelAndView mv) {
 		//관리자인지아닌지 구별하여 자원추가버튼 활성화
@@ -61,7 +61,7 @@ public class ReservationController {
 		Members members = memberservice.getMemberInfo(id);
 		mv.addObject("admin",members.getAdmin());
 		
-		//새로운 회원이면 하루당 예약가능 횟수 설정을 위해 테이블 로우 insert
+		//새로운 회원이면 하루당 예약가능 시간 설정을 위해 테이블 로우 insert
 		ReservationCount result = reservationcountservice.select(id);
 		if(result==null) {
 			int add_count = reservationcountservice.insert(id);
@@ -74,6 +74,7 @@ public class ReservationController {
 				return mv;
 			}
 		}
+		
 		//자원종류, 자원명 불러옴 (예약화면 처음 불러올 때: 자원많은 종류가 표시)
 		List<String> types = reservationitemservice.getTypeList();
 			
@@ -108,8 +109,8 @@ public class ReservationController {
 		//자원명과 날짜에 해당하는 예약된 시간을 list에 담는다.( 추가로 해당 예약자의 이름도 담음 )
 		List<ReservationCheck> list = reservationcheckservice.getTime(map);
 		for(ReservationCheck rs_check: list) {
-			Reservation rs = reservationservice.selectInfo(rs_check.getNum());
-			Members m = memberservice.getMemberInfo(rs.getId());
+			logger.info("뭐가나와유?:"+rs_check.getId());
+			Members m = memberservice.getMemberInfo(rs_check.getId());
 			rs_check.setName(m.getName());
 		}
 		return list;
@@ -196,17 +197,12 @@ public class ReservationController {
 	
 	@ResponseBody
 	@PostMapping(value="/modal_loadTime_ajax")
-	public Map<String,Object> modal_loadTime_ajax(String resource_name, String day){
+	public List<ReservationCheck> modal_loadTime_ajax(String resource_name, String day){
 		Map<String,String> map = new HashMap<String,String>();
 		map.put("resource_name", resource_name);
 		map.put("day", day);
-		List<ReservationCheck> list = reservationcheckservice.getTime(map);
-		
-		int	max_person = reservationitemservice.getMaxPerson(resource_name);
-		Map<String,Object> send = new HashMap<String,Object>();
-		send.put("list", list);
-		send.put("max_person", max_person); //해당자원의 최대인원수
-		return send;
+		List<ReservationCheck> list = reservationcheckservice.getTimeAndMaxperson(map);
+		return list;
 	}
 	
 	@GetMapping(value="/deleteReservation")
@@ -247,7 +243,6 @@ public class ReservationController {
 		int s_value = Integer.parseInt(rs.getStart_time());
 		int e_value = Integer.parseInt(rs.getEnd_time());
 		
-		Map<String,Object> map = new HashMap<String,Object>();
 		int update_count = e_value-s_value+1; //예약소진횟수
 		int change_count = update_count - before_time; //수정해서 차감될 예약소진횟수
 				
@@ -259,6 +254,7 @@ public class ReservationController {
 			return mv;
 		}
 				
+		Map<String,Object> map = new HashMap<String,Object>();
 				//예약잔여 횟수가 충분히 남아있는 경우 
 				map.put("use_count", change_count);
 				map.put("id", rs.getId());
@@ -349,7 +345,7 @@ public class ReservationController {
 	@PostMapping(value="/mylist_ajax")
 	public List<Reservation> myList_ajax(Principal userPrincipal, String start_day, String end_day, int page){
 		String id = userPrincipal.getName();
-		logger.info("시작날:"+start_day+"종료날:"+end_day+"아이디:"+id+"페이지:"+page);
+		logger.info("조회시작날:"+start_day+"종료날:"+end_day+"아이디:"+id+"페이지:"+page);
 		Members m = memberservice.getMemberInfo(id);
 		List<Reservation> list = reservationservice.selectById(start_day, end_day, id, page);
 		
@@ -375,6 +371,7 @@ public class ReservationController {
 		}
 		return list;
 	}
+	
 	@ResponseBody
 	@PostMapping(value="/rmemberdetail")
 	public List<Members> rMemberDetail(String names){

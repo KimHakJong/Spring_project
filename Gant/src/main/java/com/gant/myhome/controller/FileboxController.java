@@ -3,6 +3,7 @@ package com.gant.myhome.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -190,7 +191,8 @@ private static final Logger logger = LoggerFactory.getLogger(MembersController.c
 	@ResponseBody
 	@PostMapping(value="/loadAll")
 	public Map<String,Object> loadAll(FFolder ffolder, int included_folder_num) {
-		List<FFolder> folder_list = ffolderservice.selectSubFolder(ffolder); //한 단계 하위 폴더리스트 조회
+		
+		List<FFolder> folder_list = ffolderservice.selectSubFolder(ffolder); //현재보다 한 단계 하위 폴더리스트 조회
 		
 		Map<String,Integer> param_map = new HashMap<String,Integer>();
 		param_map.put("included_folder_num", included_folder_num);
@@ -199,9 +201,9 @@ private static final Logger logger = LoggerFactory.getLogger(MembersController.c
 		logger.info("폴더리스트 불러오는 개수:"+folder_list.size());
 		logger.info("파일리스트 불러오는 개수:"+file_list.size());
 		
-		Map<String,Object> send_map = new HashMap<String,Object>(); //폴더와 파일 리스트들을 반환
-		send_map.put("file", file_list);
+		Map<String,Object> send_map = new HashMap<String,Object>(); //현재 폴더의 한 단계 하위 폴더들과 파일 리스트들을 담음
 		send_map.put("folder", folder_list);
+		send_map.put("file", file_list);
 		return send_map;
 	}
 	
@@ -218,8 +220,14 @@ private static final Logger logger = LoggerFactory.getLogger(MembersController.c
 		}else if(type.equals("폴더")) {
 			//로컬에서도 똑같은 폴더명 수정
 		    File local_old_path = new File(fileboxsavefolder.getSavefolder()+old_path);
-		    int last = old_path.indexOf("/",2);
+		    
+		    //바꿀이름 new가정 -> 기존 폴더경로: a/b/c/d/ , 새로운 경로: a/b/c/new 로 바꾸는 작업 
+		    int last = old_path.lastIndexOf("/");
+		    last = old_path.substring(0,last).lastIndexOf("/");
+		    
 		    String new_path = old_path.substring(0,last+1) + name;
+		    logger.info("기존경로?:"+old_path);
+		    logger.info("새로운경로?:"+new_path);
 		    File local_new_path = new File(fileboxsavefolder.getSavefolder()+new_path);
 		    boolean updateok = local_old_path.renameTo(local_new_path);
 		    
@@ -309,8 +317,10 @@ private static final Logger logger = LoggerFactory.getLogger(MembersController.c
 	public byte[] folderDownload(FFolder ffolder, HttpServletResponse response) throws Exception {
 
 		List<FFileinfo> list = ffileinfoservice.selectAllFileInFolder(ffolder);//폴더 하위에있는 모든 파일의 이름,확장자,파일경로를 가져오는 동작 수행
-			
-			//카피한 파일을 모아둘 임시폴더 (다운로드 후 마지막에 폴더 비울 예정)
+		
+		if(list.size()>0) {
+
+			//카피한 파일을 모아둘 임시 폴더 (다운로드 후 마지막에 폴더 비울 예정)
 			String zipdir = fileboxsavefolder.getSavefolder() + "fordownzip";
 			File path1 = new File(zipdir);
 			if (!(path1.exists())) {
@@ -321,7 +331,7 @@ private static final Logger logger = LoggerFactory.getLogger(MembersController.c
 			//임시폴더에 폴더구조를 수정하여 다운로드하므로 폴더1/폴더2/폴더3/'와 '폴더1/폴더2/폴더3/폴더4/' -> '폴더3/ , 폴더4/'로 변경작업
 			for(FFileinfo ffileinfo : list) {
 			
-				//new_folder_path: C:/fileboxupload/fordownzip/(원래파일의 폴더경로 -> 새로운 폴더경로)
+				//new_folder_path: C:/fileboxupload/fordownzip/ + (원래파일의 폴더경로 -> 새로운 폴더경로)
 				String new_folder_path = zipdir + File.separator + 
 								ffileinfo.getFile_save_path().substring(ffolder.getFolder_path().lastIndexOf("/")+1 , ffileinfo.getFile_save_path().lastIndexOf("/")+1);
 				rename(ffileinfo, new_folder_path); //압축할 임시폴더로 업로드경로와 동일한 폴더경로 생성과 파일명 재지정(난수파일명->원래파일명)
@@ -343,7 +353,18 @@ private static final Logger logger = LoggerFactory.getLogger(MembersController.c
 	        FileUtils.cleanDirectory(path1); //임시폴더 내부 파일과 폴더
 	        zipfile.delete(); //임시폴더 압축한 zip파일
 			return bytes;
-
+		}
+		else {
+			response.setContentType("text/html;charset=utf-8");
+			PrintWriter out = response.getWriter();
+			out.println("<script>");
+			out.println("alert('폴더가 비어있습니다.')");
+			out.println("history.back();");
+			out.println("</script>");
+			out.close();
+			return null;
+		}
+		
 	}
 	
 	//다운받을 기존 폴더명과 난수파일명 -> 원래파일명 바꿔서 임시폴더에 카피하는 메소드
@@ -397,7 +418,8 @@ private static final Logger logger = LoggerFactory.getLogger(MembersController.c
 					map.put("p_no", p_no);
 					map.put("destination_folder_path", folder_path); //변경될 위치의 폴더 경로
 					map.put("folder_to_move", folder_to_move); //옮길 폴더 경로
-					result = ffolderservice.updateLocation(map); //옮길 폴더와 하위폴더도 경로 변경
+					result = ffileinfoservice.updateLocationByFolder(map); //옮길 폴더의 내부 파일 경로 변경
+					result = ffolderservice.updateLocation(map); //옮길 폴더와 하위 폴더도 경로 변경
 					if(result>0) result=2;
 				}
 					
@@ -417,7 +439,7 @@ private static final Logger logger = LoggerFactory.getLogger(MembersController.c
 					map.put("p_no", p_no); //프로젝트 번호
 					map.put("file_num", file_to_move); //이동할 파일의 파일번호
 					map.put("folder_path", folder_path); //변경될 위치의 폴더경로
-					result = ffileinfoservice.updateLocation(map); //파일이 포함된 폴더경로 변경
+					result = ffileinfoservice.updateLocation(map); //파일이 포함된 폴더경로, 파일경로 변경
 					if(result>0) result=1;
 				}
 			}

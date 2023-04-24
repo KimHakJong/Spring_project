@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.gant.myhome.domain.Members;
@@ -14,13 +13,11 @@ import com.gant.myhome.mybatis.mapper.MembersMapper;
 public class MemberServicelmpl implements MemberService {
 
 	private MembersMapper dao;
-	private PasswordEncoder passwordEncoder;
 	
 	
 	@Autowired
-	public MemberServicelmpl(MembersMapper dao, PasswordEncoder passwordEncoder) {
+	public MemberServicelmpl(MembersMapper dao) {
 		this.dao = dao;
-		this.passwordEncoder = passwordEncoder;
 	}
 	
 	@Override
@@ -75,7 +72,7 @@ public class MemberServicelmpl implements MemberService {
 		HashMap<String,String> map = new HashMap<String,String>();
 		if(!searchfield.equals("")) {
 			map.put("searchfield", searchfield);
-			map.put("searchword", "%"+searchword+"%");
+			map.put("searchword", searchword);
 		}
 		
 		return dao.getMembersCount(map);
@@ -89,7 +86,7 @@ public class MemberServicelmpl implements MemberService {
 		
 		if(!searchfield.equals("")) {
 			map.put("searchfield", searchfield);
-			map.put("searchword", "%"+searchword+"%");
+			map.put("searchword",searchword);
 		}
 		
 		map.put("start", startrow);
@@ -141,7 +138,6 @@ public class MemberServicelmpl implements MemberService {
 
 	@Override
 	public List<Members> getSearchMembersList_ajax(String name) {
-		name = "%" + name + "%";
 		return dao.getSearchMembersList_ajax(name);
 	}
 
